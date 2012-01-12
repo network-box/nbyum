@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    yummy = nbyum.NBYum(args)
+    yummy = nbyum.NBYumCli(args)
 
     try:
         yummy.run()

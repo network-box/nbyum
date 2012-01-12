@@ -1,18 +1,18 @@
-import yum
+from yumbase import NBYumBase
 
 
-class NBYum(yum.YumBase):
+class NBYumCli(object):
     def __init__(self, args):
-        super(NBYum, self).__init__()
+        self.args = args
+
+        self.base = NBYumBase()
 
         if not args.debug:
             # Shut yum up
-            self.preconf.debuglevel = 0
-            self.preconf.errorlevel = 0
+            self.base.preconf.debuglevel = 0
+            self.base.preconf.errorlevel = 0
 
-        self.setCacheDir()
-
-        self.args = args
+        self.base.setCacheDir()
 
     def run(self):
         func = getattr(self, self.args.func)
