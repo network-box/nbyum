@@ -1,12 +1,12 @@
 import yum
 
 
-class NBYum(object):
+class NBYum(yum.YumBase):
     def __init__(self):
-        self.yum = yum.YumBase()
+        super(NBYum, self).__init__()
 
         # Shut yum up
-        self.yum.preconf.debuglevel = 0
-        self.yum.preconf.errorlevel = 0
+        self.preconf.debuglevel = 0
+        self.preconf.errorlevel = 0
 
-        self.yum.setCacheDir()
+        self.setCacheDir()
