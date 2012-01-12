@@ -8,7 +8,9 @@ try:
     import nbyum
 except ImportError:
     # We're probably running in a development environment
-    sys.path.append('./src')
+    import os
+
+    sys.path.append(os.path.join(os.path.dirname(sys.argv[0]), 'src'))
     import nbyum
 
 
