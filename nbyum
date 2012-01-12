@@ -1,0 +1,25 @@
+#!/usr/bin/python
+
+import argparse
+import sys
+
+
+try:
+    import nbyum
+except ImportError:
+    # We're probably running in a development environment
+    sys.path.append('./src')
+    import nbyum
+
+
+if __name__ == '__main__':
+    yummy = nbyum.NBYum()
+
+    parser = argparse.ArgumentParser(description="Just like yum, " \
+                                                 "but with a usable output")
+
+    subparsers = parser.add_subparsers(title="subcommands")
+
+    args = parser.parse_args()
+
+    sys.exit(0)

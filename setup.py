@@ -1,4 +1,5 @@
 import os
+import sys
 
 from distutils.core import setup
 
@@ -7,6 +8,9 @@ requires = [
     # Not available from Pypi, but worth mentioning for packagers
     #'yum',
     ]
+
+if sys.version_info < (2, 7):
+    requires.append('argparse')
 
 
 here = os.path.abspath(os.path.dirname(__file__))
