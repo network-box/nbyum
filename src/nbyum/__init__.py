@@ -21,6 +21,4 @@ class NBYumCli(object):
     def check_update(self):
         """Check for updates to installed packages."""
         self.base.populateUpdates()
-
-        for member in self.base.tsInfo.getMembers():
-            print member
+        self.base.recapTransaction()
