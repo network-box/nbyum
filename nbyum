@@ -13,13 +13,15 @@ except ImportError:
 
 
 if __name__ == '__main__':
-    yummy = nbyum.NBYum()
-
     parser = argparse.ArgumentParser(description="Just like yum, " \
                                                  "but with a usable output")
+    parser.add_argument("-d", "--debug", action="store_true",
+                        help="Print some useful debug information")
 
     subparsers = parser.add_subparsers(title="subcommands")
 
     args = parser.parse_args()
+
+    yummy = nbyum.NBYum(args)
 
     sys.exit(0)
