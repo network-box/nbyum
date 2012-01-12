@@ -11,3 +11,9 @@ class NBYum(yum.YumBase):
             self.preconf.errorlevel = 0
 
         self.setCacheDir()
+
+        self.args = args
+
+    def run(self):
+        func = getattr(self, self.args.func)
+        return func()

@@ -23,5 +23,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     yummy = nbyum.NBYum(args)
-
-    sys.exit(0)
+    exit_code = yummy.run()
+    sys.exit(exit_code)
