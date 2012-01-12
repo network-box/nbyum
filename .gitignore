@@ -1,0 +1,13 @@
+# -- Distutils auto-gerated stuff --------------------------------------------
+build
+dist
+MANIFEST
+*.egg-info
+
+# -- Python bytecode ---------------------------------------------------------
+*.pyc
+*.pyo
+
+# -- Editor auto-backup stuff ------------------------------------------------
+.*.swp
+*~
