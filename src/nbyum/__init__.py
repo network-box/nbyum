@@ -17,3 +17,7 @@ class NBYumCli(object):
     def run(self):
         func = getattr(self, self.args.func)
         func()
+
+    def check_update(self):
+        """Check for updates to installed packages."""
+        pass
