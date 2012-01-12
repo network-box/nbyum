@@ -23,5 +23,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     yummy = nbyum.NBYum(args)
-    exit_code = yummy.run()
-    sys.exit(exit_code)
+
+    try:
+        yummy.run()
+
+    except Exception, e:
+        print("{'error': '%s'}" % e)
+        sys.exit(1)
+
+    sys.exit(0)

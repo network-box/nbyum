@@ -16,4 +16,4 @@ class NBYum(yum.YumBase):
 
     def run(self):
         func = getattr(self, self.args.func)
-        return func()
+        func()
