@@ -62,7 +62,7 @@ class NBYumBase(yum.YumBase):
                 continue
 
             # Packages to be updated
-            if member.ts_state == 'ud':
+            elif member.ts_state == 'ud':
                 envr_old = get_envr(member)
 
                 if len(member.updated_by) > 1:
@@ -77,3 +77,15 @@ class NBYumBase(yum.YumBase):
 
                 print(update_tmpl % (envr_old, envr_new))
                 continue
+
+            # Packages being the actual update
+            elif member.ts_state == 'u':
+                # Those are handled with the packages to be updated above
+                # TODO: Should we check that they actually are?
+                continue
+
+            else:
+                msg = "The transaction includes a package of state '%s'," \
+                      " but those are not handled yet." \
+                      " Ask your friendly nbyum developer!"
+                raise WTFException(msg)
