@@ -12,7 +12,7 @@ update_tmpl = "{'update': ('%s', '%s')}"
 
 
 class NBYumBase(yum.YumBase):
-    def populateUpdates(self):
+    def populate_updates(self):
         """Get the updates."""
         updates = self.up
 
@@ -42,7 +42,7 @@ class NBYumBase(yum.YumBase):
         if res != 2:
             raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
 
-    def recapTransaction(self):
+    def recap_transaction(self):
         """Print a summary of the transaction."""
         # Interesting stuff for the future:
         #   - member.obsoleted_by (other member)
