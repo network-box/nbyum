@@ -3,7 +3,7 @@ from operator import attrgetter
 import yum
 
 from errors import NBYumException, WTFException
-from utils import get_envr
+from utils import get_envra
 
 
 install_tmpl = "{'install': '%s'}"
@@ -60,31 +60,31 @@ class NBYumBase(yum.YumBase):
                              key=attrgetter("ts_state")):
             # Packages newly installed
             if member.ts_state == "i":
-                envr = get_envr(member)
+                envra = get_envra(member)
 
                 if member.isDep:
                     tmpl = installdep_tmpl
                 else:
                     tmpl = install_tmpl
 
-                print(tmpl % envr)
+                print(tmpl % envra)
                 continue
 
             # Packages replaced by a newer update
             elif member.ts_state == "ud":
-                envr_old = get_envr(member)
+                envra_old = get_envra(member)
 
                 if len(member.updated_by) > 1:
                     # TODO: Why would that ever happen? o_O
-                    msg = ["For some reason, '%s' is updated by a bunch of packages:" % envr_old]
+                    msg = ["For some reason, '%s' is updated by a bunch of packages:" % envra_old]
                     for pkg in member.updated_by:
-                        msg.append("    %s" % (get_envr(pkg)))
+                        msg.append("    %s" % (get_envra(pkg)))
                     raise WTFException("\n".join(msg))
 
                 new = member.updated_by[0]
-                envr_new = get_envr(new)
+                envra_new = get_envra(new)
 
-                print(update_tmpl % (envr_old, envr_new))
+                print(update_tmpl % (envra_old, envra_new))
                 continue
 
             # Packages being the actual update
