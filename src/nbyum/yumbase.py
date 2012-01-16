@@ -12,8 +12,8 @@ update_tmpl = "{'update': ('%s', '%s')}"
 
 
 class NBYumBase(yum.YumBase):
-    def populate_updates(self):
-        """Get the updates."""
+    def update_packages(self, apply=False):
+        """Check for updates and optionally apply."""
         updates = self.up
 
         if updates is None:
@@ -41,6 +41,9 @@ class NBYumBase(yum.YumBase):
 
         if res != 2:
             raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
+
+        if apply:
+            self.processTransaction()
 
     def recap_transaction(self):
         """Print a summary of the transaction."""
