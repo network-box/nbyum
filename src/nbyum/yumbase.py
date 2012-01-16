@@ -1,9 +1,7 @@
-from operator import attrgetter
-
 import yum
 
 from errors import NBYumException, WTFException
-from utils import get_envra
+from utils import get_envra, transaction_ordergetter
 
 
 install_tmpl = "{'install': '%s'}"
@@ -35,7 +33,7 @@ class NBYumBase(yum.YumBase):
         # Interesting stuff for the future:
         #   - member.repoid (string: 'experimental', 'installed', ...
         for member in sorted(self.tsInfo.getMembers(),
-                             key=attrgetter("ts_state")):
+                             key=transaction_ordergetter):
             # Packages newly installed
             if member.ts_state == "i":
                 envra = get_envra(member)

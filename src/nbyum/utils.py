@@ -39,3 +39,18 @@ def get_envra(pkg):
     """Get the Epoch:Name-Version-Release.Arch representation of a package."""
     return "%s:%s-%s-%s.%s" % (pkg.epoch, pkg.name, pkg.version,
                                pkg.release, pkg.arch)
+
+def transaction_ordergetter(pkg):
+    """Return a simple ordering for package lists.
+
+    In the transaction summary, we want the order to be loosely defined:
+        - packages should be 'grouped' by their `ts_state` (all updates
+          together, all new packages together, etc...)
+        - updates should come before the new packages coming as dependencies
+
+    This last requirement is what makes the alphabetical order unsuitable, so
+    we need a reference list.
+    """
+    reference = ["i", "od", "ud", "u"]
+
+    return reference.index(pkg.ts_state)
