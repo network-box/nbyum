@@ -10,11 +10,11 @@ except ImportError:
     # We're probably running in a development environment
     import os
 
-    sys.path.append(os.path.join(os.path.dirname(sys.argv[0]), 'src'))
+    sys.path.append(os.path.join(os.path.dirname(sys.argv[0]), "src"))
     import nbyum
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Just like yum, " \
                                                  "but with a usable output")
     parser.add_argument("-d", "--debug", action="store_true",

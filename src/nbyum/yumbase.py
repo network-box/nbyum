@@ -48,9 +48,9 @@ class NBYumBase(yum.YumBase):
         #   - member.obsoleted_by (other member)
         #   - member.repoid (string: 'experimental', 'installed', ...
         for member in sorted(self.tsInfo.getMembers(),
-                             key=attrgetter('ts_state')):
+                             key=attrgetter("ts_state")):
             # Packages to be installed
-            if member.ts_state == 'i':
+            if member.ts_state == "i":
                 envr = get_envr(member)
 
                 if member.isDep:
@@ -62,7 +62,7 @@ class NBYumBase(yum.YumBase):
                 continue
 
             # Packages to be updated
-            elif member.ts_state == 'ud':
+            elif member.ts_state == "ud":
                 envr_old = get_envr(member)
 
                 if len(member.updated_by) > 1:
@@ -79,7 +79,7 @@ class NBYumBase(yum.YumBase):
                 continue
 
             # Packages being the actual update
-            elif member.ts_state == 'u':
+            elif member.ts_state == "u":
                 # Those are handled with the packages to be updated above
                 # TODO: Should we check that they actually are?
                 continue

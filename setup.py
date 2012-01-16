@@ -6,28 +6,28 @@ from distutils.core import setup
 
 requires = [
     # Not available from Pypi, but worth mentioning for packagers
-    #'yum',
+    #"yum",
     ]
 
 if sys.version_info < (2, 7):
-    requires.append('argparse')
+    requires.append("argparse")
 
 
 here = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(here, 'README.rst')) as f:
+with open(os.path.join(here, "README.rst")) as f:
     README = f.read()
 
 
-setup(name='nbyum',
-      version='0.0.1',
-      description='Just like yum, but with a usable output',
+setup(name="nbyum",
+      version="0.0.1",
+      description="Just like yum, but with a usable output",
       long_description=README,
-      author='Mathieu Bridon',
-      author_email='mathieu.bridon@network-box.com',
-      license='GPLv3+',
+      author="Mathieu Bridon",
+      author_email="mathieu.bridon@network-box.com",
+      license="GPLv3+",
       url="https://www.network-box.com",
-      package_dir={'': 'src'},
-      packages=['nbyum'],
-      scripts=['nbyum'],
+      package_dir={"": "src"},
+      packages=["nbyum"],
+      scripts=["nbyum"],
       requires=requires,
       )
