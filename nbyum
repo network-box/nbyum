@@ -25,6 +25,11 @@ if __name__ == "__main__":
     parser_checkupdate = subparsers.add_parser("check-update",
                                                help="Check for updates to " \
                                                     "installed packages")
+    parser_checkupdate.add_argument("packages", nargs="*", metavar="PACKAGE",
+                                    help="The package to update. An " \
+                                         "arbitrary number can be specified." \
+                                         " If none is, updates for the whole" \
+                                         " system are checked.")
     parser_checkupdate.set_defaults(func="check_update")
 
     args = parser.parse_args()

@@ -12,7 +12,7 @@ update_tmpl = "{'update': ('%s', '%s')}"
 
 
 class NBYumBase(yum.YumBase):
-    def update_packages(self, apply=False):
+    def update_packages(self, packages, apply=False):
         """Check for updates and optionally apply."""
         updates = self.up
 
@@ -23,6 +23,9 @@ class NBYumBase(yum.YumBase):
 
         # Get packages to be updated
         for (new, old) in updates.getUpdatesTuples():
+            if not old.name in packages:
+                continue
+
             updating = self.getPackageObject(new)
             updated = self.rpmdb.searchPkgTuple(old)[0]
 
@@ -30,6 +33,9 @@ class NBYumBase(yum.YumBase):
 
         # Get packages to be obsoleted
         for (obs, inst) in updates.getObsoletesTuples():
+            if not inst.name in packages:
+                continue
+
             obsoleting = self.getPackageObject(obs)
             installed = self.rpmdb.searchPkgTuple(inst)[0]
 
