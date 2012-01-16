@@ -43,6 +43,9 @@ class TestCase(unittest.TestCase):
                     else:
                         output.write(line)
 
+                if hasattr(self, "installonlypkgs"):
+                    output.write("installonlypkgs=%s\n" % self.installonlypkgs)
+
                 output.write("installroot=%s\n" % self.installroot)
                 output.write("reposdir=%s\n" % self.reposdir)
                 output.write("\n")
