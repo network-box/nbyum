@@ -96,5 +96,5 @@ class NBYumBase(yum.YumBase):
             else:
                 msg = "The transaction includes a package of state '%s'," \
                       " but those are not handled yet." \
-                      " Ask your friendly nbyum developer!"
+                      " Ask your friendly nbyum developer!" % member.ts_state
                 raise WTFException(msg)
