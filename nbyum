@@ -32,6 +32,15 @@ if __name__ == "__main__":
                                          " system are checked.")
     parser_checkupdate.set_defaults(func="check_update")
 
+    parser_update = subparsers.add_parser("update",
+                                          help="Update packages or the " \
+                                               "whole system")
+    parser_update.add_argument("packages", nargs="*", metavar="PACKAGE",
+                               help="The package to update. An arbitrary " \
+                                    "number can be specified. If none is, " \
+                                    "the whole system is updated.")
+    parser_update.set_defaults(func="update")
+
     args = parser.parse_args()
 
     yummy = nbyum.NBYumCli(args)

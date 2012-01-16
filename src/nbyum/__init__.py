@@ -18,7 +18,13 @@ class NBYumCli(object):
         func = getattr(self, self.args.func)
         func()
 
+    # -- Functions corresponding to commands ---------------------------------
     def check_update(self):
         """Check for updates to installed packages."""
         self.base.update_packages(self.args.packages, apply=False)
+        self.base.recap_transaction()
+
+    def update(self):
+        """Actually update the whole system."""
+        self.base.update_packages(self.args.packages, apply=True)
         self.base.recap_transaction()
