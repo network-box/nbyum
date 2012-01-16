@@ -38,12 +38,7 @@ class NBYumBase(yum.YumBase):
             if member.ts_state == "i":
                 envra = get_envra(member)
 
-                if member.isDep:
-                    tmpl = installdep_tmpl
-                else:
-                    tmpl = install_tmpl
-
-                print(tmpl % envra)
+                print(install_tmpl % envra)
                 continue
 
             # Packages obsoleted by a new one
@@ -80,11 +75,14 @@ class NBYumBase(yum.YumBase):
                 print(update_tmpl % (envra_old, envra_new))
                 continue
 
-            # Packages being the actual update/obsoleter
+            # Packages being the actual update/obsoleter... or new dependency
             elif member.ts_state == "u":
-                # Those are handled with the packages to be updated/obsoleted
-                # TODO: Should we check that they actually are?
-                continue
+                if member.isDep:
+#                    print("Installing as dependency: %s" % member)
+                    envra = get_envra(member)
+
+                    print(installdep_tmpl % envra)
+                    continue
 
             else:
                 msg = "The transaction includes a package of state '%s'," \

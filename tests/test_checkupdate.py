@@ -44,3 +44,14 @@ class TestCheckUpdate(TestCase):
 
         result = [eval(line) for line in self.new_stdout.getvalue().split("\n") if line]
         self.assertEqual(result, expected)
+
+    def test_install_as_dep(self):
+        """Check a repo with an update requiring a new install."""
+        args = self.parser.parse_args([self.command])
+        self._run_nbyum_test(args)
+
+        expected = [{'update': ('0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch')},
+                    {'installdep': '0:plouf-2-1.nb5.0.noarch'}]
+
+        result = [eval(line) for line in self.new_stdout.getvalue().split("\n") if line]
+        self.assertEqual(result, expected)
