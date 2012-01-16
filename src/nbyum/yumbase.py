@@ -58,7 +58,7 @@ class NBYumBase(yum.YumBase):
         #   - member.repoid (string: 'experimental', 'installed', ...
         for member in sorted(self.tsInfo.getMembers(),
                              key=attrgetter("ts_state")):
-            # Packages to be installed
+            # Packages newly installed
             if member.ts_state == "i":
                 envr = get_envr(member)
 
@@ -70,7 +70,7 @@ class NBYumBase(yum.YumBase):
                 print(tmpl % envr)
                 continue
 
-            # Packages to be updated
+            # Packages replaced by a newer update
             elif member.ts_state == "ud":
                 envr_old = get_envr(member)
 
