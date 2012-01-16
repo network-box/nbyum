@@ -2,7 +2,7 @@ from yumbase import NBYumBase
 
 
 class NBYumCli(object):
-    def __init__(self, args):
+    def __init__(self, args, yumconf=None):
         self.args = args
 
         self.base = NBYumBase()
@@ -11,6 +11,9 @@ class NBYumCli(object):
             # Shut yum up
             self.base.preconf.debuglevel = 0
             self.base.preconf.errorlevel = 0
+
+        if yumconf:
+            self.base.preconf.fn = yumconf
 
         self.base.setCacheDir()
 
