@@ -46,23 +46,6 @@ class NBYumBase(yum.YumBase):
                 print(tmpl % envra)
                 continue
 
-            # Packages replaced by a newer update
-            elif member.ts_state == "ud":
-                envra_old = get_envra(member)
-
-                if len(member.updated_by) > 1:
-                    # TODO: Why would that ever happen? o_O
-                    msg = ["For some reason, '%s' is updated by a bunch of packages:" % envra_old]
-                    for pkg in member.updated_by:
-                        msg.append("    %s" % (get_envra(pkg)))
-                    raise WTFException("\n".join(msg))
-
-                new = member.updated_by[0]
-                envra_new = get_envra(new)
-
-                print(update_tmpl % (envra_old, envra_new))
-                continue
-
             # Packages obsoleted by a new one
             elif member.ts_state == "od":
                 envra_old = get_envra(member)
@@ -78,6 +61,23 @@ class NBYumBase(yum.YumBase):
                 envra_new = get_envra(new)
 
                 print(obsolete_tmpl % (envra_old, envra_new))
+                continue
+
+            # Packages replaced by a newer update
+            elif member.ts_state == "ud":
+                envra_old = get_envra(member)
+
+                if len(member.updated_by) > 1:
+                    # TODO: Why would that ever happen? o_O
+                    msg = ["For some reason, '%s' is updated by a bunch of packages:" % envra_old]
+                    for pkg in member.updated_by:
+                        msg.append("    %s" % (get_envra(pkg)))
+                    raise WTFException("\n".join(msg))
+
+                new = member.updated_by[0]
+                envra_new = get_envra(new)
+
+                print(update_tmpl % (envra_old, envra_new))
                 continue
 
             # Packages being the actual update/obsoleter
