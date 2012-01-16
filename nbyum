@@ -26,7 +26,8 @@ if __name__ == "__main__":
                                                help="Check for updates to " \
                                                     "installed packages")
     parser_checkupdate.add_argument("packages", nargs="*", metavar="PACKAGE",
-                                    help="The package to update. An " \
+                                    help="The package(s) for which to check " \
+                                         "if an update is available. An " \
                                          "arbitrary number can be specified." \
                                          " If none is, updates for the whole" \
                                          " system are checked.")
@@ -36,7 +37,7 @@ if __name__ == "__main__":
                                           help="Update packages or the " \
                                                "whole system")
     parser_update.add_argument("packages", nargs="*", metavar="PACKAGE",
-                               help="The package to update. An arbitrary " \
+                               help="The package(s) to update. An arbitrary " \
                                     "number can be specified. If none is, " \
                                     "the whole system is updated.")
     parser_update.set_defaults(func="update")
