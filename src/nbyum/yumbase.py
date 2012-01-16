@@ -24,7 +24,7 @@ class NBYumBase(yum.YumBase):
         # Get new packages to be installed as dependencies
         res, resmsg = self.buildTransaction()
 
-        if res != 2:
+        if res != 2 and len(self.tsInfo.getMembers()):
             raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
 
         if apply:
