@@ -1,5 +1,7 @@
 from yum.rpmtrans import NoOutputCallBack
+
 from yumbase import NBYumBase
+from utils import ensure_privileges
 
 
 class NBYumCli(object):
@@ -37,6 +39,7 @@ class NBYumCli(object):
         self.base.update_packages(self.args.packages, apply=False)
         self.base.recap_transaction()
 
+    @ensure_privileges
     def update(self):
         """Actually update the whole system."""
         self.base.update_packages(self.args.packages, apply=True)
