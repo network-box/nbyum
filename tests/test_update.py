@@ -21,10 +21,10 @@ class TestUpdate(TestCase):
         result = []
 
         for h in sorted(rpm.TransactionSet(self.installroot).dbMatch(),
-                        key=attrgetter("name")): 
+                        key=attrgetter("name", "version", "release")):
             if h["epoch"] is None:
                 h["epoch"] = 0
-            result.append("%(epoch)s:%(name)s-%(version)s-%(release)s.%(arch)s" % h) 
+            result.append("%(epoch)s:%(name)s-%(version)s-%(release)s.%(arch)s" % h)
 
         return result
 
@@ -108,7 +108,7 @@ class TestUpdate(TestCase):
 
         # -- Check the installed packages after the update ---------
         expected = ["0:baz-2-1.nb5.0.noarch",
-                    "0:foo-1-2.nb5.0.noarch",
+                    "0:foo-1-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
 
         result = self._get_installed_rpms()
@@ -131,7 +131,7 @@ class TestUpdate(TestCase):
 
         # -- Check the installed packages after the update ---------
         expected = ["0:bar-1-1.nb5.0.noarch",
-                    "0:foo-1-2.nb5.0.noarch",
+                    "0:foo-1-1.nb5.0.noarch",
                     "0:plouf-2-1.nb5.0.noarch",
                     "0:toto-2-1.nb5.0.noarch"]
 
