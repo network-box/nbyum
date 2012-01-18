@@ -27,7 +27,7 @@ class NBYumBase(yum.YumBase):
         if res != 2 and len(self.tsInfo.getMembers()):
             raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
 
-        if apply:
+        if apply and len(self.tsInfo.getMembers()):
             if os.getuid() != 0:
                 raise NBYumException("Could not update: Please try again as root")
 
