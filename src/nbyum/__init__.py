@@ -18,8 +18,14 @@ class NBYumCli(object):
         self.base.setCacheDir()
 
     def run(self):
-        func = getattr(self, self.args.func)
-        func()
+        try:
+            func = getattr(self, self.args.func)
+            func()
+            return 0
+
+        except Exception, e:
+            print("{'error': '%s'}" % e)
+            return 1
 
     # -- Functions corresponding to commands ---------------------------------
     def check_update(self):
