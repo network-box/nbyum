@@ -8,6 +8,9 @@ def get_parser():
                                                  "but with a usable output")
     parser.add_argument("-d", "--debug", action="store_true",
                         help="Print some useful debug information")
+    parser.add_argument("-c", "--config",
+                        help="Yum configuration file to use " \
+                             "(default: /etc/yum.comf)")
 
     subparsers = parser.add_subparsers(title="subcommands")
 

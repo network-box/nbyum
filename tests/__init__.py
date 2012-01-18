@@ -80,13 +80,16 @@ class TestCase(unittest.TestCase):
 
     def _run_nbyum_test(self, args):
         """This is not a test method, just a helper to avoid duplication."""
+        # Make sure we use our own test config
+        args.config = self.yumconf
+
         # All nbyum does is print its output, so let's capture it
         self.old_stdout = sys.stdout
         self.new_stdout = cStringIO.StringIO()
         sys.stdout = self.new_stdout
 
         from nbyum import NBYumCli
-        yummy = NBYumCli(args, yumconf=self.yumconf)
+        yummy = NBYumCli(args)
         yummy.run()
 
         # And restore stdout now that we finished
