@@ -1,8 +1,8 @@
 import cStringIO
 import os
-import unittest
 import subprocess
 import sys
+import unittest
 
 
 global_dataroot = os.path.join(os.path.abspath(os.getcwd()), "tests/data")
