@@ -30,6 +30,6 @@ setup(name="nbyum",
       packages=["nbyum"],
       scripts=["nbyum"],
       install_requires=install_requires,
-      tests_require=['nose'],
-      test_suite='nose.collector',
+      tests_require=["nose"],
+      test_suite="nose.collector",
       )
