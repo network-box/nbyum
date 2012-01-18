@@ -26,7 +26,7 @@ class NBYumBase(yum.YumBase):
             raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
 
         if apply:
-            self.processTransaction()
+            self.processTransaction(rpmDisplay=self.nbyum_rpmDisplay)
 
     def recap_transaction(self):
         """Print a summary of the transaction."""

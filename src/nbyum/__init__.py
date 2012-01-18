@@ -1,3 +1,4 @@
+from yum.rpmtrans import NoOutputCallBack
 from yumbase import NBYumBase
 
 
@@ -11,6 +12,9 @@ class NBYumCli(object):
             # Shut yum up
             self.base.preconf.debuglevel = 0
             self.base.preconf.errorlevel = 0
+            self.base.nbyum_rpmDisplay = NoOutputCallBack()
+        else:
+            self.base.nbyum_rpmDisplay = None
 
         if yumconf:
             self.base.preconf.fn = yumconf
