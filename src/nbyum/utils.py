@@ -1,4 +1,7 @@
 import argparse
+import os
+
+from errors import NBYumException
 
 
 def get_parser():
@@ -57,3 +60,13 @@ def transaction_ordergetter(pkg):
     reference = ["i", "od", "ud", "u"]
 
     return reference.index(pkg.ts_state)
+
+def ensure_privileges(command):
+    """Used as a decorator to ensure a command is run as root."""
+    def wrapper(self):
+        if os.getuid() != 0:
+            raise NBYumException("This command must be run as root")
+
+        command(self)
+
+    return wrapper
