@@ -26,7 +26,7 @@ with open(os.path.join(here, "README.rst")) as f:
 
 setup(name="nbyum",
       # Note: This is a pre-release
-      version="5.0.0-svn20456",
+      version="5.0.0-svn20457",
       description="Just like yum, but with a usable output",
       long_description=README,
       author="Mathieu Bridon",
