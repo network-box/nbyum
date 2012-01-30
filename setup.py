@@ -3,6 +3,11 @@ import sys
 
 from setuptools import setup
 
+# We use unittest2's skip* decorators, and if we don't help Python it will
+# import the older, incompatible unittest module
+import unittest2
+sys.modules["unittest"] = unittest2
+
 
 install_requires = [
     # Not available from Pypi, but worth mentioning for packagers

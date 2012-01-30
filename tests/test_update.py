@@ -27,11 +27,9 @@ class TestUpdate(TestCase):
 
         return result
 
+    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
     def test_no_updates(self):
         """Update from a repo with no available updates."""
-        if os.getuid() != 0:
-           raise SkipTest("Updates must be run as root")
-
         args = self.parser.parse_args([self.command])
         self._run_nbyum_test(args)
 
@@ -49,11 +47,9 @@ class TestUpdate(TestCase):
         result = self._get_installed_rpms()
         self.assertEqual(result, expected)
 
+    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
     def test_only_updates(self):
         """Update from a repo with only updates available."""
-        if os.getuid() != 0:
-           raise SkipTest("Updates must be run as root")
-
         args = self.parser.parse_args([self.command])
         self._run_nbyum_test(args)
 
@@ -71,11 +67,9 @@ class TestUpdate(TestCase):
         result = self._get_installed_rpms()
         self.assertEqual(result, expected)
 
+    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
     def test_only_install(self):
         """Update from a repo with only new installs available."""
-        if os.getuid() != 0:
-           raise SkipTest("Updates must be run as root")
-
         args = self.parser.parse_args([self.command])
         self._run_nbyum_test(args)
 
@@ -94,11 +88,9 @@ class TestUpdate(TestCase):
         result = self._get_installed_rpms()
         self.assertEqual(result, expected)
 
+    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
     def test_only_obsoletes(self):
         """Update from a repo with only obsoletes available."""
-        if os.getuid() != 0:
-           raise SkipTest("Updates must be run as root")
-
         args = self.parser.parse_args([self.command])
         self._run_nbyum_test(args)
 
@@ -116,11 +108,9 @@ class TestUpdate(TestCase):
         result = self._get_installed_rpms()
         self.assertEqual(result, expected)
 
+    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
     def test_install_as_dep(self):
         """Update from a repo with an update requiring a new install."""
-        if os.getuid() != 0:
-           raise SkipTest("Updates must be run as root")
-
         args = self.parser.parse_args([self.command])
         self._run_nbyum_test(args)
 
@@ -140,11 +130,9 @@ class TestUpdate(TestCase):
         result = self._get_installed_rpms()
         self.assertEqual(result, expected)
 
+    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
     def test_ordering(self):
         """Update from a repo with a bit of everything available."""
-        if os.getuid() != 0:
-           raise SkipTest("Updates must be run as root")
-
         args = self.parser.parse_args([self.command])
         self._run_nbyum_test(args)
 
@@ -166,11 +154,9 @@ class TestUpdate(TestCase):
         result = self._get_installed_rpms()
         self.assertEqual(result, expected)
 
+    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
     def test_ordering_bis(self):
         """Update from a repo with a bit of everything available, bis."""
-        if os.getuid() != 0:
-           raise SkipTest("Updates must be run as root")
-
         args = self.parser.parse_args([self.command])
         self._run_nbyum_test(args)
 
