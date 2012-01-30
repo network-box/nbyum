@@ -148,8 +148,8 @@ class TestUpdate(TestCase):
 
         # -- Check the update summary ------------------------------
         expected = [{'obsolete': ('0:bar-1-1.nb5.0.noarch', '0:baz-2-1.nb5.0.noarch')},
-                    {'update': ('0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch')},
                     {'update': ('0:foo-1-1.nb5.0.noarch', '0:foo-1-2.nb5.0.noarch')},
+                    {'update': ('0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch')},
                     {'installdep': '0:plouf-2-1.nb5.0.noarch'}]
 
         result = [eval(line) for line in self.new_stdout.getvalue().split("\n") if line]
@@ -174,8 +174,8 @@ class TestUpdate(TestCase):
 
         # -- Check the update summary ------------------------------
         expected = [{'install': '0:bar-1-2.nb5.0.noarch'},
-                    {'update': ('0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch')},
                     {'update': ('0:foo-1-1.nb5.0.noarch', '0:foo-1-2.nb5.0.noarch')},
+                    {'update': ('0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch')},
                     {'installdep': '0:plouf-2-1.nb5.0.noarch'}]
 
         result = [eval(line) for line in self.new_stdout.getvalue().split("\n") if line]
