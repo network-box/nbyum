@@ -30,6 +30,9 @@ class TestUpdate(TestCase):
 
     def test_no_updates(self):
         """Update from a repo with no available updates."""
+        if os.getuid() != 0:
+           raise SkipTest("Updates must be run as root")
+
         args = self.parser.parse_args([self.command])
         self._run_nbyum_test(args)
 
