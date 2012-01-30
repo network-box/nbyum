@@ -1,4 +1,19 @@
-Here's the doc for nbyum.
+nbyum is a wrapper around yum. Why wrap? Simply because we need a way to call
+the yum API from a Perl program.
+
+As such, we could easier write a Perl binding to the yum API (which would be
+quite painful and would require someone with knowledge both in Python and
+Perl), or wrap it all into a simpler Python command-line tool we can then call
+as needed.
+
+However, such a tool needs a nicely formatted output, automatically parsable by
+the caller program.
+
+Thus nbyum, doing a subset of the yum functionality (only what we need), and
+printing a parser-friendly JSON output on stdout.
+
+Usage
+=====
 
 The usage should be self-documented thanks to Python's awesome argparse module,
 so just run ``nbyum`` with the ``-h`` or ``--help`` option for details::
@@ -10,9 +25,6 @@ Each command has its own help as well, for example, if you want help on the
 command rather than to the global tool::
 
     # nbyum check-update -h
-
-The really interesting part though is the output of the commands, which are
-described below.
 
 Check for available updates
 ===========================
