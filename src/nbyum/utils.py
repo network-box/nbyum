@@ -29,6 +29,22 @@ def get_parser():
                                          " system are checked.")
     parser_checkupdate.set_defaults(func="check_update")
 
+    # -- Subcommand: list -----------------------------------------------------
+    parser_list = subparsers.add_parser("list",
+                                        help="List packages and security " \
+                                             "modules")
+    parser_list.add_argument("type", choices=["packages", "sms"],
+                             help="Choose between listing packages and " \
+                                  "security modules.")
+    parser_list.add_argument("filter",
+                             choices=["all", "installed", "available"],
+                             help="List all, or filter on installed/available" \
+                                  "only.")
+    parser_list.add_argument("patterns", nargs="*",
+                             help="An optional list of patterns to match " \
+                                  "names against.")
+    parser_list.set_defaults(func="list")
+
     # -- Subcommand: update ---------------------------------------------------
     parser_update = subparsers.add_parser("update",
                                           help="Update packages or the " \

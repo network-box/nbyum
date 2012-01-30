@@ -13,6 +13,10 @@ obsolete_tmpl = "{'obsolete': ('%s', '%s')}"
 
 
 class NBYumBase(yum.YumBase):
+    def list_packages(self, type_, status, patterns):
+        """List packages and security modules."""
+        pass
+
     def update_packages(self, packages, apply=False):
         """Check for updates and optionally apply."""
         if packages:
