@@ -19,7 +19,7 @@ class NBYumBase(yum.YumBase):
         """Get a packages list."""
         # match_tuple is (exact_matches, glob_matches, unmatched_patterns)
         match_tuple = self.pkgSack.matchPackageNames(patterns)
-        matches = match_tuple[0] + match_tuple[1]
+        matches = set(match_tuple[0] + match_tuple[1])
 
         for pkg in filter(filter_, matches):
             if self.rpmdb.installed(po=pkg):
@@ -32,7 +32,7 @@ class NBYumBase(yum.YumBase):
                 # make it match packages on their name, not envra!
                 if fnmatch.fnmatch(pkg.name, pattern):
                     yield status, pkg
-                    continue
+                    break
 
     def __smsize_patterns(self, patterns):
         """Pre-process patterns when matching security modules.
