@@ -35,5 +35,6 @@ setup(name="nbyum",
       packages=["nbyum"],
       scripts=["nbyum"],
       install_requires=install_requires,
+      tests_require=["unittest2"],
       test_suite="unittest2.collector",
       )
