@@ -27,7 +27,7 @@ class TestUpdate(TestCase):
 
         return result
 
-    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
+    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_no_updates(self):
         """Update from a repo with no available updates."""
         args = [self.command]
@@ -47,7 +47,7 @@ class TestUpdate(TestCase):
         result = self._get_installed_rpms()
         self.assertEqual(result, expected)
 
-    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
+    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_only_updates(self):
         """Update from a repo with only updates available."""
         args = [self.command]
@@ -67,7 +67,7 @@ class TestUpdate(TestCase):
         result = self._get_installed_rpms()
         self.assertEqual(result, expected)
 
-    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
+    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_only_install(self):
         """Update from a repo with only new installs available."""
         args = [self.command]
@@ -88,7 +88,7 @@ class TestUpdate(TestCase):
         result = self._get_installed_rpms()
         self.assertEqual(result, expected)
 
-    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
+    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_only_obsoletes(self):
         """Update from a repo with only obsoletes available."""
         args = [self.command]
@@ -108,7 +108,7 @@ class TestUpdate(TestCase):
         result = self._get_installed_rpms()
         self.assertEqual(result, expected)
 
-    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
+    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_install_as_dep(self):
         """Update from a repo with an update requiring a new install."""
         args = [self.command]
@@ -130,7 +130,7 @@ class TestUpdate(TestCase):
         result = self._get_installed_rpms()
         self.assertEqual(result, expected)
 
-    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
+    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_ordering(self):
         """Update from a repo with a bit of everything available."""
         args = [self.command]
@@ -154,7 +154,7 @@ class TestUpdate(TestCase):
         result = self._get_installed_rpms()
         self.assertEqual(result, expected)
 
-    @unittest2.skipIf(os.getuid != 0, "Updates must be run as root")
+    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_ordering_bis(self):
         """Update from a repo with a bit of everything available, bis."""
         args = [self.command]
