@@ -2,7 +2,7 @@ import cStringIO
 import os
 import subprocess
 import sys
-import unittest
+import unittest2
 
 
 global_dataroot = os.path.join(os.path.abspath(os.getcwd()), "tests/data")
@@ -10,7 +10,7 @@ conf_template = os.path.join("/etc/yum.conf")
 setuprepo_baseurl = os.path.join(global_dataroot, "setup.repo")
 
 
-class TestCase(unittest.TestCase):
+class TestCase(unittest2.TestCase):
     def setUp(self):
         # -- We will need a parser ---------------------------------
         from nbyum.utils import get_parser

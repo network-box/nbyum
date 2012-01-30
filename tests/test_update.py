@@ -1,7 +1,6 @@
 from operator import attrgetter
 import os
-
-from nose.exc import SkipTest
+import unittest2
 
 import rpm
 
