@@ -12,10 +12,6 @@ setuprepo_baseurl = os.path.join(global_dataroot, "setup.repo")
 
 class TestCase(unittest2.TestCase):
     def setUp(self):
-        # -- We will need a parser ---------------------------------
-        from nbyum.utils import get_parser
-        self.parser = get_parser()
-
         # -- A few useful definitions ------------------------------
         self.dataroot = os.path.join(global_dataroot, self.command)
         self.yumconf = os.path.join(self.dataroot,
@@ -80,17 +76,6 @@ class TestCase(unittest2.TestCase):
 
     def _run_nbyum_test(self, args):
         """This is not a test method, just a helper to avoid duplication."""
-        # Make sure we use our own test config
-        args.config = self.yumconf
-
-        # All nbyum does is print its output, so let's capture it
-        self.old_stdout = sys.stdout
-        self.new_stdout = cStringIO.StringIO()
-        sys.stdout = self.new_stdout
-
-        from nbyum import NBYumCli
-        yummy = NBYumCli(args)
-        yummy.run()
-
-        # And restore stdout now that we finished
-        sys.stdout = self.old_stdout
+        cmd = ["nbyum", "-c", self.yumconf] + args
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        self.stdout, unused = proc.communicate()
