@@ -1,21 +1,77 @@
+import fnmatch
 import os
 
 import yum
 
 from errors import NBYumException, WTFException
-from utils import get_envra, transaction_ordergetter
+from utils import get_envra, list_ordergetter, transaction_ordergetter
 
 
 install_tmpl = "{'install': '%s'}"
 installdep_tmpl = "{'installdep': '%s'}"
+list_tmpl = "{'%s': '%s'}"
 update_tmpl = "{'update': ('%s', '%s')}"
 obsolete_tmpl = "{'obsolete': ('%s', '%s')}"
 
 
 class NBYumBase(yum.YumBase):
+    def __get_packages_list(self, patterns, filter_):
+        """Get a packages list."""
+        # match_tuple is (exact_matches, glob_matches, unmatched_patterns)
+        match_tuple = self.pkgSack.matchPackageNames(patterns)
+        matches = match_tuple[0] + match_tuple[1]
+
+        for pkg in filter(filter_, matches):
+            if self.rpmdb.installed(po=pkg):
+                status = "installed"
+            else:
+                status = "available"
+
+            for pattern in patterns:
+                # Yum developers, if you name an API matchPackageNames,
+                # make it match packages on their name, not envra!
+                if fnmatch.fnmatch(pkg.name, pattern):
+                    yield status, pkg
+                    continue
+
+    def __smsize_patterns(self, patterns):
+        """Pre-process patterns when matching security modules.
+
+        If a user specifies a pattern like 'b*', then the 'nbsm-base' security
+        module should match.
+        """
+        result = []
+        for pattern in patterns:
+            if not pattern.startswith("nbsm"):
+                pattern = "nbsm-%s" % pattern
+
+            result.append(pattern)
+
+        return result
+
     def list_packages(self, type_, status, patterns):
         """List packages and security modules."""
-        pass
+        if type_ == "sms":
+            type_filter = lambda x: x.name.startswith("nbsm-")
+        elif type_ == "packages":
+            type_filter = lambda x: not x.name.startswith("nbsm-")
+        else:
+            raise WTFException("Somehow you managed to pass an unhandled " \
+                               "value for the listing type (%s). Please " \
+                               "report it as a bug." % type_)
+
+        if not patterns:
+            patterns = ["*"]
+
+        if type_ == "sms":
+            # Special case for the security modules
+            patterns = self.__smsize_patterns(patterns)
+
+        for pkg_status, pkg in sorted(self.__get_packages_list(patterns,
+                                                               type_filter),
+                                      key=list_ordergetter):
+            if status == "all" or status == pkg_status:
+                print(list_tmpl % (pkg_status, get_envra(pkg)))
 
     def update_packages(self, packages, apply=False):
         """Check for updates and optionally apply."""

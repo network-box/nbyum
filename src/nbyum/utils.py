@@ -62,6 +62,33 @@ def get_envra(pkg):
     return "%s:%s-%s-%s.%s" % (pkg.epoch, pkg.name, pkg.version,
                                pkg.release, pkg.arch)
 
+def get_nevra(pkg, ordering=False):
+    """Get the Name-Epoch:Version-Release.Arch representation of a package."""
+    name = pkg.name
+
+    if ordering:
+        # If we're trying to order packages, then we need a bit of work
+        name = name.lower()
+
+    return "%s-%s:%s-%s.%s" % (name, pkg.epoch, pkg.version,
+                               pkg.release, pkg.arch)
+
+def list_ordergetter(pkg_tuple):
+    """Return a simple ordering for package lists.
+
+    In a list of packages, we want the order to be defined as following:
+        - first, installed packages
+        - next, available packages
+        - for each group, order by nevra
+
+    :param pkg_tuple: A 2-tuple composed of the package status ("installed"
+                      or "available") and the actual package.
+    """
+    reference = ["installed", "available"]
+
+    return "%s %s" % (reference.index(pkg_tuple[0]),
+                      get_nevra(pkg_tuple[1], ordering=True))
+
 def transaction_ordergetter(pkg):
     """Return a simple ordering for package lists.
 
