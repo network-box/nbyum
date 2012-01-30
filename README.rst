@@ -91,3 +91,15 @@ happen if it had been.
     The summary is printed **after** the transaction has been processed. In
     other words, once you get the output, the updates have already been
     applied.
+
+List packages and security modules
+==================================
+
+The command prints a JSON dictionary per line. Its only key is a string
+representing the status of the package. The only two possible keys are
+``installed`` and ``available``.
+
+Below is an example output of a packages listing::
+
+    {'installed': '0:nbsm-base-5.0.0-0.1.nb5.0.18.noarch'}
+    {'available': '0:nbsm-noc-provisioning-5.0.0-0.1.nb5.0.0.noarch'}
