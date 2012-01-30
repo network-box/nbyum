@@ -33,16 +33,19 @@ def get_parser():
     parser_list = subparsers.add_parser("list",
                                         help="List packages and security " \
                                              "modules")
-    parser_list.add_argument("filter",
+    parser_list.add_argument("filter", metavar="FILTER",
                              choices=["all", "installed", "available"],
                              help="List all, or filter on installed/available" \
-                                  "only.")
-    parser_list.add_argument("type", choices=["packages", "sms"],
+                                  "only. Possible values are 'all', " \
+                                  "'installed' and 'available'.")
+    parser_list.add_argument("type", metavar="TYPE",
+                             choices=["packages", "sms"],
                              help="Choose between listing packages and " \
-                                  "security modules.")
-    parser_list.add_argument("patterns", nargs="*",
-                             help="An optional list of patterns to match " \
-                                  "names against.")
+                                  "security modules. Possible values are " \
+                                  "'packages' and 'sms'.")
+    parser_list.add_argument("patterns", nargs="*", metavar="PATTERN",
+                             help="A glob-like pattern to match " \
+                                  "names against, for example 'nb*'.")
     parser_list.set_defaults(func="list")
 
     # -- Subcommand: update ---------------------------------------------------
