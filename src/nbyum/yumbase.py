@@ -140,7 +140,6 @@ class NBYumBase(yum.YumBase):
             # Packages being the actual update/obsoleter... or new dependency
             elif member.ts_state == "u":
                 if member.isDep:
-#                    print("Installing as dependency: %s" % member)
                     envra = get_envra(member)
 
                     print(installdep_tmpl % envra)

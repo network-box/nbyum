@@ -59,5 +59,4 @@ class TestListSMs(TestCase):
                     {'available': '0:nbsm-bar-1-1.nb5.0.noarch'}]
 
         result = [eval(line) for line in self.stdout.split("\n") if line]
-        print result
         self.assertEqual(result, expected)
