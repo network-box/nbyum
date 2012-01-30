@@ -33,13 +33,13 @@ def get_parser():
     parser_list = subparsers.add_parser("list",
                                         help="List packages and security " \
                                              "modules")
-    parser_list.add_argument("type", choices=["packages", "sms"],
-                             help="Choose between listing packages and " \
-                                  "security modules.")
     parser_list.add_argument("filter",
                              choices=["all", "installed", "available"],
                              help="List all, or filter on installed/available" \
                                   "only.")
+    parser_list.add_argument("type", choices=["packages", "sms"],
+                             help="Choose between listing packages and " \
+                                  "security modules.")
     parser_list.add_argument("patterns", nargs="*",
                              help="An optional list of patterns to match " \
                                   "names against.")
