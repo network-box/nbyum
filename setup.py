@@ -6,8 +6,12 @@ from setuptools import setup
 if sys.argv[1] == "test":
     # We use unittest2's skip* decorators, and if we don't help Python it will
     # import the older, incompatible unittest module
-    import unittest2
-    sys.modules["unittest"] = unittest2
+    try:
+        import unittest2
+        sys.modules["unittest"] = unittest2
+    except ImportError:
+        print("We use unittest2 for the unit tests, please install it")
+        sys.exit(1)
 
 
 install_requires = [
@@ -37,6 +41,5 @@ setup(name="nbyum",
       packages=["nbyum"],
       scripts=["nbyum"],
       install_requires=install_requires,
-      tests_require=["unittest2"],
       test_suite="unittest2.collector",
       )
