@@ -42,6 +42,7 @@ class TestUpdate(TestCase):
         # -- Check the installed packages after the update ---------
         expected = ["0:bar-1-1.nb5.0.noarch",
                     "0:foo-1-1.nb5.0.noarch",
+                    "0:nbsm-foo-1-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
 
         result = self._get_installed_rpms()
@@ -62,6 +63,7 @@ class TestUpdate(TestCase):
         # -- Check the installed packages after the update ---------
         expected = ["0:bar-1-1.nb5.0.noarch",
                     "0:foo-1-2.nb5.0.noarch",
+                    "0:nbsm-foo-1-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
 
         result = self._get_installed_rpms()
@@ -83,6 +85,7 @@ class TestUpdate(TestCase):
         expected = ["0:bar-1-1.nb5.0.noarch",
                     "0:bar-1-2.nb5.0.noarch",
                     "0:foo-1-1.nb5.0.noarch",
+                    "0:nbsm-foo-1-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
 
         result = self._get_installed_rpms()
@@ -103,6 +106,7 @@ class TestUpdate(TestCase):
         # -- Check the installed packages after the update ---------
         expected = ["0:baz-2-1.nb5.0.noarch",
                     "0:foo-1-1.nb5.0.noarch",
+                    "0:nbsm-foo-1-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
 
         result = self._get_installed_rpms()
@@ -124,6 +128,7 @@ class TestUpdate(TestCase):
         # -- Check the installed packages after the update ---------
         expected = ["0:bar-1-1.nb5.0.noarch",
                     "0:foo-1-1.nb5.0.noarch",
+                    "0:nbsm-foo-1-1.nb5.0.noarch",
                     "0:plouf-2-1.nb5.0.noarch",
                     "0:toto-2-1.nb5.0.noarch"]
 
@@ -148,6 +153,7 @@ class TestUpdate(TestCase):
         # -- Check the installed packages after the update ---------
         expected = ["0:baz-2-1.nb5.0.noarch",
                     "0:foo-1-2.nb5.0.noarch",
+                    "0:nbsm-foo-1-1.nb5.0.noarch",
                     "0:plouf-2-1.nb5.0.noarch",
                     "0:toto-2-1.nb5.0.noarch"]
 
@@ -173,6 +179,7 @@ class TestUpdate(TestCase):
         expected = ["0:bar-1-1.nb5.0.noarch",
                     "0:bar-1-2.nb5.0.noarch",
                     "0:foo-1-2.nb5.0.noarch",
+                    "0:nbsm-foo-1-1.nb5.0.noarch",
                     "0:plouf-2-1.nb5.0.noarch",
                     "0:toto-2-1.nb5.0.noarch"]
 
