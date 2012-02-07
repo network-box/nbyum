@@ -44,8 +44,8 @@ def get_parser():
                                   "security modules. Possible values are " \
                                   "'packages' and 'sms'.")
     parser_list.add_argument("patterns", nargs="*", metavar="PATTERN",
-                             help="A glob-like pattern to match " \
-                                  "names against, for example 'nb*'.")
+                             help="A (list of) glob-like pattern(s) to " \
+                                  "match names against, for example 'nb*'.")
     parser_list.set_defaults(func="list")
 
     # -- Subcommand: update --------------------------------------------------
