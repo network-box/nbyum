@@ -44,28 +44,28 @@ type, as described below:
 ** The value of the hash is the envra of the package to be installed.
 ** Example::
 
-    {'install': '0:kernel-3.1.7-4.nb5.0.4.x86_64'}
+    {"install": "0:kernel-3.1.7-4.nb5.0.4.x86_64"}
 
 * key = ``obsolete``
 
 ** This means that the package would be obsoleted if we'd actually run the
    transaction.
-** The value of the hash is a 2-tuple containing the envra of the package
+** The value of the hash is a 2-array containing the envra of the package
    which would be obsolated and the envra of the package which would obsolete
    it.
 ** Example::
 
-    {'obsolete': ('0:bar-1-1.nb5.0.noarch', '0:baz-2-1.nb5.0.noarch')}
+    {"obsolete": ["0:bar-1-1.nb5.0.noarch", "0:baz-2-1.nb5.0.noarch"]}
 
 * key = ``update``
 
 ** This means that the package would be updated if we'd actually run the
    transaction.
-** The value of the hash is a 2-tuple containing the envra of the package
+** The value of the hash is a 2-array containing the envra of the package
    which would be updated and the envra of the package which would update it.
 ** Example::
 
-    {'update': ('0:systemd-37-3.nb5.0.9.x86_64', '0:systemd-37-5.nb5.0.9.x86_64')}
+    {"update": ["0:systemd-37-3.nb5.0.9.x86_64", "0:systemd-37-5.nb5.0.9.x86_64"]}
 
 * key = ``installdep``
 
@@ -74,7 +74,7 @@ type, as described below:
 ** The value of the hash is the envra of the package to be installed.
 ** Example::
 
-    {'installdep': '0:plouf-2-1.nb5.0.noarch'}
+    {"installdep": "0:plouf-2-1.nb5.0.noarch"}
 
 Of course, nbyum might return **several lines of output**, since a transaction
 can be formed of several updates, installations, obsoletions, or any
@@ -85,11 +85,11 @@ In such a case, lines of output will be **grouped by type**
 **ordered** as they have been described above. As an example, one could have
 the following summary::
 
-    {'install': '0:kernel-3.1.7-4.nb5.0.4.x86_64'}
-    {'obsolete': ('0:upstart-1.2.2-1.nb5.0.noarch', '0:systemd-26-2.nb5.0.noarch')}
-    {'update': ('0:bash-4.2.10-4.nb5.0.9.x86_64', '0:bash-4.2.20-1.nb5.0.9.x86_64')}
-    {'update': ('0:glibc-2.14.90-14.nb5.0.9.x86_64', '0:glibc-2.14.90-24.nb5.0.9.x86_64')}
-    {'installdep': '0:systemd-units-26-2.nb5.0.noarch'}
+    {"install": "0:kernel-3.1.7-4.nb5.0.4.x86_64"}
+    {"obsolete": ["0:upstart-1.2.2-1.nb5.0.noarch", "0:systemd-26-2.nb5.0.noarch"]}
+    {"update": ["0:bash-4.2.10-4.nb5.0.9.x86_64", "0:bash-4.2.20-1.nb5.0.9.x86_64"]}
+    {"update": ["0:glibc-2.14.90-14.nb5.0.9.x86_64", "0:glibc-2.14.90-24.nb5.0.9.x86_64"]}
+    {"installdep": "0:systemd-units-26-2.nb5.0.noarch"}
 
 Update the system
 =================
@@ -113,5 +113,5 @@ representing the status of the package. The only two possible keys are
 
 Below is an example output of a packages listing::
 
-    {'installed': '0:nbsm-base-5.0.0-0.1.nb5.0.18.noarch'}
-    {'available': '0:nbsm-noc-provisioning-5.0.0-0.1.nb5.0.0.noarch'}
+    {"installed": "0:nbsm-base-5.0.0-0.1.nb5.0.18.noarch"}
+    {"available": "0:nbsm-noc-provisioning-5.0.0-0.1.nb5.0.0.noarch"}
