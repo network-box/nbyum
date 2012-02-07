@@ -1,4 +1,5 @@
 import fnmatch
+import json
 import os
 
 import yum
@@ -7,16 +8,6 @@ from errors import NBYumException, WTFException
 from utils import get_envra, list_ordergetter, transaction_ordergetter
 
 
-info_tmpl = "{'name': '%(name)s', 'sourcerpm': '%(base_package_name)s', " \
-            "'license': '%(license)s', 'epoch': '%(epoch)s', " \
-            "'version': '%(version)s', 'release': '%(release)s', " \
-            "'arch': '%(arch)s', 'summary': '%(summary)s', " \
-            "'description': '%(description)s'}"
-install_tmpl = "{'install': '%s'}"
-installdep_tmpl = "{'installdep': '%s'}"
-list_tmpl = "{'%s': '%s'}"
-update_tmpl = "{'update': ('%s', '%s')}"
-obsolete_tmpl = "{'obsolete': ('%s', '%s')}"
 
 
 class NBYumBase(yum.YumBase):
@@ -86,7 +77,7 @@ class NBYumBase(yum.YumBase):
                                                                type_filter),
                                       key=list_ordergetter):
             if status == "all" or status == pkg_status:
-                print(list_tmpl % (pkg_status, get_envra(pkg)))
+                print(json.dumps({pkg_status: get_envra(pkg)}))
 
     def update_packages(self, packages, apply=False):
         """Check for updates and optionally apply."""
@@ -115,7 +106,7 @@ class NBYumBase(yum.YumBase):
             if member.ts_state == "i":
                 envra = get_envra(member)
 
-                print(install_tmpl % envra)
+                print(json.dumps({"install": envra}))
                 continue
 
             # Packages obsoleted by a new one
@@ -132,7 +123,7 @@ class NBYumBase(yum.YumBase):
                 new = member.obsoleted_by[0]
                 envra_new = get_envra(new)
 
-                print(obsolete_tmpl % (envra_old, envra_new))
+                print(json.dumps({"obsolete": (envra_old, envra_new)}))
                 continue
 
             # Packages replaced by a newer update
@@ -149,7 +140,7 @@ class NBYumBase(yum.YumBase):
                 new = member.updated_by[0]
                 envra_new = get_envra(new)
 
-                print(update_tmpl % (envra_old, envra_new))
+                print(json.dumps({"update": (envra_old, envra_new)}))
                 continue
 
             # Packages being the actual update/obsoleter... or new dependency
@@ -157,7 +148,7 @@ class NBYumBase(yum.YumBase):
                 if member.isDep:
                     envra = get_envra(member)
 
-                    print(installdep_tmpl % envra)
+                    print(json.dumps({"installdep": envra}))
                     continue
 
             else:

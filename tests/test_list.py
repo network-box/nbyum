@@ -1,3 +1,5 @@
+import json
+
 from tests import TestCase
 
 
@@ -14,7 +16,7 @@ class TestListPackages(TestCase):
                     {'installed': '0:foo-1-1.nb5.0.noarch'},
                     {'installed': '0:toto-1-1.nb5.0.noarch'}]
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)
 
     def test_list_available_packages(self):
@@ -28,7 +30,7 @@ class TestListPackages(TestCase):
                     {'available': '0:plouf-2-1.nb5.0.noarch'},
                     {'available': '0:toto-2-1.nb5.0.noarch'}]
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)
 
     def test_list_packages(self):
@@ -45,7 +47,7 @@ class TestListPackages(TestCase):
                     {'available': '0:plouf-2-1.nb5.0.noarch'},
                     {'available': '0:toto-2-1.nb5.0.noarch'}]
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)
 
     def test_list_no_packages_match(self):
@@ -56,7 +58,7 @@ class TestListPackages(TestCase):
         # -- Check the listing -------------------------------------
         expected = []
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)
 
     def test_list_packages_match(self):
@@ -68,5 +70,5 @@ class TestListPackages(TestCase):
         expected = [{'installed': '0:foo-1-1.nb5.0.noarch'},
                     {'available': '0:plouf-2-1.nb5.0.noarch'}]
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)

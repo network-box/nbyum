@@ -1,3 +1,5 @@
+import json
+
 from tests import TestCase
 
 
@@ -13,7 +15,7 @@ class TestCheckUpdate(TestCase):
         # -- Check the update summary ------------------------------
         expected = []
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)
 
     def test_only_updates(self):
@@ -22,9 +24,9 @@ class TestCheckUpdate(TestCase):
         self._run_nbyum_test(args)
 
         # -- Check the update summary ------------------------------
-        expected = [{'update': ('0:foo-1-1.nb5.0.noarch', '0:foo-1-2.nb5.0.noarch')}]
+        expected = [{'update': ['0:foo-1-1.nb5.0.noarch', '0:foo-1-2.nb5.0.noarch']}]
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)
 
     def test_only_install(self):
@@ -35,7 +37,7 @@ class TestCheckUpdate(TestCase):
         # -- Check the update summary ------------------------------
         expected = [{'install': '0:bar-1-2.nb5.0.noarch'}]
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)
 
     def test_only_obsoletes(self):
@@ -44,9 +46,9 @@ class TestCheckUpdate(TestCase):
         self._run_nbyum_test(args)
 
         # -- Check the update summary ------------------------------
-        expected = [{'obsolete': ('0:bar-1-1.nb5.0.noarch', '0:baz-2-1.nb5.0.noarch')}]
+        expected = [{'obsolete': ['0:bar-1-1.nb5.0.noarch', '0:baz-2-1.nb5.0.noarch']}]
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)
 
     def test_install_as_dep(self):
@@ -55,10 +57,10 @@ class TestCheckUpdate(TestCase):
         self._run_nbyum_test(args)
 
         # -- Check the update summary ------------------------------
-        expected = [{'update': ('0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch')},
+        expected = [{'update': ['0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch']},
                     {'installdep': '0:plouf-2-1.nb5.0.noarch'}]
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)
 
     def test_ordering(self):
@@ -67,12 +69,12 @@ class TestCheckUpdate(TestCase):
         self._run_nbyum_test(args)
 
         # -- Check the update summary ------------------------------
-        expected = [{'obsolete': ('0:bar-1-1.nb5.0.noarch', '0:baz-2-1.nb5.0.noarch')},
-                    {'update': ('0:foo-1-1.nb5.0.noarch', '0:foo-1-2.nb5.0.noarch')},
-                    {'update': ('0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch')},
+        expected = [{'obsolete': ['0:bar-1-1.nb5.0.noarch', '0:baz-2-1.nb5.0.noarch']},
+                    {'update': ['0:foo-1-1.nb5.0.noarch', '0:foo-1-2.nb5.0.noarch']},
+                    {'update': ['0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch']},
                     {'installdep': '0:plouf-2-1.nb5.0.noarch'}]
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)
 
     def test_ordering_bis(self):
@@ -82,9 +84,9 @@ class TestCheckUpdate(TestCase):
 
         # -- Check the update summary ------------------------------
         expected = [{'install': '0:bar-1-2.nb5.0.noarch'},
-                    {'update': ('0:foo-1-1.nb5.0.noarch', '0:foo-1-2.nb5.0.noarch')},
-                    {'update': ('0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch')},
+                    {'update': ['0:foo-1-1.nb5.0.noarch', '0:foo-1-2.nb5.0.noarch']},
+                    {'update': ['0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch']},
                     {'installdep': '0:plouf-2-1.nb5.0.noarch'}]
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)
