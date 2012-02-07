@@ -115,3 +115,36 @@ Below is an example output of a packages listing::
 
     {"installed": "0:nbsm-base-5.0.0-0.1.nb5.0.18.noarch"}
     {"available": "0:nbsm-noc-provisioning-5.0.0-0.1.nb5.0.0.noarch"}
+
+Obtain informations on packages
+===============================
+
+The command prints a JSON object per line, each one representing a package.
+
+The list of names used for the members of the objects are as follow:
+
+* ``name``: The name of the package.
+* ``base_package_name``: The name of the base package. This is also the name
+    of the source rpm and of the spec file.
+* ``license``: The license under which the software is distributed.
+* ``epoch``: The epoch of the package.
+* ``version``: The version of the packaged software.
+* ``release``: The release of the package.
+* ``arch``: The architecture for which the package has been built.
+* ``summary``: The summary of the package.
+* ``description``: The description of the package.
+
+Below is an example output::
+
+    {"name": "bar", "base_package_name": "bar", "license": "MIT", "epoch": "0",
+     "version": "1", "release": "1.nb5.0", "arch": "noarch",
+     "summary": "Get some Bar",
+     "description": "This package provides you the joy of getting some Bar."}
+    {"name": "foo", "base_package_name": "foo", "license": "MIT", "epoch": "0",
+     "version": "1", "release": "1.nb5.0", "arch": "noarch",
+     "summary": "Get some Foo",
+     "description": "This package provides you the joy of getting some Foo."}
+
+.. note::
+    The example above should really be on two lines (2 packages), but it
+    contains line breaks to improve readability of this documentation.
