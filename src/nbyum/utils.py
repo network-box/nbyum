@@ -29,7 +29,7 @@ def get_parser():
                                          " system are checked.")
     parser_checkupdate.set_defaults(func="check_update")
 
-    # -- Subcommand: list -----------------------------------------------------
+    # -- Subcommand: list ----------------------------------------------------
     parser_list = subparsers.add_parser("list",
                                         help="List packages and security " \
                                              "modules")
@@ -48,7 +48,7 @@ def get_parser():
                                   "names against, for example 'nb*'.")
     parser_list.set_defaults(func="list")
 
-    # -- Subcommand: update ---------------------------------------------------
+    # -- Subcommand: update --------------------------------------------------
     parser_update = subparsers.add_parser("update",
                                           help="Update packages or the " \
                                                "whole system")
