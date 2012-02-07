@@ -39,6 +39,10 @@ class NBYumCli(object):
         self.base.update_packages(self.args.packages, apply=False)
         self.base.recap_transaction()
 
+    def info(self):
+        """Get some infos about packages."""
+        self.base.get_infos(self.args.patterns)
+
     def list(self):
         """List packages and security modules."""
         self.base.list_packages(self.args.type, self.args.filter,

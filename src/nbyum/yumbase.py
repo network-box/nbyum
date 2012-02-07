@@ -49,6 +49,10 @@ class NBYumBase(yum.YumBase):
 
         return result
 
+    def get_infos(self, patterns):
+        """Get some infos on packages."""
+        pass
+
     def list_packages(self, type_, status, patterns):
         """List packages and security modules."""
         if type_ == "sms":

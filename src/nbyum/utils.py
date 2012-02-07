@@ -29,6 +29,14 @@ def get_parser():
                                          " system are checked.")
     parser_checkupdate.set_defaults(func="check_update")
 
+    # -- Subcommand: info ----------------------------------------------------
+    parser_info = subparsers.add_parser("info",
+                                        help="Get some infos about packages")
+    parser_info.add_argument("patterns", nargs="+", metavar="PATTERN",
+                             help="A (list of) glob-like pattern(s) to " \
+                                  "match names against, for example 'nb*'.")
+    parser_info.set_defaults(func="info")
+
     # -- Subcommand: list ----------------------------------------------------
     parser_list = subparsers.add_parser("list",
                                         help="List packages and security " \
