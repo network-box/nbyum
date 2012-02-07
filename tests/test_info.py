@@ -1,3 +1,5 @@
+import json
+
 from tests import TestCase
 
 
@@ -12,7 +14,7 @@ class TestInfo(TestCase):
         # -- Check the infos ---------------------------------------
         expected = []
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)
 
     def test_info_simple(self):
@@ -21,13 +23,13 @@ class TestInfo(TestCase):
         self._run_nbyum_test(args)
 
         # -- Check the infos ---------------------------------------
-        expected = [{'name': 'foo', 'sourcerpm': 'foo', 'license': 'MIT',
+        expected = [{'name': 'foo', 'base_package_name': 'foo', 'license': 'MIT',
                      'epoch': '0', 'version': '1', 'release': '1.nb5.0',
                      'arch': 'noarch', 'summary': 'Get some Foo',
                      'description': 'This package provides you the joy of ' \
                                     'getting some Foo.'}]
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)
 
     def test_info_patterns(self):
@@ -36,17 +38,17 @@ class TestInfo(TestCase):
         self._run_nbyum_test(args)
 
         # -- Check the infos ---------------------------------------
-        expected = [{'name': 'bar', 'sourcerpm': 'bar', 'license': 'MIT',
+        expected = [{'name': 'bar', 'base_package_name': 'bar', 'license': 'MIT',
                      'epoch': '0', 'version': '1', 'release': '1.nb5.0',
                      'arch': 'noarch', 'summary': 'Get some Bar',
                      'description': 'This package provides you the joy of ' \
                                     'getting some Bar.'},
-                    {'name': 'foo', 'sourcerpm': 'foo', 'license': 'MIT',
+                    {'name': 'foo', 'base_package_name': 'foo', 'license': 'MIT',
                      'epoch': '0', 'version': '1', 'release': '1.nb5.0',
                      'arch': 'noarch', 'summary': 'Get some Foo',
                      'description': 'This package provides you the joy of ' \
                                     'getting some Foo.'},
-                    {'name': 'nbsm-foo', 'sourcerpm': 'nbsm-foo',
+                    {'name': 'nbsm-foo', 'base_package_name': 'nbsm-foo',
                      'license': 'MIT', 'epoch': '0', 'version': '1',
                      'release': '1.nb5.0', 'arch': 'noarch',
                      'summary': 'Security Module to get some Foo',
@@ -54,5 +56,5 @@ class TestInfo(TestCase):
                                     'getting some Foo.'},
                     ]
 
-        result = [eval(line) for line in self.stdout.split("\n") if line]
+        result = [json.loads(line) for line in self.stdout.split("\n") if line]
         self.assertEqual(result, expected)

@@ -8,6 +8,8 @@ from errors import NBYumException, WTFException
 from utils import get_envra, list_ordergetter, transaction_ordergetter
 
 
+info_attrs = ("name", "base_package_name", "license", "epoch", "version",
+              "release", "arch", "summary", "description")
 
 
 class NBYumBase(yum.YumBase):
@@ -53,7 +55,7 @@ class NBYumBase(yum.YumBase):
         for pkg_status, pkg in sorted(self.__get_packages_list(patterns,
                                                                type_filter),
                                       key=list_ordergetter):
-            print(info_tmpl % pkg)
+            print(json.dumps(dict((name, getattr(pkg, name)) for name in info_attrs)))
 
     def list_packages(self, type_, status, patterns):
         """List packages and security modules."""
