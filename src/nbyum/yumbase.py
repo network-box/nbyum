@@ -7,6 +7,11 @@ from errors import NBYumException, WTFException
 from utils import get_envra, list_ordergetter, transaction_ordergetter
 
 
+info_tmpl = "{'name': '%(name)s', 'sourcerpm': '%(base_package_name)s', " \
+            "'license': '%(license)s', 'epoch': '%(epoch)s', " \
+            "'version': '%(version)s', 'release': '%(release)s', " \
+            "'arch': '%(arch)s', 'summary': '%(summary)s', " \
+            "'description': '%(description)s'}"
 install_tmpl = "{'install': '%s'}"
 installdep_tmpl = "{'installdep': '%s'}"
 list_tmpl = "{'%s': '%s'}"
@@ -51,7 +56,13 @@ class NBYumBase(yum.YumBase):
 
     def get_infos(self, patterns):
         """Get some infos on packages."""
-        pass
+        # We don't want to filter here, unlike for listings
+        type_filter = lambda x: True
+
+        for pkg_status, pkg in sorted(self.__get_packages_list(patterns,
+                                                               type_filter),
+                                      key=list_ordergetter):
+            print(info_tmpl % pkg)
 
     def list_packages(self, type_, status, patterns):
         """List packages and security modules."""
