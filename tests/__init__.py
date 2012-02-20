@@ -1,4 +1,3 @@
-import cStringIO
 from operator import attrgetter
 import os
 import subprocess
