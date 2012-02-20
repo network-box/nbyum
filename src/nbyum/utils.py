@@ -126,6 +126,9 @@ def transaction_ordergetter(pkg):
     This last requirement is what makes the alphabetical order unsuitable, so
     we need to be clevererer.
     """
+    # Everything we don't specifically handle is ordered way last
+    index = 99
+
     # Order install first, then obsoletions, then regular updates
     reference = ["i", "od", "ud"]
     if pkg.ts_state in reference:
