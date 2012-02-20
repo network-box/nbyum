@@ -1,8 +1,11 @@
 import cStringIO
+from operator import attrgetter
 import os
 import subprocess
 import sys
 import unittest2
+
+import rpm
 
 
 global_dataroot = os.path.join(os.path.abspath(os.getcwd()), "tests/data")
@@ -79,3 +82,19 @@ class TestCase(unittest2.TestCase):
         cmd = ["nbyum", "-c", self.yumconf] + args
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         self.stdout, unused = proc.communicate()
+
+    def _get_installed_rpms(self):
+        """Not a test, just a handy helper.
+
+        This returns the list of installed packages, to compare with what was
+        expected after the update.
+        """
+        result = []
+
+        for h in sorted(rpm.TransactionSet(self.installroot).dbMatch(),
+                        key=attrgetter("name", "version", "release")):
+            if h["epoch"] is None:
+                h["epoch"] = 0
+            result.append("%(epoch)s:%(name)s-%(version)s-%(release)s.%(arch)s" % h)
+
+        return result

@@ -1,9 +1,6 @@
 import json
-from operator import attrgetter
 import os
 import unittest2
-
-import rpm
 
 from tests import TestCase
 
@@ -11,22 +8,6 @@ from tests import TestCase
 class TestUpdate(TestCase):
     command = "update"
     installonlypkgs = "bar"
-
-    def _get_installed_rpms(self):
-        """Not a test, just a handy helper.
-
-        This returns the list of installed packages, to compare with what was
-        expected after the update.
-        """
-        result = []
-
-        for h in sorted(rpm.TransactionSet(self.installroot).dbMatch(),
-                        key=attrgetter("name", "version", "release")):
-            if h["epoch"] is None:
-                h["epoch"] = 0
-            result.append("%(epoch)s:%(name)s-%(version)s-%(release)s.%(arch)s" % h)
-
-        return result
 
     @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_no_updates(self):
