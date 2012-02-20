@@ -125,7 +125,7 @@ class NBYumBase(yum.YumBase):
         #   - member.repoid (string: 'experimental', 'installed', ...
         for member in sorted(self.tsInfo.getMembers(),
                              key=transaction_ordergetter):
-            # Packages newly installed
+            # Packages newly installed (install_only when running an update)
             if member.ts_state == "i":
                 print(json.dumps({"install": get_envra(member)}))
                 continue
@@ -160,10 +160,16 @@ class NBYumBase(yum.YumBase):
                                              get_envra(member.updated_by[0]))}))
                 continue
 
-            # Packages being the actual update/obsoleter... or new dependency
+            # Packages being the actual update/obsoleter...
+            # or a new dependency, or even a new install >_<
             elif member.ts_state == "u":
                 if member.isDep:
                     print(json.dumps({"installdep": get_envra(member)}))
+                    continue
+
+                if not member.updates and not member.obsoletes:
+                    # Packages newly installed (when running 'install')
+                    print(json.dumps({"install": get_envra(member)}))
                     continue
 
             else:
