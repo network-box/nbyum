@@ -165,3 +165,25 @@ Below is an example output::
 .. note::
     The example above should really be on two lines (2 packages), but it
     contains line breaks to improve readability of this documentation.
+
+Install new packages and security modules
+=========================================
+
+.. note::
+   Only security modules can be installed at the moment. It might become
+   possible in the future to install packages as well.
+
+The command prints a JSON object per line, each one representing a package in
+the install transaction.
+
+
+The output is similar to the ``check-update`` one, except only ``install`` and
+``installdep`` are valid keys for the objects.
+
+Here is an example output::
+
+    {"install": "0:nbsm-noc-provisioning-5.0.0-0.1.nb5.0.0.noarch"}
+    {"installdep": "0:mysql-libs-5.1.52-1_1.nb5.0.0.x86_64"}
+    {"installdep": "0:nbprovision-5.0.0-0.1.svn20086.nb5.0.1.noarch"}
+    {"installdep": "0:nbprovision-pushcode-5.0.0-0.1.svn20086.nb5.0.1.noarch"}
+    {"installdep": "0:perl-DBD-MySQL-4.013-3.nb5.0.0.x86_64"}
