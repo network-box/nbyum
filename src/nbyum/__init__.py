@@ -42,6 +42,10 @@ class NBYumCli(object):
         except Exception, e:
             import json
 
+            if self.args.debug:
+                import traceback
+                e = traceback.format_exc()
+
             print(json.dumps({'error': '%s' % e}))
             return 1
 
