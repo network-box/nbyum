@@ -57,6 +57,27 @@ class NBYumBase(yum.YumBase):
                                       key=list_ordergetter):
             print(json.dumps(dict((name, getattr(pkg, name)) for name in info_attrs)))
 
+    def install_packages(self, type_, patterns):
+        """Install packages and security modules."""
+        if type_ == "sms":
+            # Special case for the security modules
+            patterns = self.__smsize_patterns(patterns)
+        else:
+            raise WTFException("Somehow you managed to pass an unhandled " \
+                               "value for the installing type (%s). Please " \
+                               "report it as a bug." % type_)
+
+        for pattern in patterns:
+            self.install(pattern=pattern)
+
+        # Get new packages to be installed as dependencies
+        res, resmsg = self.buildTransaction()
+
+        if res != 2 and len(self.tsInfo.getMembers()):
+            raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
+
+        self.processTransaction(rpmDisplay=self.nbyum_rpmDisplay)
+
     def list_packages(self, type_, status, patterns):
         """List packages and security modules."""
         if type_ == "sms":

@@ -59,6 +59,12 @@ class NBYumCli(object):
         """Get some infos about packages."""
         self.base.get_infos(self.args.patterns)
 
+    @ensure_privileges
+    def install(self):
+        """Install packages and security modules."""
+        self.base.install_packages(self.args.type, self.args.patterns)
+        self.base.recap_transaction()
+
     def list(self):
         """List packages and security modules."""
         self.base.list_packages(self.args.type, self.args.filter,
