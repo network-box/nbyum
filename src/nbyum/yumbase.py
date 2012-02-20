@@ -106,9 +106,7 @@ class NBYumBase(yum.YumBase):
                              key=transaction_ordergetter):
             # Packages newly installed
             if member.ts_state == "i":
-                envra = get_envra(member)
-
-                print(json.dumps({"install": envra}))
+                print(json.dumps({"install": get_envra(member)}))
                 continue
 
             # Packages obsoleted by a new one
@@ -122,10 +120,8 @@ class NBYumBase(yum.YumBase):
                         msg.append("    %s" % (get_envra(pkg)))
                     raise WTFException("\n".join(msg))
 
-                new = member.obsoleted_by[0]
-                envra_new = get_envra(new)
-
-                print(json.dumps({"obsolete": (envra_old, envra_new)}))
+                print(json.dumps({"obsolete": (envra_old,
+                                               get_envra(member.obsoleted_by[0]))}))
                 continue
 
             # Packages replaced by a newer update
@@ -139,18 +135,14 @@ class NBYumBase(yum.YumBase):
                         msg.append("    %s" % (get_envra(pkg)))
                     raise WTFException("\n".join(msg))
 
-                new = member.updated_by[0]
-                envra_new = get_envra(new)
-
-                print(json.dumps({"update": (envra_old, envra_new)}))
+                print(json.dumps({"update": (envra_old,
+                                             get_envra(member.updated_by[0]))}))
                 continue
 
             # Packages being the actual update/obsoleter... or new dependency
             elif member.ts_state == "u":
                 if member.isDep:
-                    envra = get_envra(member)
-
-                    print(json.dumps({"installdep": envra}))
+                    print(json.dumps({"installdep": get_envra(member)}))
                     continue
 
             else:
