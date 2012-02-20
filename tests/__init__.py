@@ -1,3 +1,4 @@
+import json
 from operator import attrgetter
 import os
 import subprocess
@@ -76,11 +77,14 @@ class TestCase(unittest2.TestCase):
                ]
         subprocess.check_call(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
-    def _run_nbyum_test(self, args):
+    def _run_nbyum_test(self, args, expected):
         """This is not a test method, just a helper to avoid duplication."""
         cmd = ["nbyum", "-c", self.yumconf] + args
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        self.stdout, unused = proc.communicate()
+        stdout, unused = proc.communicate()
+
+        result = [json.loads(line) for line in stdout.split("\n") if line]
+        self.assertEqual(result, expected)
 
     def _get_installed_rpms(self):
         """Not a test, just a handy helper.
