@@ -1,6 +1,8 @@
+import json
+
 from yum.rpmtrans import NoOutputCallBack
 
-from errors import NBYumException
+from errors import NBYumException, WTFException
 from utils import ensure_privileges
 from yumbase import NBYumBase
 
@@ -24,13 +26,26 @@ class NBYumCli(object):
 
         self.base.setCacheDir()
 
-        # The Yum API is just hopeless, it prints errors instead of raising
-        # them. As a result, if we want to retrieve it, we must trick the
-        # YumBase logger.
-        # /me feels dirty :(
+        # The Yum API is just hopeless, it prints warnings and errors instead
+        # of making them available and useful. As a result, if we want to
+        # retrieve it, we must play dirty tricks on the YumBase loggers. :(
+        def new_warning(msg, *args):
+            if len(args) == msg.count("%s"):
+                print(json.dumps({'warning': '%s' % (msg%args)}))
+
+            else:
+                msg = "Something unexpected happened while trying to print " \
+                      "a warning.\n\nThe warning message to print was the " \
+                      "following:\n  %s\n\nHowever, some additional " \
+                      "arguments were passed, but it is not clear how they\n" \
+                      "should have been handled:\n  %s\n\nPlease report a " \
+                      "bug, providing the above information." % (msg, args)
+                raise WTFException(msg)
+
         def new_critical(msg):
             raise NBYumException(msg)
 
+        self.base.verbose_logger.warning = new_warning
         self.base.logger.critical = new_critical
 
     def run(self):
@@ -40,8 +55,6 @@ class NBYumCli(object):
             return 0
 
         except Exception, e:
-            import json
-
             if self.args.debug:
                 import traceback
                 e = traceback.format_exc()
