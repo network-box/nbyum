@@ -76,7 +76,8 @@ class NBYumBase(yum.YumBase):
         if res != 2 and len(self.tsInfo.getMembers()):
             raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
 
-        self.processTransaction(rpmDisplay=self.nbyum_rpmDisplay)
+        if len(self.tsInfo.getMembers()):
+            self.processTransaction(rpmDisplay=self.nbyum_rpmDisplay)
 
     def list_packages(self, type_, status, patterns):
         """List packages and security modules."""
