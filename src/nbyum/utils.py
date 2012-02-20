@@ -21,12 +21,12 @@ def get_parser():
     parser_checkupdate = subparsers.add_parser("check-update",
                                                help="Check for updates to " \
                                                     "installed packages")
-    parser_checkupdate.add_argument("packages", nargs="*", metavar="PACKAGE",
-                                    help="The package(s) for which to check " \
-                                         "if an update is available. An " \
-                                         "arbitrary number can be specified." \
-                                         " If none is, updates for the whole" \
-                                         " system are checked.")
+    parser_checkupdate.add_argument("patterns", nargs="*", metavar="PATTERN",
+                                    help="A (list of) glob-like patterns to " \
+                                         "match names against, for example " \
+                                         "'nb*'. If none is specified, " \
+                                         "updates for the whole system are " \
+                                         "checked.")
     parser_checkupdate.set_defaults(func="check_update")
 
     # -- Subcommand: info ----------------------------------------------------
@@ -60,10 +60,11 @@ def get_parser():
     parser_update = subparsers.add_parser("update",
                                           help="Update packages or the " \
                                                "whole system")
-    parser_update.add_argument("packages", nargs="*", metavar="PACKAGE",
-                               help="The package(s) to update. An arbitrary " \
-                                    "number can be specified. If none is, " \
-                                    "the whole system is updated.")
+    parser_update.add_argument("patterns", nargs="*", metavar="PATTERN",
+                               help="A (list of) glob-like patterns to match" \
+                                    "names against, for example 'nb*'. If " \
+                                    "none is specified, the whole system is " \
+                                    "updated.")
     parser_update.set_defaults(func="update")
 
     return parser

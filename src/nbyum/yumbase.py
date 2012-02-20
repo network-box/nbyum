@@ -81,11 +81,11 @@ class NBYumBase(yum.YumBase):
             if status == "all" or status == pkg_status:
                 print(json.dumps({pkg_status: get_envra(pkg)}))
 
-    def update_packages(self, packages, apply=False):
+    def update_packages(self, patterns, apply=False):
         """Check for updates and optionally apply."""
-        if packages:
-            for package in packages:
-                self.update(pattern=package)
+        if patterns:
+            for pattern in patterns:
+                self.update(pattern=pattern)
         else:
             self.update()
 
