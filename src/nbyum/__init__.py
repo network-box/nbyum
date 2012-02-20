@@ -1,7 +1,8 @@
 from yum.rpmtrans import NoOutputCallBack
 
-from yumbase import NBYumBase
+from errors import NBYumException
 from utils import ensure_privileges
+from yumbase import NBYumBase
 
 
 class NBYumCli(object):
@@ -22,6 +23,15 @@ class NBYumCli(object):
             self.base.preconf.fn = args.config
 
         self.base.setCacheDir()
+
+        # The Yum API is just hopeless, it prints errors instead of raising
+        # them. As a result, if we want to retrieve it, we must trick the
+        # YumBase logger.
+        # /me feels dirty :(
+        def new_critical(msg):
+            raise NBYumException(msg)
+
+        self.base.logger.critical = new_critical
 
     def run(self):
         try:
