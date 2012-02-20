@@ -124,12 +124,22 @@ def transaction_ordergetter(pkg):
         - updates should come before the new packages coming as dependencies
 
     This last requirement is what makes the alphabetical order unsuitable, so
-    we need a reference list.
+    we need to be clevererer.
     """
-    reference = ["i", "od", "ud", "u"]
+    # Order install first, then obsoletions, then regular updates
+    reference = ["i", "od", "ud"]
+    if pkg.ts_state in reference:
+        index = reference.index(pkg.ts_state)
 
-    return "%s %s" % (reference.index(pkg.ts_state),
-                      get_nevra(pkg, ordering=True))
+    elif pkg.ts_state == "u":
+        if pkg.isDep:
+            # Packages installed as dependencies are last
+            index = 3
+        elif not pkg.updates:
+            # Packages installed with 'nbyum install' are first
+            index = 0
+
+    return "%02d %s" % (index, get_nevra(pkg, ordering=True))
 
 def ensure_privileges(command):
     """Used as a decorator to ensure a command is run as root."""
