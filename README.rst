@@ -26,6 +26,23 @@ command rather than to the global tool::
 
     # nbyum check-update -h
 
+Warnings and error messages
+===========================
+
+Shi^wErrors happen.
+
+And when they do, they will be printed as JSON objects, one on each line.
+
+The possible keys to look for are ``warning`` and ``error``, for example::
+
+    # nbyum install sms base
+    {"warning": "Package nbsm-base-5.0.0-0.1.nb5.0.18.noarch already installed and latest version"}
+
+    # nbyum check-update nosuchpackage
+    {"error": "No Match for argument: nosuchpackage"}
+
+Warnings are not fatal, but errors are.
+
 Check for available updates
 ===========================
 
