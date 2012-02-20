@@ -40,7 +40,9 @@ class NBYumCli(object):
             return 0
 
         except Exception, e:
-            print("{'error': '%s'}" % e)
+            import json
+
+            print(json.dumps({'error': '%s' % e}))
             return 1
 
     # -- Functions corresponding to commands ---------------------------------
