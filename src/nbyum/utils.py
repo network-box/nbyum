@@ -174,6 +174,9 @@ def transaction_ordergetter(pkg):
         elif not pkg.updates and not pkg.obsoletes:
             # Packages installed with 'nbyum install' are first
             index = 0
+    elif pkg.ts_state == "e":
+        # Packages being removed with `nbyum remove'
+        index = 40
 
     return "%02d %s" % (index, get_nevra(pkg, ordering=True))
 
