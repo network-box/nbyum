@@ -176,7 +176,6 @@ Install new packages and security modules
 The command prints a JSON object per line, each one representing a package in
 the install transaction.
 
-
 The output is similar to the ``check-update`` one, except only ``install`` and
 ``installdep`` are valid keys for the objects.
 
@@ -187,3 +186,21 @@ Here is an example output::
     {"installdep": "0:nbprovision-5.0.0-0.1.svn20086.nb5.0.1.noarch"}
     {"installdep": "0:nbprovision-pushcode-5.0.0-0.1.svn20086.nb5.0.1.noarch"}
     {"installdep": "0:perl-DBD-MySQL-4.013-3.nb5.0.0.x86_64"}
+
+Remove packages and security modules
+====================================
+
+.. note::
+   Only security modules can be removed at the moment. It might become
+   possible in the future to remove packages as well.
+
+The command prints a JSON object per line, each one representing a package in
+the removal transaction.
+
+The ourput is similar to the ``check-update`` one, except only ``remove`` is a
+valid key for the objects.
+
+Here is an example output::
+
+    {"remove": "0:nbsm-bidule-1-1.nb5.0.noarch"}
+    {"remove": "0:bidule-1-1.nb5.0.noarch"}
