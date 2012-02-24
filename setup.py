@@ -41,7 +41,10 @@ class TestCommand(Command):
 
         tests = unittest2.collector()
         t = unittest2.TextTestRunner(verbosity=self.verbose)
-        t.run(tests)
+        result = t.run(tests)
+
+        if result.errors or result.failures:
+            sys.exit(1)
 
 
 setup(name="nbyum",
