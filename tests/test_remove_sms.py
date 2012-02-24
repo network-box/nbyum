@@ -45,6 +45,11 @@ class TestRemoveSms(TestCase):
     @unittest2.skipIf(os.getuid() != 0, "Removals must be run as root")
     def test_remove_sm_with_deps(self):
         """Try removing a security module and the *packages* it depends on."""
+        # -- Setup: install a security module with deps ------------
+        # This can't be done as part of the setUp because then yum
+        # won't identify the leaves to remove
+        self._install_packages_setup(["nbsm-bidule"])
+
         args = [self.command, "sms", "nbsm-bidule"]
 
         # -- Check the removal summary -----------------------------
