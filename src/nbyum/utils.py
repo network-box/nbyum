@@ -4,6 +4,19 @@ import os
 from errors import NBYumException
 
 
+class DummyOpts(object):
+    """Just a dummy class to get the plugins to run.
+
+    Plugins expect to be passed an optparse object so they can check if the
+    user specified certain command-line arguments.
+
+    Instances of this class will simply emulate those by providing to plugins
+    the parameters they want.
+    """
+    def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
 def get_parser():
     """Get the argument parser for the main nbyum command line tool."""
     # -- Root level arguments (-h/--help is added by default) ----------------

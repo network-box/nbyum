@@ -3,7 +3,7 @@ import json
 from yum.rpmtrans import NoOutputCallBack
 
 from errors import NBYumException, WTFException
-from utils import ensure_privileges
+from utils import DummyOpts, ensure_privileges
 from yumbase import NBYumBase
 
 
@@ -28,6 +28,9 @@ class NBYumCli(object):
             self.base.preconf.fn = args.config
 
         self.base.setCacheDir()
+
+        # We don't care about it, but calling it initializes the plugins...
+        self.base.conf
 
         # -- Monkey-patch the YumBase for what can't be done as preconfig ----
         # The Yum API prints warnings and errors instead of making them
