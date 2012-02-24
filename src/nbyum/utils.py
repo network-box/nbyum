@@ -39,7 +39,8 @@ def get_parser():
 
     # -- Subcommand: install -------------------------------------------------
     parser_install = subparsers.add_parser("install",
-                                           help="Install available packages")
+                                           help="Install available packages" \
+                                                " and security modules")
     parser_install.add_argument("type", metavar="sms",
                              choices=["sms"],
                              help="Choose between installing packages and " \
@@ -47,8 +48,8 @@ def get_parser():
                                   " is 'sms' as packages installation is not" \
                                   " implemented yet.")
     parser_install.add_argument("patterns", nargs="+", metavar="PATTERN",
-                             help="A (list of) glob-like pattern(s) to " \
-                                  "match names against, for example 'nb*'.")
+                                help="A (list of) glob-like pattern(s) to " \
+                                     "match names against, for example 'nb*'.")
     parser_install.set_defaults(func="install")
 
     # -- Subcommand: list ----------------------------------------------------

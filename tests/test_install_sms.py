@@ -30,7 +30,7 @@ class TestInstallSms(TestCase):
         """Try installing an already installed security module."""
         args = [self.command, "sms", "foo"]
 
-        # -- Check the error message -------------------------------
+        # -- Check the warning message -----------------------------
         expected = [{"warning": "Package nbsm-foo-1-1.nb5.0.noarch already installed and latest version"}]
         self._run_nbyum_test(args, expected)
 
