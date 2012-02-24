@@ -93,6 +93,8 @@ class NBYumCli(object):
     @ensure_privileges
     def remove(self):
         """Remove packages and security modules."""
+        self.base.plugins.setCmdLine(DummyOpts(remove_leaves=True), None)
+
         self.base.remove_packages(self.args.type, self.args.patterns)
         self.base.recap_transaction()
 
