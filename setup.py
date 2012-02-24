@@ -3,16 +3,6 @@ import sys
 
 from distutils.core import setup, Command
 
-if sys.argv[1] == "test":
-    # We use unittest2's skip* decorators, and if we don't help Python it will
-    # import the older, incompatible unittest module
-    try:
-        import unittest2
-        sys.modules["unittest"] = unittest2
-    except ImportError:
-        print("We use unittest2 for the unit tests, please install it")
-        sys.exit(1)
-
 
 install_requires = [
     # Not available from Pypi, but worth mentioning for packagers
@@ -40,6 +30,15 @@ class TestCommand(Command):
 
     def run(self):
         """Run all the unit tests found in the `tests/' folder."""
+        # We use unittest2's skip* decorators, and if we don't help Python it will
+        # import the older, incompatible unittest module
+        try:
+            import unittest2
+            sys.modules["unittest"] = unittest2
+        except ImportError:
+            print("We use unittest2 for the unit tests, please install it")
+            sys.exit(1)
+
         tests = unittest2.collector()
         t = unittest2.TextTestRunner(verbosity=self.verbose)
         t.run(tests)
