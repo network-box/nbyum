@@ -131,3 +131,29 @@ class TestUpdate(TestCase):
                     "0:plouf-2-1.nb5.0.noarch",
                     "0:toto-2-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
+
+    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
+    def test_no_newsave(self):
+        """Update and make sure no rpmnew/rpmsave files were left."""
+        args = [self.command]
+
+        # -- Quick modification of the config files ----------------
+        with open("/etc/foo.conf", "w") as f:
+            f.write("foo=0\n")
+        with open("/etc/foo-noreplace.conf", "w") as f:
+            f.write("foo=0\n")
+
+        # -- Check the update summary ------------------------------
+        expected = [{'update': ['0:nbsm-foo-1-1.nb5.0.noarch', '0:nbsm-foo-2-1.nb5.0.noarch']}]
+        self._run_nbyum_test(args, expected)
+
+        # -- Check the installed packages after the update ---------
+        expected = ["0:bar-1-1.nb5.0.noarch",
+                    "0:foo-1-1.nb5.0.noarch",
+                    "0:nbsm-foo-2-1.nb5.0.noarch",
+                    "0:toto-1-1.nb5.0.noarch"]
+        self._check_installed_rpms(expected)
+
+        # -- Check that no rpmnew/rpmsave files were left ----------
+        self.assertFalse(os.path.exists("/etc/foo.conf.rpmsave"))
+        self.assertFalse(os.path.exists("/etc/foo-noreplace.conf.rpmnew"))
