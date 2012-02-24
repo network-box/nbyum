@@ -26,9 +26,9 @@ class NBYumCli(object):
 
         self.base.setCacheDir()
 
-        # The Yum API is just hopeless, it prints warnings and errors instead
-        # of making them available and useful. As a result, if we want to
-        # retrieve it, we must play dirty tricks on the YumBase loggers. :(
+        # The Yum API prints warnings and errors instead of making them
+        # available and useful. As a result, if we want to retrieve them, we
+        # must play dirty tricks on the YumBase loggers. :(
         def new_warning(msg, *args):
             if len(args) == msg.count("%s"):
                 print(json.dumps({'warning': '%s' % (msg%args)}))
