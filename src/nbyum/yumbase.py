@@ -122,6 +122,23 @@ class NBYumBase(yum.YumBase):
         if res != 2 and len(self.tsInfo.getMembers()):
             raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
 
+        # Check that this won't remove security modules unexpectedly
+        unexpectedly_removed_sms = []
+        for pkg in self.tsInfo.getMembers():
+            if pkg.name.startswith("nbsm-"):
+                unexpectedly_removed_sms.append(pkg.name)
+                for pattern in patterns:
+                    if fnmatch.fnmatch(pkg.name, pattern):
+                        unexpectedly_removed_sms.remove(pkg.name)
+                        break
+
+        if unexpectedly_removed_sms:
+            msg = "Proceeding would remove the following " \
+                  "security module%s:\n  - %s\nTransaction aborted." \
+                      % (len(unexpectedly_removed_sms)>1 and "s" or "",
+                         '\n  - '.join(unexpectedly_removed_sms))
+            raise NBYumException(msg)
+
         if len(self.tsInfo.getMembers()):
             self.processTransaction(rpmDisplay=self.nbyum_rpmDisplay)
 
