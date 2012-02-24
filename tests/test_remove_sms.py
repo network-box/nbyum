@@ -69,4 +69,26 @@ class TestRemoveSms(TestCase):
     @unittest2.skipIf(os.getuid() != 0, "Removals must be run as root")
     def test_fail_to_remove_sm_with_sms_deps(self):
         """Make sure we can't remove a security module if others require it."""
-        raise NotImplementedError("This test is not yet implemented")
+        # -- Setup: install a security module with deps ------------
+        # This can't be done as part of the setUp because then yum
+        # won't identify the leaves to remove
+        self._install_packages_setup(["nbsm-trucmuche", "nbsm-machin"])
+
+        args = [self.command, "sms", "nbsm-bidule"]
+
+        # -- Check the removal summary -----------------------------
+        expected = [{"error": "Proceeding would remove the following security modules:\n  - nbsm-machin\n  - nbsm-trucmuche\nTransaction aborted."}]
+        self._run_nbyum_test(args, expected)
+
+        # -- Check the installed packages after the removal --------
+        expected = ["0:bar-1-1.nb5.0.noarch",
+                    "0:bidule-1-1.nb5.0.noarch",
+                    "0:foo-1-1.nb5.0.noarch",
+                    "0:nbsm-bidule-1-1.nb5.0.noarch",
+                    "0:nbsm-foo-1-1.nb5.0.noarch",
+                    "0:nbsm-machin-1-1.nb5.0.noarch",
+                    "0:nbsm-trucmuche-1-1.nb5.0.noarch",
+                    "0:toto-1-1.nb5.0.noarch"]
+
+        result = self._get_installed_rpms()
+        self.assertEqual(result, expected)
