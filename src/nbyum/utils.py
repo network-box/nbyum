@@ -17,6 +17,12 @@ class DummyOpts(object):
         for k, v in kwargs.items():
             setattr(self, k, v)
 
+    def __getattr__(self, name):
+        # We use different options depending on the case, so we might
+        # sometimes try to access an option which we didn't pass to the
+        # constructor. Return None for all those cases.
+        return None
+
 def get_parser():
     """Get the argument parser for the main nbyum command line tool."""
     # -- Root level arguments (-h/--help is added by default) ----------------
