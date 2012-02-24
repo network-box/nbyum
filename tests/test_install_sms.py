@@ -21,8 +21,7 @@ class TestInstallSms(TestCase):
                     "0:foo-1-1.nb5.0.noarch",
                     "0:nbsm-foo-1-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
-
-        result = self._check_installed_rpms(expected)
+        self._check_installed_rpms(expected)
 
     @unittest2.skipIf(os.getuid() != 0, "Installations must be run as root")
     def test_already_installed_sm(self):
@@ -38,8 +37,7 @@ class TestInstallSms(TestCase):
                     "0:foo-1-1.nb5.0.noarch",
                     "0:nbsm-foo-1-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
-
-        result = self._check_installed_rpms(expected)
+        self._check_installed_rpms(expected)
 
     @unittest2.skipIf(os.getuid() != 0, "Installations must be run as root")
     def test_install_sm(self):
@@ -56,8 +54,7 @@ class TestInstallSms(TestCase):
                     "0:nbsm-bar-1-1.nb5.0.noarch",
                     "0:nbsm-foo-1-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
-
-        result = self._check_installed_rpms(expected)
+        self._check_installed_rpms(expected)
 
     @unittest2.skipIf(os.getuid() != 0, "Installations must be run as root")
     def test_install_sm_with_deps(self):
@@ -76,8 +73,7 @@ class TestInstallSms(TestCase):
                     "0:nbsm-plouf-1-1.nb5.0.noarch",
                     "0:plouf-2-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
-
-        result = self._check_installed_rpms(expected)
+        self._check_installed_rpms(expected)
 
     @unittest2.skipIf(os.getuid() != 0, "Installations must be run as root")
     def test_install_multiple_sms(self):
@@ -98,5 +94,4 @@ class TestInstallSms(TestCase):
                     "0:nbsm-toto-1-1.nb5.0.noarch",
                     "0:plouf-2-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
-
-        result = self._check_installed_rpms(expected)
+        self._check_installed_rpms(expected)

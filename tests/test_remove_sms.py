@@ -21,8 +21,7 @@ class TestRemoveSms(TestCase):
                     "0:foo-1-1.nb5.0.noarch",
                     "0:nbsm-foo-1-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
-
-        result = self._check_installed_rpms(expected)
+        self._check_installed_rpms(expected)
 
     @unittest2.skipIf(os.getuid() != 0, "Removals must be run as root")
     def test_remove_sm(self):
@@ -37,8 +36,7 @@ class TestRemoveSms(TestCase):
         expected = ["0:bar-1-1.nb5.0.noarch",
                     "0:foo-1-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
-
-        result = self._check_installed_rpms(expected)
+        self._check_installed_rpms(expected)
 
     @unittest2.skipIf(os.getuid() != 0, "Removals must be run as root")
     def test_remove_sm_with_deps(self):
@@ -60,8 +58,7 @@ class TestRemoveSms(TestCase):
                     "0:foo-1-1.nb5.0.noarch",
                     "0:nbsm-foo-1-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
-
-        result = self._check_installed_rpms(expected)
+        self._check_installed_rpms(expected)
 
     @unittest2.skipIf(os.getuid() != 0, "Removals must be run as root")
     def test_fail_to_remove_sm_with_sms_deps(self):
@@ -86,5 +83,4 @@ class TestRemoveSms(TestCase):
                     "0:nbsm-machin-1-1.nb5.0.noarch",
                     "0:nbsm-trucmuche-1-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
-
-        result = self._check_installed_rpms(expected)
+        self._check_installed_rpms(expected)
