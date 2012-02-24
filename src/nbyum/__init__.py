@@ -11,6 +11,7 @@ class NBYumCli(object):
     def __init__(self, args):
         self.args = args
 
+        # -- Deal with the preconfig stuff -----------------------------------
         self.base = NBYumBase()
 
         if not args.debug:
@@ -28,9 +29,10 @@ class NBYumCli(object):
 
         self.base.setCacheDir()
 
+        # -- Monkey-patch the YumBase for what can't be done as preconfig ----
         # The Yum API prints warnings and errors instead of making them
-        # available and useful. As a result, if we want to retrieve them, we
-        # must play dirty tricks on the YumBase loggers. :(
+        # available and useful. As a result, if we want to retrieve them,
+        # we must play dirty tricks on the YumBase loggers. :(
         def new_warning(msg, *args):
             if len(args) == msg.count("%s"):
                 print(json.dumps({'warning': '%s' % (msg%args)}))

@@ -30,7 +30,7 @@ class TestCase(unittest2.TestCase):
         testrepo_baseurl = os.path.join(self.dataroot,
                                         "%s.repo" % self._testMethodName)
 
-        # -- Set up the yum config and repos -----------------------
+        # -- Write the yum config and setup repo -------------------
         if not os.path.isdir(self.reposdir):
             os.makedirs(self.reposdir)
 
@@ -58,6 +58,7 @@ class TestCase(unittest2.TestCase):
         cmd = ["/usr/bin/sudo", "/usr/bin/yum", "install", "*", "-c", self.yumconf, "-y"]
         subprocess.check_call(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
+        # -- Set up the test repo ----------------------------------
         with open(testrepo_conf, "w") as f:
             f.write("[test]\n")
             f.write("name=Dummy test repo\n")
