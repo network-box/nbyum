@@ -86,11 +86,11 @@ class TestCase(unittest2.TestCase):
         result = [json.loads(line) for line in stdout.split("\n") if line]
         self.assertEqual(result, expected)
 
-    def _get_installed_rpms(self):
+    def _check_installed_rpms(self, expected):
         """Not a test, just a handy helper.
 
-        This returns the list of installed packages, to compare with what was
-        expected after the update.
+        This compares the list of installed packages to the provided expected
+        list.
         """
         result = []
 
@@ -100,7 +100,7 @@ class TestCase(unittest2.TestCase):
                 h["epoch"] = 0
             result.append("%(epoch)s:%(name)s-%(version)s-%(release)s.%(arch)s" % h)
 
-        return result
+        self.assertEqual(result, expected)
 
     def _install_packages_setup(self, pkgs):
         """Not a test, just a handy helper.
