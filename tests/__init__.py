@@ -55,8 +55,7 @@ class TestCase(unittest2.TestCase):
                 output.write("gpgcheck=0\n")
 
         # -- Install a handful of packages, to test transactions ---
-        cmd = ["/usr/bin/sudo", "/usr/bin/yum", "install", "*", "-c", self.yumconf, "-y"]
-        subprocess.check_call(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        self._install_packages_setup(["*"])
 
         # -- Set up the test repo ----------------------------------
         with open(testrepo_conf, "w") as f:
@@ -102,3 +101,17 @@ class TestCase(unittest2.TestCase):
             result.append("%(epoch)s:%(name)s-%(version)s-%(release)s.%(arch)s" % h)
 
         return result
+
+    def _install_packages_setup(self, pkgs):
+        """Not a test, just a handy helper.
+
+        This installs a few packages using yum, which is needed as part of the
+        setup for some tests.
+        """
+        cmd = ["/usr/bin/sudo", "/usr/bin/yum", "install",
+                                                "-c", self.yumconf,
+                                                "-y"]
+        cmd.extend(pkgs)
+
+        subprocess.check_call(cmd, stdout=subprocess.PIPE,
+                                   stderr=subprocess.STDOUT)
