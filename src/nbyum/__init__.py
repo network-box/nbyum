@@ -19,6 +19,8 @@ class NBYumCli(object):
             self.base.preconf.errorlevel = 0
             self.base.nbyum_rpmDisplay = NoOutputCallBack()
         else:
+            self.base.preconf.debuglevel = 99
+            self.base.preconf.errorlevel = 99
             self.base.nbyum_rpmDisplay = None
 
         if args.config:
