@@ -101,5 +101,7 @@ class NBYumCli(object):
     @ensure_privileges
     def update(self):
         """Actually update the whole system."""
+        self.base.plugins.setCmdLine(DummyOpts(nuke_newsave=True), None)
+
         self.base.update_packages(self.args.patterns, apply=True)
         self.base.recap_transaction()

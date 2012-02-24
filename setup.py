@@ -7,6 +7,7 @@ from distutils.core import setup, Command
 install_requires = [
     # Not available from Pypi, but worth mentioning for packagers
     #"yum",
+    #"yum-plugin-nuke-newsave",
     ]
 
 if sys.version_info < (2, 7):
