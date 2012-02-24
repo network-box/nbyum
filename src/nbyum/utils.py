@@ -150,24 +150,28 @@ def transaction_ordergetter(pkg):
     In the transaction summary, we want the order to be loosely defined:
         - packages should be 'grouped' by their `ts_state` (all updates
           together, all new packages together, etc...)
-        - updates should come before the new packages coming as dependencies
+        - installations first, then obsoletes, then updates, etc...
 
-    This last requirement is what makes the alphabetical order unsuitable, so
-    we need to be clevererer.
+    This last requirement is what makes a purely alphabetical order unsuitable,
+    so we need to be more clevererer.
     """
     # Everything we don't specifically handle is ordered way last
     index = 99
 
-    # Order install first, then obsoletions, then regular updates
-    reference = ["i", "od", "ud"]
-    if pkg.ts_state in reference:
-        index = reference.index(pkg.ts_state)
-
+    if pkg.ts_state == "i":
+        # Packages coming as installonly with `nbyum update'
+        index = 5
+    elif pkg.ts_state == "od":
+        # Packages being obsoleted with `nbyum update'
+        index = 10
+    elif pkg.ts_state == "ud":
+        # Packages being updated with `nbyum update'
+        index = 20
     elif pkg.ts_state == "u":
         if pkg.isDep:
-            # Packages installed as dependencies are last
-            index = 3
-        elif not pkg.updates:
+            # Packages installed as dependencies
+            index = 30
+        elif not pkg.updates and not pkg.obsoletes:
             # Packages installed with 'nbyum install' are first
             index = 0
 
