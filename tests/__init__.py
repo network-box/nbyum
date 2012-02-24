@@ -55,7 +55,7 @@ class TestCase(unittest2.TestCase):
                 output.write("gpgcheck=0\n")
 
         # -- Install a handful of packages, to test transactions ---
-        cmd = ["sudo", "yum", "install", "*", "-c", self.yumconf, "-y"]
+        cmd = ["/usr/bin/sudo", "/usr/bin/yum", "install", "*", "-c", self.yumconf, "-y"]
         subprocess.check_call(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
         with open(testrepo_conf, "w") as f:
@@ -66,11 +66,11 @@ class TestCase(unittest2.TestCase):
             f.write("gpgcheck=0\n")
 
     def tearDown(self):
-        cmd = ["yum", "clean", "all", "-c", self.yumconf]
+        cmd = ["/usr/bin/yum", "clean", "all", "-c", self.yumconf]
         subprocess.check_call(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
         # -- Cleanup, with super user permissions ------------------
-        cmd = ["sudo", "rm", "-fr", self.yumconf,
+        cmd = ["/usr/bin/sudo", "rm", "-fr", self.yumconf,
                                     self.installroot,
                                     self.reposdir,
                                     self.cachedir,
@@ -79,7 +79,7 @@ class TestCase(unittest2.TestCase):
 
     def _run_nbyum_test(self, args, expected):
         """This is not a test method, just a helper to avoid duplication."""
-        cmd = ["nbyum", "-c", self.yumconf] + args
+        cmd = ["./nbyum", "-c", self.yumconf] + args
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         stdout, unused = proc.communicate()
 
