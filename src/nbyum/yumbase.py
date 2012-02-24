@@ -109,7 +109,21 @@ class NBYumBase(yum.YumBase):
 
     def remove_packages(self, type_, patterns):
         """Remove packages and security modules."""
-        raise NotImplementedError("Package removal is not yet implemented")
+        type_filter, patterns = self.__type_and_patterns_preprocessor(type_,
+                                                                      patterns)
+
+        for pattern in patterns:
+            # FIXME: What if a pattern matches `nbsm-*' and type is `packages'?
+            self.remove(pattern=pattern)
+
+        # Get new packages to be installed as dependencies
+        res, resmsg = self.buildTransaction()
+
+        if res != 2 and len(self.tsInfo.getMembers()):
+            raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
+
+        if len(self.tsInfo.getMembers()):
+            self.processTransaction(rpmDisplay=self.nbyum_rpmDisplay)
 
     def update_packages(self, patterns, apply=False):
         """Check for updates and optionally apply."""
@@ -137,6 +151,10 @@ class NBYumBase(yum.YumBase):
             # Packages newly installed (install_only when running an update)
             if member.ts_state == "i":
                 print(json.dumps({"install": get_envra(member)}))
+
+            # Packages being removed
+            elif member.ts_state == "e":
+                print(json.dumps({"remove": get_envra(member)}))
 
             # Packages obsoleted by a new one
             elif member.ts_state == "od":
