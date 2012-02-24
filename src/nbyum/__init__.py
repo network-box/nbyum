@@ -84,6 +84,12 @@ class NBYumCli(object):
                                 self.args.patterns)
 
     @ensure_privileges
+    def remove(self):
+        """Remove packages and security modules."""
+        self.base.remove_packages(self.args.type, self.args.patterns)
+        self.base.recap_transaction()
+
+    @ensure_privileges
     def update(self):
         """Actually update the whole system."""
         self.base.update_packages(self.args.patterns, apply=True)

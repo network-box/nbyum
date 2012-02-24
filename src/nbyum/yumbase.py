@@ -103,6 +103,10 @@ class NBYumBase(yum.YumBase):
             if status == "all" or status == pkg_status:
                 print(json.dumps({pkg_status: get_envra(pkg)}))
 
+    def remove_packages(self, type_, patterns):
+        """Remove packages and security modules."""
+        raise NotImplementedError("Package removal is not yet implemented")
+
     def update_packages(self, patterns, apply=False):
         """Check for updates and optionally apply."""
         if patterns:

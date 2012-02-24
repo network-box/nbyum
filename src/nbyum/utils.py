@@ -71,6 +71,21 @@ def get_parser():
                                   "match names against, for example 'nb*'.")
     parser_list.set_defaults(func="list")
 
+    # -- Subcommand: remove --------------------------------------------------
+    parser_remove = subparsers.add_parser("remove",
+                                          help="Remove installed packages " \
+                                               "and security modules")
+    parser_remove.add_argument("type", metavar="sms",
+                               choices=["sms"],
+                               help="Choose between removing packages and " \
+                                  "security modules. The only possible value" \
+                                  " is 'sms' as packages removal is not" \
+                                  " implemented yet.")
+    parser_remove.add_argument("patterns", nargs="+", metavar="PATTERN",
+                               help="A (list of) glob-like pattern(s) to " \
+                                    "match names against, for example 'nb*'.")
+    parser_remove.set_defaults(func="remove")
+
     # -- Subcommand: update --------------------------------------------------
     parser_update = subparsers.add_parser("update",
                                           help="Update packages or the " \
