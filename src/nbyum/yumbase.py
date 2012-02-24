@@ -47,6 +47,27 @@ class NBYumBase(yum.YumBase):
 
         return result
 
+    def __type_and_patterns_preprocessor(self, type_, patterns):
+        """Get the type filter and make sure the patterns are sound."""
+        if not patterns:
+            patterns = ["*"]
+
+        if type_ == "sms":
+            type_filter = lambda x: x.name.startswith("nbsm-")
+
+            # Special case for the security modules
+            patterns = self.__smsize_patterns(patterns)
+
+        elif type_ == "packages":
+            type_filter = lambda x: not x.name.startswith("nbsm-")
+
+        else:
+            raise WTFException("Somehow you managed to pass an unhandled " \
+                               "value for the listing type (%s). Please " \
+                               "report it as a bug." % type_)
+
+        return type_filter, patterns
+
     def get_infos(self, patterns):
         """Get some infos on packages."""
         # We don't want to filter here, unlike for listings
@@ -59,15 +80,11 @@ class NBYumBase(yum.YumBase):
 
     def install_packages(self, type_, patterns):
         """Install packages and security modules."""
-        if type_ == "sms":
-            # Special case for the security modules
-            patterns = self.__smsize_patterns(patterns)
-        else:
-            raise WTFException("Somehow you managed to pass an unhandled " \
-                               "value for the installing type (%s). Please " \
-                               "report it as a bug." % type_)
+        type_filter, patterns = self.__type_and_patterns_preprocessor(type_,
+                                                                      patterns)
 
         for pattern in patterns:
+            # FIXME: What if a pattern matches `nbsm-*' and type is `packages'?
             self.install(pattern=pattern)
 
         # Get new packages to be installed as dependencies
@@ -81,21 +98,8 @@ class NBYumBase(yum.YumBase):
 
     def list_packages(self, type_, status, patterns):
         """List packages and security modules."""
-        if type_ == "sms":
-            type_filter = lambda x: x.name.startswith("nbsm-")
-        elif type_ == "packages":
-            type_filter = lambda x: not x.name.startswith("nbsm-")
-        else:
-            raise WTFException("Somehow you managed to pass an unhandled " \
-                               "value for the listing type (%s). Please " \
-                               "report it as a bug." % type_)
-
-        if not patterns:
-            patterns = ["*"]
-
-        if type_ == "sms":
-            # Special case for the security modules
-            patterns = self.__smsize_patterns(patterns)
+        type_filter, patterns = self.__type_and_patterns_preprocessor(type_,
+                                                                      patterns)
 
         for pkg_status, pkg in sorted(self.__get_packages_list(patterns,
                                                                type_filter),
