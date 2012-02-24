@@ -54,7 +54,7 @@ class TestRemoveSms(TestCase):
 
         # -- Check the removal summary -----------------------------
         expected = [{"remove": "0:nbsm-bidule-1-1.nb5.0.noarch"},
-                    {"removedep": "0:bidule-1-1.nb5.0.noarch"}]
+                    {"remove": "0:bidule-1-1.nb5.0.noarch"}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the removal --------
