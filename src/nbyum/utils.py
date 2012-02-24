@@ -178,6 +178,9 @@ def transaction_ordergetter(pkg):
         # Packages being removed with `nbyum remove'
         index = 40
 
+    if not pkg.name.startswith("nbsm-"):
+        index+=1
+
     return "%02d %s" % (index, get_nevra(pkg, ordering=True))
 
 def ensure_privileges(command):
