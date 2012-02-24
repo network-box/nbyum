@@ -1,7 +1,7 @@
 import os
 import sys
 
-from setuptools import setup
+from distutils.core import setup, Command
 
 if sys.argv[1] == "test":
     # We use unittest2's skip* decorators, and if we don't help Python it will
@@ -28,6 +28,23 @@ with open(os.path.join(here, "README.rst")) as f:
     README = f.read()
 
 
+class TestCommand(Command):
+    """A custom distutils command to run unit tests."""
+    user_options = []
+
+    def initialize_options(self):
+        self._dir = os.getcwd()
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        """Run all the unit tests found in the `tests/' folder."""
+        tests = unittest2.collector()
+        t = unittest2.TextTestRunner(verbosity=self.verbose)
+        t.run(tests)
+
+
 setup(name="nbyum",
       # Note: This is a pre-release
       version="5.0.0-svn20654",
@@ -40,6 +57,6 @@ setup(name="nbyum",
       package_dir={"": "src"},
       packages=["nbyum"],
       scripts=["nbyum"],
-      install_requires=install_requires,
-      test_suite="unittest2.collector",
+      requires=install_requires,
+      cmdclass={'test': TestCommand},
       )
