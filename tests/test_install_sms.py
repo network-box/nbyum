@@ -45,7 +45,8 @@ class TestInstallSms(TestCase):
         args = [self.command, "sms", "nbsm-bar"]
 
         # Check the installation summary ---------------------------
-        expected = [{"install": "0:nbsm-bar-1-1.nb5.0.noarch"}]
+        expected = [{"install": {"name": "nbsm-bar", "epoch": "0", "version": "1",
+                                 "release": "1.nb5.0", "arch": "noarch"}}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the install --------
@@ -62,8 +63,10 @@ class TestInstallSms(TestCase):
         args = [self.command, "sms", "nbsm-plouf"]
 
         # Check the installation summary ---------------------------
-        expected = [{"install": "0:nbsm-plouf-1-1.nb5.0.noarch"},
-                    {"installdep": "0:plouf-2-1.nb5.0.noarch"}]
+        expected = [{"install": {"name": "nbsm-plouf", "epoch": "0", "version": "1",
+                                 "release": "1.nb5.0", "arch": "noarch"}},
+                    {"installdep": {"name": "plouf", "epoch": "0", "version": "2",
+                                    "release": "1.nb5.0", "arch": "noarch"}}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the install --------
@@ -81,9 +84,12 @@ class TestInstallSms(TestCase):
         args = [self.command, "sms", "nbsm-plouf", "toto"]
 
         # Check the installation summary ---------------------------
-        expected = [{"install": "0:nbsm-plouf-1-1.nb5.0.noarch"},
-                    {"install": "0:nbsm-toto-1-1.nb5.0.noarch"},
-                    {"installdep": "0:plouf-2-1.nb5.0.noarch"}]
+        expected = [{"install": {"name": "nbsm-plouf", "epoch": "0", "version": "1",
+                                 "release": "1.nb5.0", "arch": "noarch"}},
+                    {"install": {"name": "nbsm-toto", "epoch": "0", "version": "1",
+                                 "release": "1.nb5.0", "arch": "noarch"}},
+                    {"installdep": {"name": "plouf", "epoch": "0", "version": "2",
+                                    "release": "1.nb5.0", "arch": "noarch"}}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the install --------

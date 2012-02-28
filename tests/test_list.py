@@ -9,9 +9,12 @@ class TestListPackages(TestCase):
         args = [self.command, "installed", "packages"]
 
         # -- Check the listing -------------------------------------
-        expected = [{'installed': '0:bar-1-1.nb5.0.noarch'},
-                    {'installed': '0:foo-1-1.nb5.0.noarch'},
-                    {'installed': '0:toto-1-1.nb5.0.noarch'}]
+        expected = [{'installed': {"name": "bar", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"}},
+                    {'installed': {"name": "foo", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"}},
+                    {'installed': {"name": "toto", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"}}]
         self._run_nbyum_test(args, expected)
 
     def test_list_available_packages(self):
@@ -19,10 +22,14 @@ class TestListPackages(TestCase):
         args = [self.command, "available", "packages"]
 
         # -- Check the listing -------------------------------------
-        expected = [{'available': '0:baz-2-1.nb5.0.noarch'},
-                    {'available': '0:foo-1-2.nb5.0.noarch'},
-                    {'available': '0:plouf-2-1.nb5.0.noarch'},
-                    {'available': '0:toto-2-1.nb5.0.noarch'}]
+        expected = [{'available': {"name": "baz", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"}},
+                    {'available': {"name": "foo", "epoch": "0", "version": "1",
+                                   "release": "2.nb5.0", "arch": "noarch"}},
+                    {'available': {"name": "plouf", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"}},
+                    {'available': {"name": "toto", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"}}]
         self._run_nbyum_test(args, expected)
 
     def test_list_packages(self):
@@ -30,13 +37,20 @@ class TestListPackages(TestCase):
         args = [self.command, "all", "packages"]
 
         # -- Check the listing -------------------------------------
-        expected = [{'installed': '0:bar-1-1.nb5.0.noarch'},
-                    {'installed': '0:foo-1-1.nb5.0.noarch'},
-                    {'installed': '0:toto-1-1.nb5.0.noarch'},
-                    {'available': '0:baz-2-1.nb5.0.noarch'},
-                    {'available': '0:foo-1-2.nb5.0.noarch'},
-                    {'available': '0:plouf-2-1.nb5.0.noarch'},
-                    {'available': '0:toto-2-1.nb5.0.noarch'}]
+        expected = [{'installed': {"name": "bar", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"}},
+                    {'installed': {"name": "foo", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"}},
+                    {'installed': {"name": "toto", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"}},
+                    {'available': {"name": "baz", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"}},
+                    {'available': {"name": "foo", "epoch": "0", "version": "1",
+                                   "release": "2.nb5.0", "arch": "noarch"}},
+                    {'available': {"name": "plouf", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"}},
+                    {'available': {"name": "toto", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"}}]
         self._run_nbyum_test(args, expected)
 
     def test_list_no_packages_match(self):
@@ -52,6 +66,8 @@ class TestListPackages(TestCase):
         args = [self.command, "all", "packages", "foo", "*lou*"]
 
         # -- Check the listing -------------------------------------
-        expected = [{'installed': '0:foo-1-1.nb5.0.noarch'},
-                    {'available': '0:plouf-2-1.nb5.0.noarch'}]
+        expected = [{'installed': {"name": "foo", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"}},
+                    {'available': {"name": "plouf", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"}}]
         self._run_nbyum_test(args, expected)

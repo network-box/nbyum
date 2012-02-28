@@ -29,7 +29,8 @@ class TestRemoveSms(TestCase):
         args = [self.command, "sms", "nbsm-foo"]
 
         # -- Check the removal summary -----------------------------
-        expected = [{"remove": "0:nbsm-foo-1-1.nb5.0.noarch"}]
+        expected = [{"remove": {"name": "nbsm-foo", "epoch": "0", "version": "1",
+                                "release": "1.nb5.0", "arch": "noarch"}}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the removal --------
@@ -49,8 +50,10 @@ class TestRemoveSms(TestCase):
         args = [self.command, "sms", "nbsm-bidule"]
 
         # -- Check the removal summary -----------------------------
-        expected = [{"remove": "0:nbsm-bidule-1-1.nb5.0.noarch"},
-                    {"remove": "0:bidule-1-1.nb5.0.noarch"}]
+        expected = [{"remove": {"name": "nbsm-bidule", "epoch": "0", "version": "1",
+                                "release": "1.nb5.0", "arch": "noarch"}},
+                    {"remove": {"name": "bidule", "epoch": "0", "version": "1",
+                                "release": "1.nb5.0", "arch": "noarch"}}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the removal --------

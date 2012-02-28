@@ -30,7 +30,10 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'update': ['0:foo-1-1.nb5.0.noarch', '0:foo-1-2.nb5.0.noarch']}]
+        expected = [{'update': [{"name": "foo", "epoch": "0", "version": "1",
+                                 "release": "1.nb5.0", "arch": "noarch"},
+                                {"name": "foo", "epoch": "0", "version": "1",
+                                 "release": "2.nb5.0", "arch": "noarch"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -46,7 +49,8 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'install': '0:bar-1-2.nb5.0.noarch'}]
+        expected = [{'install': {"name": "bar", "epoch": "0", "version": "1",
+                                 "release": "2.nb5.0", "arch": "noarch"}}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -63,7 +67,10 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'obsolete': ['0:bar-1-1.nb5.0.noarch', '0:baz-2-1.nb5.0.noarch']}]
+        expected = [{'obsolete': [{"name": "bar", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"},
+                                  {"name": "baz", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -79,8 +86,12 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'update': ['0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch']},
-                    {'installdep': '0:plouf-2-1.nb5.0.noarch'}]
+        expected = [{'update': [{"name": "toto", "epoch": "0", "version": "1",
+                                 "release": "1.nb5.0", "arch": "noarch"},
+                                {"name": "toto", "epoch": "0", "version": "2",
+                                 "release": "1.nb5.0", "arch": "noarch"}]},
+                    {'installdep': {"name": "plouf", "epoch": "0", "version": "2",
+                                    "release": "1.nb5.0", "arch": "noarch"}}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -97,10 +108,20 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'obsolete': ['0:bar-1-1.nb5.0.noarch', '0:baz-2-1.nb5.0.noarch']},
-                    {'update': ['0:foo-1-1.nb5.0.noarch', '0:foo-1-2.nb5.0.noarch']},
-                    {'update': ['0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch']},
-                    {'installdep': '0:plouf-2-1.nb5.0.noarch'}]
+        expected = [{'obsolete': [{"name": "bar", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"},
+                                  {"name": "baz", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"}]},
+                    {'update': [{"name": "foo", "epoch": "0", "version": "1",
+                                 "release": "1.nb5.0", "arch": "noarch"},
+                                {"name": "foo", "epoch": "0", "version": "1",
+                                 "release": "2.nb5.0", "arch": "noarch"}]},
+                    {'update': [{"name": "toto", "epoch": "0", "version": "1",
+                                 "release": "1.nb5.0", "arch": "noarch"},
+                                {"name": "toto", "epoch": "0", "version": "2",
+                                 "release": "1.nb5.0", "arch": "noarch"}]},
+                    {'installdep': {"name": "plouf", "epoch": "0", "version": "2",
+                                    "release": "1.nb5.0", "arch": "noarch"}}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -117,10 +138,18 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'install': '0:bar-1-2.nb5.0.noarch'},
-                    {'update': ['0:foo-1-1.nb5.0.noarch', '0:foo-1-2.nb5.0.noarch']},
-                    {'update': ['0:toto-1-1.nb5.0.noarch', '0:toto-2-1.nb5.0.noarch']},
-                    {'installdep': '0:plouf-2-1.nb5.0.noarch'}]
+        expected = [{'install': {"name": "bar", "epoch": "0", "version": "1",
+                                 "release": "2.nb5.0", "arch": "noarch"}},
+                    {'update': [{"name": "foo", "epoch": "0", "version": "1",
+                                 "release": "1.nb5.0", "arch": "noarch"},
+                                {"name": "foo", "epoch": "0", "version": "1",
+                                 "release": "2.nb5.0", "arch": "noarch"}]},
+                    {'update': [{"name": "toto", "epoch": "0", "version": "1",
+                                 "release": "1.nb5.0", "arch": "noarch"},
+                                {"name": "toto", "epoch": "0", "version": "2",
+                                 "release": "1.nb5.0", "arch": "noarch"}]},
+                    {'installdep': {"name": "plouf", "epoch": "0", "version": "2",
+                                    "release": "1.nb5.0", "arch": "noarch"}}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -144,7 +173,10 @@ class TestUpdate(TestCase):
             f.write("foo=0\n")
 
         # -- Check the update summary ------------------------------
-        expected = [{'update': ['0:nbsm-foo-1-1.nb5.0.noarch', '0:nbsm-foo-2-1.nb5.0.noarch']}]
+        expected = [{'update': [{"name": "nbsm-foo", "epoch": "0", "version": "1",
+                                 "release": "1.nb5.0", "arch": "noarch"},
+                                {"name": "nbsm-foo", "epoch": "0", "version": "2",
+                                 "release": "1.nb5.0", "arch": "noarch"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
