@@ -131,14 +131,13 @@ def get_rpminfos(pkg):
 
 def get_nevra(pkg, ordering=False):
     """Get the Name-Epoch:Version-Release.Arch representation of a package."""
-    name = pkg.name
+    envra = get_envra(pkg)
 
     if ordering:
         # If we're trying to order packages, then we need a bit of work
-        name = name.lower()
+        envra['name'] = envra['name'].lower()
 
-    return "%s-%s:%s-%s.%s" % (name, pkg.epoch, pkg.version,
-                               pkg.release, pkg.arch)
+    return "%(name)s-%(epoch)s:%(version)s-%(release)s.%(arch)s" % envra
 
 def list_ordergetter(pkg_tuple):
     """Return a simple ordering for package lists.
