@@ -119,9 +119,9 @@ def get_parser():
     return parser
 
 def get_envra(pkg):
-    """Get the Epoch:Name-Version-Release.Arch representation of a package."""
-    return "%s:%s-%s-%s.%s" % (pkg.epoch, pkg.name, pkg.version,
-                               pkg.release, pkg.arch)
+    """Get the (Epoch, Name, Version, Release, Arch) representation of a package."""
+    envra_attrs = ("name", "epoch", "version", "release", "arch")
+    return dict([(attr, getattr(pkg, attr)) for attr in envra_attrs])
 
 def get_nevra(pkg, ordering=False):
     """Get the Name-Epoch:Version-Release.Arch representation of a package."""
