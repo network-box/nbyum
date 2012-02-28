@@ -5,11 +5,8 @@ import os
 import yum
 
 from errors import NBYumException, WTFException
-from utils import get_envra, list_ordergetter, transaction_ordergetter
-
-
-info_attrs = ("name", "base_package_name", "license", "epoch", "version",
-              "release", "arch", "summary", "description")
+from utils import (get_envra, get_rpminfos,
+                   list_ordergetter, transaction_ordergetter)
 
 
 class NBYumBase(yum.YumBase):
@@ -76,7 +73,7 @@ class NBYumBase(yum.YumBase):
         for pkg_status, pkg in sorted(self.__get_packages_list(patterns,
                                                                type_filter),
                                       key=list_ordergetter):
-            print(json.dumps(dict((name, getattr(pkg, name)) for name in info_attrs)))
+            print(json.dumps(get_rpminfos(pkg)))
 
     def install_packages(self, type_, patterns):
         """Install packages and security modules."""
