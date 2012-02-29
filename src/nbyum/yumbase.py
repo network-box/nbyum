@@ -153,7 +153,10 @@ class NBYumBase(yum.YumBase):
         if res != 2 and len(self.tsInfo.getMembers()):
             raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
 
-        if apply and len(self.tsInfo.getMembers()):
+        if not len(self.tsInfo.getMembers()):
+            print(json.dumps({"info": "Packages are all up to date"}))
+
+        elif apply:
             self.processTransaction(rpmDisplay=self.nbyum_rpmDisplay)
 
     def recap_transaction(self):
