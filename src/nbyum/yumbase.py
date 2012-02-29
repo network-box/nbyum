@@ -10,23 +10,23 @@ from utils import (get_envra, get_rpminfos,
 
 
 class NBYumBase(yum.YumBase):
-    def __get_packages_list(self, patterns, filter_):
+    def __get_packages_list(self, status, patterns, filter_):
         """Get a packages list."""
+        source = {"installed": self.rpmdb, "available": self.pkgSack}[status]
+
         # match_tuple is (exact_matches, glob_matches, unmatched_patterns)
-        match_tuple = self.pkgSack.matchPackageNames(patterns)
+        match_tuple = source.matchPackageNames(patterns)
         matches = set(match_tuple[0] + match_tuple[1])
 
         for pkg in filter(filter_, matches):
-            if self.rpmdb.installed(po=pkg):
-                status = "installed"
-            else:
-                status = "available"
+            if status == "available" and self.rpmdb.installed(po=pkg):
+                continue
 
             for pattern in patterns:
                 # Yum developers, if you name an API matchPackageNames,
                 # make it match packages on their name, not envra!
                 if fnmatch.fnmatch(pkg.name, pattern):
-                    yield status, pkg
+                    yield pkg
                     break
 
     def __smsize_patterns(self, patterns):
@@ -98,11 +98,19 @@ class NBYumBase(yum.YumBase):
         type_filter, patterns = self.__type_and_patterns_preprocessor(type_,
                                                                       patterns)
 
-        for pkg_status, pkg in sorted(self.__get_packages_list(patterns,
-                                                               type_filter),
-                                      key=list_ordergetter):
-            if status == "all" or status == pkg_status:
-                print(json.dumps({pkg_status: get_envra(pkg)}))
+        if status in ("all", "installed"):
+            for pkg in sorted(self.__get_packages_list("installed",
+                                                       patterns,
+                                                       type_filter),
+                              key=list_ordergetter):
+                print(json.dumps({"installed": get_envra(pkg)}))
+
+        if status in ("all", "available"):
+            for pkg in sorted(self.__get_packages_list("available",
+                                                       patterns,
+                                                       type_filter),
+                              key=list_ordergetter):
+                print(json.dumps({"available": get_envra(pkg)}))
 
     def remove_packages(self, type_, patterns):
         """Remove packages and security modules."""

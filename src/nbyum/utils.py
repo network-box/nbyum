@@ -139,20 +139,8 @@ def get_ordered_nevra(pkg):
     return "%(name)s-%(epoch)s:%(version)s-%(release)s.%(arch)s" % envra
 
 def list_ordergetter(pkg_tuple):
-    """Return a simple ordering for package lists.
-
-    In a list of packages, we want the order to be defined as following:
-        - first, installed packages
-        - next, available packages
-        - for each group, order by nevra
-
-    :param pkg_tuple: A 2-tuple composed of the package status ("installed"
-                      or "available") and the actual package.
-    """
-    reference = ["installed", "available"]
-
-    return "%s %s" % (reference.index(pkg_tuple[0]),
-                      get_ordered_nevra(pkg_tuple[1]))
+    """Return a simple ordering for package lists."""
+    return get_ordered_nevra(pkg_tuple[1])
 
 def transaction_ordergetter(pkg):
     """Return a simple ordering for package lists.
