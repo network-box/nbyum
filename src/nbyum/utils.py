@@ -129,13 +129,12 @@ def get_rpminfos(pkg):
               "base_package_name", "summary", "description")
     return dict([(attr, getattr(pkg, attr)) for attr in infos_attrs])
 
-def get_nevra(pkg, ordering=False):
+def get_ordered_nevra(pkg):
     """Get the Name-Epoch:Version-Release.Arch representation of a package."""
     envra = get_envra(pkg)
 
-    if ordering:
-        # If we're trying to order packages, then we need a bit of work
-        envra['name'] = envra['name'].lower()
+    # Let's order alphabetically and insensitively to the case
+    envra['name'] = envra['name'].lower()
 
     return "%(name)s-%(epoch)s:%(version)s-%(release)s.%(arch)s" % envra
 
@@ -153,7 +152,7 @@ def list_ordergetter(pkg_tuple):
     reference = ["installed", "available"]
 
     return "%s %s" % (reference.index(pkg_tuple[0]),
-                      get_nevra(pkg_tuple[1], ordering=True))
+                      get_ordered_nevra(pkg_tuple[1]))
 
 def transaction_ordergetter(pkg):
     """Return a simple ordering for package lists.
@@ -192,7 +191,7 @@ def transaction_ordergetter(pkg):
     if not pkg.name.startswith("nbsm-"):
         index+=1
 
-    return "%02d %s" % (index, get_nevra(pkg, ordering=True))
+    return "%02d %s" % (index, get_ordered_nevra(pkg))
 
 def ensure_privileges(command):
     """Used as a decorator to ensure a command is run as root."""
