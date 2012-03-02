@@ -2,16 +2,7 @@
 
 import sys
 
-
-try:
-    import nbyum
-except ImportError:
-    # We're probably running in a development environment
-    import os
-
-    if os.path.exists("./src/nbyum"):
-        sys.path.append(os.path.join(os.path.dirname(sys.argv[0]), "src"))
-        import nbyum
+import nbyum
 
 
 if __name__ == "__main__":
