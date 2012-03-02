@@ -9,9 +9,9 @@ class TestListSMs(TestCase):
         args = [self.command, "installed", "sms"]
 
         # -- Check the listing -------------------------------------
-        expected = [{'installed': {"name": "nbsm-foo", "epoch": "0",
+        expected = [{"status": "installed", "name": "nbsm-foo", "epoch": "0",
                                    "version": "1", "release": "1.nb5.0",
-                                   "arch": "noarch"}}]
+                                   "arch": "noarch"}]
         self._run_nbyum_test(args, expected)
 
     def test_list_available_sms(self):
@@ -19,9 +19,9 @@ class TestListSMs(TestCase):
         args = [self.command, "available", "sms"]
 
         # -- Check the listing -------------------------------------
-        expected = [{'available': {"name": "nbsm-bar", "epoch": "0",
+        expected = [{"status": "available", "name": "nbsm-bar", "epoch": "0",
                                    "version": "1", "release": "1.nb5.0",
-                                   "arch": "noarch"}}]
+                                   "arch": "noarch"}]
         self._run_nbyum_test(args, expected)
 
     def test_list_sms(self):
@@ -29,12 +29,12 @@ class TestListSMs(TestCase):
         args = [self.command, "all", "sms"]
 
         # -- Check the listing -------------------------------------
-        expected = [{'installed': {"name": "nbsm-foo", "epoch": "0",
+        expected = [{"status": "installed", "name": "nbsm-foo", "epoch": "0",
                                    "version": "1", "release": "1.nb5.0",
-                                   "arch": "noarch"}},
-                    {'available': {"name": "nbsm-bar", "epoch": "0",
+                                   "arch": "noarch"},
+                    {"status": "available", "name": "nbsm-bar", "epoch": "0",
                                    "version": "1", "release": "1.nb5.0",
-                                   "arch": "noarch"}}]
+                                   "arch": "noarch"}]
         self._run_nbyum_test(args, expected)
 
     def test_list_no_sms_match(self):
@@ -50,10 +50,10 @@ class TestListSMs(TestCase):
         args = [self.command, "all", "sms", "nbsm-foo", "*a*"]
 
         # -- Check the listing -------------------------------------
-        expected = [{'installed': {"name": "nbsm-foo", "epoch": "0",
+        expected = [{"status": "installed", "name": "nbsm-foo", "epoch": "0",
                                    "version": "1", "release": "1.nb5.0",
-                                   "arch": "noarch"}},
-                    {'available': {"name": "nbsm-bar", "epoch": "0",
+                                   "arch": "noarch"},
+                    {"status": "available", "name": "nbsm-bar", "epoch": "0",
                                    "version": "1", "release": "1.nb5.0",
-                                   "arch": "noarch"}}]
+                                   "arch": "noarch"}]
         self._run_nbyum_test(args, expected)

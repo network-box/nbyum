@@ -9,12 +9,12 @@ class TestListPackages(TestCase):
         args = [self.command, "installed", "packages"]
 
         # -- Check the listing -------------------------------------
-        expected = [{'installed': {"name": "bar", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"}},
-                    {'installed': {"name": "foo", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"}},
-                    {'installed': {"name": "toto", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"}}]
+        expected = [{"status": "installed", "name": "bar", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"},
+                    {"status": "installed", "name": "foo", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"},
+                    {"status": "installed", "name": "toto", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"}]
         self._run_nbyum_test(args, expected)
 
     def test_list_available_packages(self):
@@ -22,14 +22,14 @@ class TestListPackages(TestCase):
         args = [self.command, "available", "packages"]
 
         # -- Check the listing -------------------------------------
-        expected = [{'available': {"name": "baz", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}},
-                    {'available': {"name": "foo", "epoch": "0", "version": "1",
-                                   "release": "2.nb5.0", "arch": "noarch"}},
-                    {'available': {"name": "plouf", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}},
-                    {'available': {"name": "toto", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}}]
+        expected = [{"status": "available", "name": "baz", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"},
+                    {"status": "available", "name": "foo", "epoch": "0", "version": "1",
+                                   "release": "2.nb5.0", "arch": "noarch"},
+                    {"status": "available", "name": "plouf", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"},
+                    {"status": "available", "name": "toto", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"}]
         self._run_nbyum_test(args, expected)
 
     def test_list_packages(self):
@@ -37,20 +37,20 @@ class TestListPackages(TestCase):
         args = [self.command, "all", "packages"]
 
         # -- Check the listing -------------------------------------
-        expected = [{'installed': {"name": "bar", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"}},
-                    {'installed': {"name": "foo", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"}},
-                    {'installed': {"name": "toto", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"}},
-                    {'available': {"name": "baz", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}},
-                    {'available': {"name": "foo", "epoch": "0", "version": "1",
-                                   "release": "2.nb5.0", "arch": "noarch"}},
-                    {'available': {"name": "plouf", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}},
-                    {'available': {"name": "toto", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}}]
+        expected = [{"status": "installed", "name": "bar", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"},
+                    {"status": "installed", "name": "foo", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"},
+                    {"status": "installed", "name": "toto", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"},
+                    {"status": "available", "name": "baz", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"},
+                    {"status": "available", "name": "foo", "epoch": "0", "version": "1",
+                                   "release": "2.nb5.0", "arch": "noarch"},
+                    {"status": "available", "name": "plouf", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"},
+                    {"status": "available", "name": "toto", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"}]
         self._run_nbyum_test(args, expected)
 
     def test_list_no_packages_match(self):
@@ -66,8 +66,8 @@ class TestListPackages(TestCase):
         args = [self.command, "all", "packages", "foo", "*lou*"]
 
         # -- Check the listing -------------------------------------
-        expected = [{'installed': {"name": "foo", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"}},
-                    {'available': {"name": "plouf", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}}]
+        expected = [{"status": "installed", "name": "foo", "epoch": "0", "version": "1",
+                                   "release": "1.nb5.0", "arch": "noarch"},
+                    {"status": "available", "name": "plouf", "epoch": "0", "version": "2",
+                                   "release": "1.nb5.0", "arch": "noarch"}]
         self._run_nbyum_test(args, expected)

@@ -104,13 +104,17 @@ class NBYumBase(yum.YumBase):
             for pkg in sorted(self.__get_packages_list(patterns, type_filter,
                                                        status="installed"),
                               key=list_ordergetter):
-                print(json.dumps({"installed": get_envra(pkg)}))
+                result = get_envra(pkg)
+                result.update({"status": "installed"})
+                print(json.dumps(result))
 
         if status in ("all", "available"):
             for pkg in sorted(self.__get_packages_list(patterns, type_filter,
                                                        status="available"),
                               key=list_ordergetter):
-                print(json.dumps({"available": get_envra(pkg)}))
+                result = get_envra(pkg)
+                result.update({"status": "available"})
+                print(json.dumps(result))
 
     def remove_packages(self, type_, patterns):
         """Remove packages and security modules."""
