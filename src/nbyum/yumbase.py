@@ -10,9 +10,12 @@ from utils import (get_envra, get_rpminfos,
 
 
 class NBYumBase(yum.YumBase):
-    def __get_packages_list(self, status, patterns, filter_):
+    def __get_packages_list(self, patterns, filter_, status="all"):
         """Get a packages list."""
-        source = {"installed": self.rpmdb, "available": self.pkgSack}[status]
+        if status == "installed":
+            source = self.rpmdb
+        else:
+            source = self.pkgSack
 
         # match_tuple is (exact_matches, glob_matches, unmatched_patterns)
         match_tuple = source.matchPackageNames(patterns)
@@ -70,9 +73,8 @@ class NBYumBase(yum.YumBase):
         # We don't want to filter here, unlike for listings
         type_filter = lambda x: True
 
-        for pkg_status, pkg in sorted(self.__get_packages_list(patterns,
-                                                               type_filter),
-                                      key=list_ordergetter):
+        for pkg in sorted(self.__get_packages_list(patterns, type_filter),
+                          key=list_ordergetter):
             print(json.dumps(get_rpminfos(pkg)))
 
     def install_packages(self, type_, patterns):
@@ -99,16 +101,14 @@ class NBYumBase(yum.YumBase):
                                                                       patterns)
 
         if status in ("all", "installed"):
-            for pkg in sorted(self.__get_packages_list("installed",
-                                                       patterns,
-                                                       type_filter),
+            for pkg in sorted(self.__get_packages_list(patterns, type_filter,
+                                                       status="installed"),
                               key=list_ordergetter):
                 print(json.dumps({"installed": get_envra(pkg)}))
 
         if status in ("all", "available"):
-            for pkg in sorted(self.__get_packages_list("available",
-                                                       patterns,
-                                                       type_filter),
+            for pkg in sorted(self.__get_packages_list(patterns, type_filter,
+                                                       status="available"),
                               key=list_ordergetter):
                 print(json.dumps({"available": get_envra(pkg)}))
 
