@@ -83,7 +83,8 @@ class NBYumCli(object):
     def install(self):
         """Install packages and security modules."""
         self.base.install_packages(self.args.type, self.args.patterns)
-        self.base.recap_transaction()
+        self.base.recap_transaction(confirm="All requested packages " \
+                                            "installed successfully")
 
     def list(self):
         """List packages and security modules."""
@@ -96,7 +97,8 @@ class NBYumCli(object):
         self.base.plugins.setCmdLine(DummyOpts(remove_leaves=True), None)
 
         self.base.remove_packages(self.args.type, self.args.patterns)
-        self.base.recap_transaction()
+        self.base.recap_transaction(confirm="All requested packages " \
+                                            "removed successfully")
 
     @ensure_privileges
     def update(self):
@@ -104,4 +106,8 @@ class NBYumCli(object):
         self.base.plugins.setCmdLine(DummyOpts(nuke_newsave=True), None)
 
         self.base.update_packages(self.args.patterns, apply=True)
-        self.base.recap_transaction()
+        self.base.recap_transaction(confirm="All %spackages updated " \
+                                            "successfully" \
+                                                % (self.args.patterns \
+                                                    and "requested " \
+                                                    or ""))

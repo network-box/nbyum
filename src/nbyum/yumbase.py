@@ -167,10 +167,13 @@ class NBYumBase(yum.YumBase):
         elif apply:
             self.processTransaction(rpmDisplay=self.nbyum_rpmDisplay)
 
-    def recap_transaction(self):
+    def recap_transaction(self, confirm=None):
         """Print a summary of the transaction."""
         # Interesting stuff for the future:
         #   - member.repoid (string: 'experimental', 'installed', ...
+        if not len(self.tsInfo.getMembers()):
+            return
+
         for member in sorted(self.tsInfo.getMembers(),
                              key=transaction_ordergetter):
             # Packages newly installed (install_only when running an update)
@@ -224,3 +227,6 @@ class NBYumBase(yum.YumBase):
                       " but those are not handled yet." \
                       " Ask your friendly nbyum developer!" % member.ts_state
                 raise WTFException(msg)
+
+        if confirm:
+            print(json.dumps({"info": confirm}))

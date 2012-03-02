@@ -46,7 +46,8 @@ class TestInstallSms(TestCase):
 
         # Check the installation summary ---------------------------
         expected = [{"install": {"name": "nbsm-bar", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"}}]
+                                 "release": "1.nb5.0", "arch": "noarch"}},
+                    {"info": "All requested packages installed successfully"}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the install --------
@@ -66,7 +67,8 @@ class TestInstallSms(TestCase):
         expected = [{"install": {"name": "nbsm-plouf", "epoch": "0", "version": "1",
                                  "release": "1.nb5.0", "arch": "noarch"}},
                     {"installdep": {"name": "plouf", "epoch": "0", "version": "2",
-                                    "release": "1.nb5.0", "arch": "noarch"}}]
+                                    "release": "1.nb5.0", "arch": "noarch"}},
+                    {"info": "All requested packages installed successfully"}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the install --------
@@ -89,7 +91,8 @@ class TestInstallSms(TestCase):
                     {"install": {"name": "nbsm-toto", "epoch": "0", "version": "1",
                                  "release": "1.nb5.0", "arch": "noarch"}},
                     {"installdep": {"name": "plouf", "epoch": "0", "version": "2",
-                                    "release": "1.nb5.0", "arch": "noarch"}}]
+                                    "release": "1.nb5.0", "arch": "noarch"}},
+                    {"info": "All requested packages installed successfully"}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the install --------
