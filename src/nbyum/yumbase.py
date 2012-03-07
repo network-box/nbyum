@@ -10,6 +10,26 @@ from utils import (get_envra, get_rpminfos,
 
 
 class NBYumBase(yum.YumBase):
+    def __cleanup_transaction_file(self):
+        """Remove the saved transaction file.
+
+        Yum will always save a transaction file every time we use the
+        buildTransaction() function.
+
+        That's quite useful for yum-complete-transaction.
+
+        But then, when we don't run processTransaction() (e.g on check-update),
+        we need to remove those files ourselves.
+        """
+        if self._ts_save_file is not None:
+            try:
+                os.unlink(self._ts_save_file)
+            except (IOError, OSError), e:
+                self.verbose_logger.warning(
+                        "Could not remove transaction file (%s): %s",
+                        self._ts_save_file, e)
+            self._ts_save_file = None
+
     def __get_packages_list(self, patterns, filter_, status="all"):
         """Get a packages list."""
         if status == "installed":
@@ -170,6 +190,9 @@ class NBYumBase(yum.YumBase):
 
         elif apply:
             self.processTransaction(rpmDisplay=self.nbyum_rpmDisplay)
+
+        else:
+            self.__cleanup_transaction_file()
 
     def recap_transaction(self, confirm=None):
         """Print a summary of the transaction."""
