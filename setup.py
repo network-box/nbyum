@@ -51,7 +51,7 @@ class TestCommand(Command):
 
 setup(name="nbyum",
       # Note: This is a pre-release
-      version="5.0.0-svn20842",
+      version="5.0.0-svn20933",
       description="Just like yum, but with a usable output",
       long_description=README,
       author="Mathieu Bridon",
