@@ -2,14 +2,13 @@ import json
 from operator import attrgetter
 import os
 import subprocess
-import sys
 import unittest2
 
 import rpm
 
 
 global_dataroot = os.path.join(os.path.abspath(os.getcwd()), "tests/data")
-conf_template = os.path.join("/etc/yum.conf")
+conf_template = "/etc/yum.conf"
 setuprepo_baseurl = os.path.join(global_dataroot, "setup.repo")
 
 
