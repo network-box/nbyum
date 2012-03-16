@@ -82,6 +82,8 @@ class NBYumCli(object):
     @ensure_privileges
     def install(self):
         """Install packages and security modules."""
+        self.base.plugins.setCmdLine(DummyOpts(nuke_newsave=True), None)
+
         self.base.install_packages(self.args.type, self.args.patterns)
         self.base.recap_transaction(confirm="All requested packages " \
                                             "installed successfully")
