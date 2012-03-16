@@ -5,7 +5,7 @@ from distutils.core import setup, Command
 
 
 install_requires = [
-    # Not available from Pypi, but worth mentioning for packagers
+    # -- Those are not available from Pypi, but worth mentioning for packagers
     #"yum",
     #"yum-plugin-nuke-newsave",
     #"yum-plugin-posttrans-triggers",
