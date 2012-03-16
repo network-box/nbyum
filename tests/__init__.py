@@ -22,8 +22,6 @@ class TestCase(unittest2.TestCase):
                                         "%s.root" % self._testMethodName)
         self.reposdir = os.path.join(self.dataroot,
                                      "%s.repos.d" % self._testMethodName)
-        self.cachedir = os.path.join(self.dataroot,
-                                "%s.cache" % self._testMethodName)
 
         testrepo_conf = os.path.join(self.reposdir, "test.repo")
         testrepo_baseurl = os.path.join(self.dataroot,
@@ -36,10 +34,7 @@ class TestCase(unittest2.TestCase):
         with open(conf_template, "r") as input:
             with open(self.yumconf, "w") as output:
                 for line in input.readlines():
-                    if line.startswith("cachedir="):
-                        output.write("cachedir=%s\n" % self.cachedir)
-                    else:
-                        output.write(line)
+                    output.write(line)
 
                 if hasattr(self, "installonlypkgs"):
                     output.write("installonlypkgs=%s\n" % self.installonlypkgs)
@@ -72,7 +67,6 @@ class TestCase(unittest2.TestCase):
         cmd = ["/usr/bin/sudo", "rm", "-fr", self.yumconf,
                                     self.installroot,
                                     self.reposdir,
-                                    self.cachedir,
                ]
         subprocess.check_call(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
