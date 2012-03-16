@@ -196,3 +196,27 @@ class TestUpdate(TestCase):
         # -- Check that no rpmnew/rpmsave files were left ----------
         self.assertFalse(os.path.exists("/etc/foo.conf.rpmsave"))
         self.assertFalse(os.path.exists("/etc/foo-noreplace.conf.rpmnew"))
+
+    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
+    def test_posttrans_triggers(self):
+        "Make sure we correctly use the posttrans-triggers yum plugin."""
+        args = [self.command]
+
+        # -- Check the update summary ------------------------------
+        expected = [{'update': [{"name": "nbsm-foo", "epoch": "0", "version": "1",
+                                 "release": "1.nb5.0", "arch": "noarch"},
+                                {"name": "nbsm-foo", "epoch": "0", "version": "3",
+                                 "release": "1.nb5.0", "arch": "noarch"}]},
+                    {"info": "All packages updated successfully"}]
+        self._run_nbyum_test(args, expected)
+
+        # -- Check the installed packages after the update ---------
+        expected = ["0:bar-1-1.nb5.0.noarch",
+                    "0:foo-1-1.nb5.0.noarch",
+                    "0:nbsm-foo-3-1.nb5.0.noarch",
+                    "0:toto-1-1.nb5.0.noarch"]
+        self._check_installed_rpms(expected)
+
+        # -- Check that the posttrans trigger was run --------------
+        self.assertTrue(os.path.exists("/tmp/trigger_was_run"))
+        os.unlink("/tmp/trigger_was_run")
