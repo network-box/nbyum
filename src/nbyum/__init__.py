@@ -1,5 +1,9 @@
+from contextlib import contextmanager
+import errno
 import json
+import pwd
 
+from yum.Errors import LockError
 from yum.rpmtrans import NoOutputCallBack
 
 from errors import NBYumException, WTFException
@@ -54,6 +58,44 @@ class NBYumCli(object):
 
         self.base.verbose_logger.warning = new_warning
         self.base.logger.critical = new_critical
+
+    @contextmanager
+    def __lock_yum(self):
+        """Acquire the Yum global lock.
+
+        This method works as a context manager, to be used in a `with' block.
+        """
+        # -- Acquire the lock ------------------------------------------------
+        try:
+            self.base.doLock()
+
+        except LockError as e:
+            if e.errno in (errno.EPERM, errno.EACCES):
+                raise WTFException("Can't create the lock file: %s" % e)
+
+            else:
+                lock_owner = {"pid": int(e.pid)}
+
+                with open("/proc/%(pid)s/status" % lock_owner) as status:
+                    for line in status:
+                        if line.startswith("Name:"):
+                            lock_owner["cmd"] = line.strip().split()[-1]
+                        if line.startswith("Uid:"):
+                            uid = int(line.strip().split()[-1])
+                            lock_owner["user"] = pwd.getpwuid(uid)[0]
+
+                msg = "The package system is being used by another " \
+                      "administrator - please try again later (user: " \
+                      "%(user)s, cmd: %(cmd)s, pid: %(pid)s)" % lock_owner
+
+                raise NBYumException(msg)
+
+        # -- Do the work, protected by the acquired lock ---------------------
+        yield
+
+        # -- Work is finished, release the lock ------------------------------
+        self.base.closeRpmDB()
+        self.base.doUnlock()
 
     def run(self):
         try:
