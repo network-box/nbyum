@@ -79,7 +79,19 @@ class NBYumCli(object):
                 with open("/proc/%(pid)s/status" % lock_owner) as status:
                     for line in status:
                         if line.startswith("Name:"):
-                            lock_owner["cmd"] = line.strip().split()[-1]
+                            exe = line.strip().split()[-1]
+
+                            with open("/proc/%(pid)s/cmdline" % lock_owner) as cmdline_file:
+                                cmdline = cmdline_file.read().split("\x00")
+
+                            for index, token in enumerate(cmdline):
+                                if token.startswith("/") and token.endswith(exe):
+                                    # Everything after now are options
+                                    lock_owner["cmd"] = " ".join([exe, cmdline.pop(index+1)])
+                                    break
+                            else:
+                                lock_owner["cmd"] = exe
+
                         if line.startswith("Uid:"):
                             uid = int(line.strip().split()[-1])
                             lock_owner["user"] = pwd.getpwuid(uid)[0]
