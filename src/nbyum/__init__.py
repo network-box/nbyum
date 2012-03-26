@@ -98,7 +98,7 @@ class NBYumCli(object):
 
                 msg = "The package system is being used by another " \
                       "administrator - please try again later (user: " \
-                      "%(user)s, cmd: %(cmd)s, pid: %(pid)s)" % lock_owner
+                      "%(user)s, cmd: '%(cmd)s', pid: %(pid)s)" % lock_owner
 
                 raise NBYumException(msg)
 
