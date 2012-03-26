@@ -114,8 +114,9 @@ class NBYumCli(object):
     # -- Functions corresponding to commands ---------------------------------
     def check_update(self):
         """Check for updates to installed packages."""
-        self.base.update_packages(self.args.patterns, apply=False)
-        self.base.recap_transaction()
+        with self.__lock_yum():
+            self.base.update_packages(self.args.patterns, apply=False)
+            self.base.recap_transaction()
 
     def info(self):
         """Get some infos about packages."""
@@ -128,14 +129,16 @@ class NBYumCli(object):
                                                posttrans_triggers=True),
                                      None)
 
-        self.base.install_packages(self.args.type, self.args.patterns)
-        self.base.recap_transaction(confirm="All requested packages " \
-                                            "installed successfully")
+        with self.__lock_yum():
+            self.base.install_packages(self.args.type, self.args.patterns)
+            self.base.recap_transaction(confirm="All requested packages " \
+                                                "installed successfully")
 
     def list(self):
         """List packages and security modules."""
-        self.base.list_packages(self.args.type, self.args.filter,
-                                self.args.patterns)
+        with self.__lock_yum():
+            self.base.list_packages(self.args.type, self.args.filter,
+                                    self.args.patterns)
 
     @ensure_privileges
     def remove(self):
@@ -144,9 +147,10 @@ class NBYumCli(object):
                                                posttrans_triggers=True),
                                      None)
 
-        self.base.remove_packages(self.args.type, self.args.patterns)
-        self.base.recap_transaction(confirm="All requested packages " \
-                                            "removed successfully")
+        with self.__lock_yum():
+            self.base.remove_packages(self.args.type, self.args.patterns)
+            self.base.recap_transaction(confirm="All requested packages " \
+                                                "removed successfully")
 
     @ensure_privileges
     def update(self):
@@ -155,9 +159,10 @@ class NBYumCli(object):
                                                posttrans_triggers=True),
                                      None)
 
-        self.base.update_packages(self.args.patterns, apply=True)
-        self.base.recap_transaction(confirm="All %spackages updated " \
-                                            "successfully" \
+        with self.__lock_yum():
+            self.base.update_packages(self.args.patterns, apply=True)
+            self.base.recap_transaction(confirm="All %spackages updated " \
+                                                "successfully" \
                                                 % (self.args.patterns \
                                                     and "requested " \
                                                     or ""))
