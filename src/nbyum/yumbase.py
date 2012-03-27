@@ -226,7 +226,11 @@ class NBYumBase(yum.YumBase):
             elif member.ts_state == "u":
                 envra_new = get_envra(member)
                 if member.isDep:
-                    print(json.dumps({"installdep": envra_new}))
+                    if member.updates:
+                        action = "updatedep"
+                    else:
+                        action = "installdep"
+                    print(json.dumps({action: envra_new}))
 
                 elif not member.updates and not member.obsoletes:
                     # Packages newly installed (when running 'install')
