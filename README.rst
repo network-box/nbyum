@@ -84,6 +84,17 @@ type, as described below:
 
     {"update": ["0:systemd-37-3.nb5.0.9.x86_64", "0:systemd-37-5.nb5.0.9.x86_64"]}
 
+* key = ``updatedep``
+
+** This means that the package is already installed, but another package being
+   changed in the transaction requires a newer version
+** The value od the hash is a 2-array containing the envra of the package
+   which would be updated and the envra of the package which would update it.
+** Example::
+
+    {"update": ["0:systemd-37-3.nb5.0.9.x86_64", "0:systemd-37-5.nb5.0.9.x86_64"]}
+    {"updatedep": "0:systemd-units-37-3.nb5.0.9.x86_64", "0:systemd-units-37-5.nb5.0.9.x86_64"]}
+
 * key = ``installdep``
 
 ** This means that the package would be installed if we'd actually run the
