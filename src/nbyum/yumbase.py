@@ -242,12 +242,13 @@ class NBYumBase(yum.YumBase):
             # Packages being the actual update/obsoleter...
             # or a new dependency, or even a new install >_<
             elif member.ts_state == "u":
+                envra_new = get_envra(member)
                 if member.isDep:
-                    print(json.dumps({"installdep": get_envra(member)}))
+                    print(json.dumps({"installdep": envra_new}))
 
                 elif not member.updates and not member.obsoletes:
                     # Packages newly installed (when running 'install')
-                    print(json.dumps({"install": get_envra(member)}))
+                    print(json.dumps({"install": envra_new}))
 
             else:
                 msg = "The transaction includes a package of state '%s'," \
