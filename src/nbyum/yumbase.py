@@ -213,31 +213,13 @@ class NBYumBase(yum.YumBase):
 
             # Packages obsoleted by a new one
             elif member.ts_state == "od":
-                envra_old = get_envra(member)
-
-                if len(member.obsoleted_by) > 1:
-                    # TODO: Why would that ever happen? o_O
-                    msg = ["For some reason, '%s' is obsoleted by a bunch of packages:" % envra_old]
-                    for pkg in member.obsoleted_by:
-                        msg.append("    %s" % (get_envra(pkg)))
-                    raise WTFException("\n".join(msg))
-
-                print(json.dumps({"obsolete": (envra_old,
-                                               get_envra(member.obsoleted_by[0]))}))
+                # Those are handled along with their obsoleter
+                continue
 
             # Packages replaced by a newer update
             elif member.ts_state == "ud":
-                envra_old = get_envra(member)
-
-                if len(member.updated_by) > 1:
-                    # TODO: Why would that ever happen? o_O
-                    msg = ["For some reason, '%s' is updated by a bunch of packages:" % envra_old]
-                    for pkg in member.updated_by:
-                        msg.append("    %s" % (get_envra(pkg)))
-                    raise WTFException("\n".join(msg))
-
-                print(json.dumps({"update": (envra_old,
-                                             get_envra(member.updated_by[0]))}))
+                # Those are handled along with their updater
+                continue
 
             # Packages being the actual update/obsoleter...
             # or a new dependency, or even a new install >_<
@@ -249,6 +231,16 @@ class NBYumBase(yum.YumBase):
                 elif not member.updates and not member.obsoletes:
                     # Packages newly installed (when running 'install')
                     print(json.dumps({"install": envra_new}))
+
+                else:
+                    # Packages obsoleting and/or updating others
+                    for old in member.obsoletes:
+                        print(json.dumps({"obsolete": (get_envra(old),
+                                                     envra_new)}))
+
+                    for old in member.updates:
+                        print(json.dumps({"update": (get_envra(old),
+                                                     envra_new)}))
 
             else:
                 msg = "The transaction includes a package of state '%s'," \
