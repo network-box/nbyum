@@ -36,18 +36,12 @@ class TestCommand(Command):
             print("Unit tests must unfortunately be run as root")
             sys.exit(1)
 
-        # We use unittest2's skip* decorators, and if we don't help Python it will
-        # import the older, incompatible unittest module
-        try:
-            import unittest2
-            sys.modules["unittest"] = unittest2
-        except ImportError:
-            print("We use unittest2 for the unit tests, please install it")
-            sys.exit(1)
+        import unittest
+        import tests
 
-        tests = unittest2.collector()
-        t = unittest2.TextTestRunner(verbosity=self.verbose)
-        result = t.run(tests)
+        loader = unittest.TestLoader()
+        t = unittest.TextTestRunner(verbosity=self.verbose)
+        result = t.run(loader.loadTestsFromModule(tests))
 
         if result.errors or result.failures:
             sys.exit(1)

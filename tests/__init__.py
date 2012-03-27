@@ -2,7 +2,7 @@ import json
 from operator import attrgetter
 import os
 import subprocess
-import unittest2
+import unittest
 
 import rpm
 
@@ -12,7 +12,7 @@ conf_template = "/etc/yum.conf"
 setuprepo_baseurl = os.path.join(global_dataroot, "setup.repo")
 
 
-class TestCase(unittest2.TestCase):
+class TestCase(unittest.TestCase):
     def setUp(self):
         # -- A few useful definitions ------------------------------
         self.dataroot = os.path.join(global_dataroot, self.command)
@@ -108,3 +108,13 @@ class TestCase(unittest2.TestCase):
 
         subprocess.check_call(cmd, stdout=subprocess.PIPE,
                                    stderr=subprocess.STDOUT)
+
+
+# Make sure the unit tests are discovered
+from test_checkupdate import *
+from test_info import *
+from test_install_sms import *
+from test_list import *
+from test_list_sms import *
+from test_remove_sms import *
+from test_update import *
