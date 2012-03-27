@@ -1,5 +1,4 @@
 import os
-import unittest2
 
 from tests import TestCase
 
@@ -7,7 +6,6 @@ from tests import TestCase
 class TestRemoveSms(TestCase):
     command = "remove"
 
-    @unittest2.skipIf(os.getuid() != 0, "Removals must be run as root")
     def test_no_match(self):
         """Try removing an unexisting security module."""
         args = [self.command, "sms", "no_such_security_module"]
@@ -23,7 +21,6 @@ class TestRemoveSms(TestCase):
                     "0:toto-1-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Removals must be run as root")
     def test_remove_sm(self):
         """Try removing a security module."""
         args = [self.command, "sms", "nbsm-foo"]
@@ -40,7 +37,6 @@ class TestRemoveSms(TestCase):
                     "0:toto-1-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Removals must be run as root")
     def test_remove_sm_with_deps(self):
         """Try removing a security module and the *packages* it depends on."""
         # -- Setup: install a security module with deps ------------
@@ -65,7 +61,6 @@ class TestRemoveSms(TestCase):
                     "0:toto-1-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Removals must be run as root")
     def test_fail_to_remove_sm_with_sms_deps(self):
         """Make sure we can't remove a security module if others require it."""
         # -- Setup: install a security module with deps ------------

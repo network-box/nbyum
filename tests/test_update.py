@@ -1,5 +1,4 @@
 import os
-import unittest2
 
 from tests import TestCase
 
@@ -8,7 +7,6 @@ class TestUpdate(TestCase):
     command = "update"
     installonlypkgs = "bar"
 
-    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_no_updates(self):
         """Update from a repo with no available updates."""
         args = [self.command]
@@ -24,7 +22,6 @@ class TestUpdate(TestCase):
                     "0:toto-1-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_only_updates(self):
         """Update from a repo with only updates available."""
         args = [self.command]
@@ -44,7 +41,6 @@ class TestUpdate(TestCase):
                     "0:toto-1-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_only_install(self):
         """Update from a repo with only new installs available."""
         args = [self.command]
@@ -63,7 +59,6 @@ class TestUpdate(TestCase):
                     "0:toto-1-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_only_obsoletes(self):
         """Update from a repo with only obsoletes available."""
         args = [self.command]
@@ -83,7 +78,6 @@ class TestUpdate(TestCase):
                     "0:toto-1-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_install_as_dep(self):
         """Update from a repo with an update requiring a new install."""
         args = [self.command]
@@ -106,7 +100,6 @@ class TestUpdate(TestCase):
                     "0:toto-2-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_ordering(self):
         """Update from a repo with a bit of everything available."""
         args = [self.command]
@@ -137,7 +130,6 @@ class TestUpdate(TestCase):
                     "0:toto-2-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_ordering_bis(self):
         """Update from a repo with a bit of everything available, bis."""
         args = [self.command]
@@ -167,7 +159,6 @@ class TestUpdate(TestCase):
                     "0:toto-2-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_no_newsave(self):
         """Update and make sure no rpmnew/rpmsave files were left."""
         args = [self.command]
@@ -197,7 +188,6 @@ class TestUpdate(TestCase):
         self.assertFalse(os.path.exists("/etc/foo.conf.rpmsave"))
         self.assertFalse(os.path.exists("/etc/foo-noreplace.conf.rpmnew"))
 
-    @unittest2.skipIf(os.getuid() != 0, "Updates must be run as root")
     def test_posttrans_triggers(self):
         "Make sure we correctly use the posttrans-triggers yum plugin."""
         args = [self.command]

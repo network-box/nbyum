@@ -1,5 +1,4 @@
 import os
-import unittest2
 
 from tests import TestCase
 
@@ -7,7 +6,6 @@ from tests import TestCase
 class TestInstallSms(TestCase):
     command = "install"
 
-    @unittest2.skipIf(os.getuid() != 0, "Installations must be run as root")
     def test_no_sm_match(self):
         """Try installing an unexisting security module."""
         args = [self.command, "sms", "no_such_security_module"]
@@ -23,7 +21,6 @@ class TestInstallSms(TestCase):
                     "0:toto-1-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Installations must be run as root")
     def test_already_installed_sm(self):
         """Try installing an already installed security module."""
         args = [self.command, "sms", "foo"]
@@ -39,7 +36,6 @@ class TestInstallSms(TestCase):
                     "0:toto-1-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Installations must be run as root")
     def test_install_sm(self):
         """Try installing a security module."""
         args = [self.command, "sms", "nbsm-bar"]
@@ -58,7 +54,6 @@ class TestInstallSms(TestCase):
                     "0:toto-1-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Installations must be run as root")
     def test_install_sm_with_deps(self):
         """Try installing a security module and its dependencies."""
         args = [self.command, "sms", "nbsm-plouf"]
@@ -80,7 +75,6 @@ class TestInstallSms(TestCase):
                     "0:toto-1-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    @unittest2.skipIf(os.getuid() != 0, "Installations must be run as root")
     def test_install_multiple_sms(self):
         """Try installing several security modules and their dependencies."""
         args = [self.command, "sms", "nbsm-plouf", "toto"]
