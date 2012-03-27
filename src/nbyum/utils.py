@@ -155,17 +155,17 @@ def transaction_ordergetter(pkg):
     if pkg.ts_state == "i":
         # Packages coming as installonly with `nbyum update'
         index = 5
-    elif pkg.ts_state == "od":
-        # Packages being obsoleted with `nbyum update'
-        index = 10
-    elif pkg.ts_state == "ud":
-        # Packages being updated with `nbyum update'
-        index = 20
     elif pkg.ts_state == "u":
         if pkg.isDep:
             # Packages installed as dependencies
             index = 30
-        elif not pkg.updates and not pkg.obsoletes:
+        elif pkg.obsoletes:
+            # Packages obsoleting others
+            index = 10
+        elif pkg.updates:
+            # Packages updating others
+            index = 20
+        else:
             # Packages installed with 'nbyum install' are first
             index = 0
     elif pkg.ts_state == "e":
