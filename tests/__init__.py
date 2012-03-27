@@ -64,7 +64,7 @@ class TestCase(unittest2.TestCase):
         subprocess.check_call(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
         # -- Cleanup, with super user permissions ------------------
-        cmd = ["/usr/bin/sudo", "rm", "-fr", self.yumconf,
+        cmd = ["/bin/rm", "-fr", self.yumconf,
                                     self.installroot,
                                     self.reposdir,
                ]
@@ -101,7 +101,7 @@ class TestCase(unittest2.TestCase):
         This installs a few packages using yum, which is needed as part of the
         setup for some tests.
         """
-        cmd = ["/usr/bin/sudo", "/usr/bin/yum", "install",
+        cmd = ["/usr/bin/yum", "install",
                                                 "-c", self.yumconf,
                                                 "-y"]
         cmd.extend(pkgs)
