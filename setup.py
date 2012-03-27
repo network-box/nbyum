@@ -32,6 +32,10 @@ class TestCommand(Command):
 
     def run(self):
         """Run all the unit tests found in the `tests/' folder."""
+        if os.getuid() != 0:
+            print("Unit tests must unfortunately be run as root")
+            sys.exit(1)
+
         # We use unittest2's skip* decorators, and if we don't help Python it will
         # import the older, incompatible unittest module
         try:
