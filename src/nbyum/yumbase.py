@@ -133,6 +133,11 @@ class NBYumBase(yum.YumBase):
             for pkg in sorted(self.__get_packages_list(patterns, type_filter,
                                                        status="available"),
                               key=list_ordergetter):
+                if type_ == "sms" and self.rpmdb.installed(name=pkg.name):
+                    # For security modules, we only want to show the ones that
+                    # are **not installed**, even if in a different version
+                    continue
+
                 result = get_envra(pkg)
                 result.update({"status": "available"})
                 result.update({"summary": pkg.summary})
