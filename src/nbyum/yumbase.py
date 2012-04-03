@@ -126,6 +126,7 @@ class NBYumBase(yum.YumBase):
                               key=list_ordergetter):
                 result = get_envra(pkg)
                 result.update({"status": "installed"})
+                result.update({"summary": pkg.summary})
                 print(json.dumps(result))
 
         if status in ("all", "available"):
@@ -134,6 +135,7 @@ class NBYumBase(yum.YumBase):
                               key=list_ordergetter):
                 result = get_envra(pkg)
                 result.update({"status": "available"})
+                result.update({"summary": pkg.summary})
                 print(json.dumps(result))
 
     def remove_packages(self, type_, patterns):
