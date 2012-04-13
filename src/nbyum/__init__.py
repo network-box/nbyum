@@ -1,6 +1,5 @@
 from contextlib import contextmanager
 import errno
-import json
 import logging
 import pwd
 
@@ -100,7 +99,7 @@ class NBYumCli(object):
                 import traceback
                 e = traceback.format_exc()
 
-            print(json.dumps({'error': '%s' % e}))
+            self.base.logger.error(e)
             return 1
 
     # -- Functions corresponding to commands ---------------------------------
