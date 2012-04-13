@@ -17,6 +17,10 @@ class DummyOpts(object):
         for k, v in kwargs.items():
             setattr(self, k, v)
 
+        # It seems some parts of Yum (or its plugins) have certain expectations
+        # regarding the command line options. Make sure to please them
+        if self.repos is None: self.repos = []
+
     def __getattr__(self, name):
         # We use different options depending on the case, so we might
         # sometimes try to access an option which we didn't pass to the
