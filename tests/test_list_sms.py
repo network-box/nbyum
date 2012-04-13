@@ -10,8 +10,8 @@ class TestListSMs(TestCase):
 
         # -- Check the listing -------------------------------------
         expected = [{"status": "installed", "name": "nbsm-foo", "epoch": "0",
-                                   "version": "1", "release": "1.nb5.0",
-                                   "arch": "noarch"}]
+                     "version": "1", "release": "1.nb5.0", "arch": "noarch",
+                     "summary": "Security Module to get some Foo"}]
         self._run_nbyum_test(args, expected)
 
     def test_list_available_sms(self):
@@ -20,8 +20,8 @@ class TestListSMs(TestCase):
 
         # -- Check the listing -------------------------------------
         expected = [{"status": "available", "name": "nbsm-bar", "epoch": "0",
-                                   "version": "1", "release": "1.nb5.0",
-                                   "arch": "noarch"}]
+                     "version": "1", "release": "1.nb5.0", "arch": "noarch",
+                     "summary": "Security Module to meet Toto"}]
         self._run_nbyum_test(args, expected)
 
     def test_list_sms(self):
@@ -30,11 +30,11 @@ class TestListSMs(TestCase):
 
         # -- Check the listing -------------------------------------
         expected = [{"status": "installed", "name": "nbsm-foo", "epoch": "0",
-                                   "version": "1", "release": "1.nb5.0",
-                                   "arch": "noarch"},
+                     "version": "1", "release": "1.nb5.0", "arch": "noarch",
+                     "summary": "Security Module to get some Foo"},
                     {"status": "available", "name": "nbsm-bar", "epoch": "0",
-                                   "version": "1", "release": "1.nb5.0",
-                                   "arch": "noarch"}]
+                     "version": "1", "release": "1.nb5.0", "arch": "noarch",
+                     "summary": "Security Module to meet Toto"}]
         self._run_nbyum_test(args, expected)
 
     def test_list_no_sms_match(self):
@@ -51,9 +51,9 @@ class TestListSMs(TestCase):
 
         # -- Check the listing -------------------------------------
         expected = [{"status": "installed", "name": "nbsm-foo", "epoch": "0",
-                                   "version": "1", "release": "1.nb5.0",
-                                   "arch": "noarch"},
+                     "version": "1", "release": "1.nb5.0", "arch": "noarch",
+                     "summary": "Security Module to get some Foo"},
                     {"status": "available", "name": "nbsm-bar", "epoch": "0",
-                                   "version": "1", "release": "1.nb5.0",
-                                   "arch": "noarch"}]
+                     "version": "1", "release": "1.nb5.0", "arch": "noarch",
+                     "summary": "Security Module to meet Toto"}]
         self._run_nbyum_test(args, expected)

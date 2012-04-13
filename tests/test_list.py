@@ -10,11 +10,11 @@ class TestListPackages(TestCase):
 
         # -- Check the listing -------------------------------------
         expected = [{"status": "installed", "name": "bar", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"},
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Bar"},
                     {"status": "installed", "name": "foo", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"},
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Foo"},
                     {"status": "installed", "name": "toto", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"}]
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Toto"}]
         self._run_nbyum_test(args, expected)
 
     def test_list_available_packages(self):
@@ -23,13 +23,13 @@ class TestListPackages(TestCase):
 
         # -- Check the listing -------------------------------------
         expected = [{"status": "available", "name": "baz", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"},
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Baz"},
                     {"status": "available", "name": "foo", "epoch": "0", "version": "1",
-                                   "release": "2.nb5.0", "arch": "noarch"},
+                     "release": "2.nb5.0", "arch": "noarch", "summary": "Get some Foo"},
                     {"status": "available", "name": "plouf", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"},
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Plouf"},
                     {"status": "available", "name": "toto", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}]
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Toto"}]
         self._run_nbyum_test(args, expected)
 
     def test_list_packages(self):
@@ -38,19 +38,19 @@ class TestListPackages(TestCase):
 
         # -- Check the listing -------------------------------------
         expected = [{"status": "installed", "name": "bar", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"},
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Bar"},
                     {"status": "installed", "name": "foo", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"},
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Foo"},
                     {"status": "installed", "name": "toto", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"},
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Toto"},
                     {"status": "available", "name": "baz", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"},
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Baz"},
                     {"status": "available", "name": "foo", "epoch": "0", "version": "1",
-                                   "release": "2.nb5.0", "arch": "noarch"},
+                     "release": "2.nb5.0", "arch": "noarch", "summary": "Get some Foo"},
                     {"status": "available", "name": "plouf", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"},
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Plouf"},
                     {"status": "available", "name": "toto", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}]
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Toto"}]
         self._run_nbyum_test(args, expected)
 
     def test_list_no_packages_match(self):
@@ -67,7 +67,7 @@ class TestListPackages(TestCase):
 
         # -- Check the listing -------------------------------------
         expected = [{"status": "installed", "name": "foo", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"},
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Foo"},
                     {"status": "available", "name": "plouf", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}]
+                     "release": "1.nb5.0", "arch": "noarch", "summary": "Get some Plouf"}]
         self._run_nbyum_test(args, expected)
