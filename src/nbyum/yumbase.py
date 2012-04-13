@@ -4,9 +4,9 @@ import os
 
 import yum
 
-from errors import NBYumException, WTFException
-from utils import (get_envra, get_rpminfos,
-                   list_ordergetter, transaction_ordergetter)
+from .errors import NBYumException, WTFException
+from .utils import (get_envra, get_rpminfos,
+                    list_ordergetter, transaction_ordergetter)
 
 
 class NBYumBase(yum.YumBase):

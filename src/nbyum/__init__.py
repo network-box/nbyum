@@ -6,9 +6,9 @@ import pwd
 from yum.Errors import LockError
 from yum.rpmtrans import NoOutputCallBack
 
-from errors import NBYumException, WTFException
-from utils import DummyOpts, ensure_privileges
-from yumbase import NBYumBase
+from .errors import NBYumException, WTFException
+from .utils import DummyOpts, ensure_privileges
+from .yumbase import NBYumBase
 
 
 class NBYumCli(object):
