@@ -1,12 +1,14 @@
 from contextlib import contextmanager
 import errno
 import json
+import logging
 import pwd
 
 from yum.Errors import LockError
 from yum.rpmtrans import NoOutputCallBack
 
 from .errors import NBYumException, WTFException
+from .logging_hijack import NBYumLogger
 from .utils import DummyOpts, ensure_privileges
 from .yumbase import NBYumBase
 
@@ -15,17 +17,18 @@ class NBYumCli(object):
     def __init__(self, args):
         self.args = args
 
+        # -- Hijack the Yum logging ------------------------------------------
+        logging.setLoggerClass(NBYumLogger)
+
         # -- Deal with the preconfig stuff -----------------------------------
         self.base = NBYumBase()
 
         if not args.debug:
             # Shut yum up
             self.base.preconf.debuglevel = 0
-            self.base.preconf.errorlevel = 0
             self.base.nbyum_rpmDisplay = NoOutputCallBack()
         else:
-            self.base.preconf.debuglevel = 99
-            self.base.preconf.errorlevel = 99
+            self.base.preconf.debuglevel = 6
             self.base.nbyum_rpmDisplay = None
 
         if args.config:
@@ -35,29 +38,6 @@ class NBYumCli(object):
 
         # We don't care about it, but calling it initializes the plugins...
         self.base.conf
-
-        # -- Monkey-patch the YumBase for what can't be done as preconfig ----
-        # The Yum API prints warnings and errors instead of making them
-        # available and useful. As a result, if we want to retrieve them,
-        # we must play dirty tricks on the YumBase loggers. :(
-        def new_warning(msg, *args):
-            if len(args) == msg.count("%s"):
-                print(json.dumps({'warning': '%s' % (msg%args)}))
-
-            else:
-                msg = "Something unexpected happened while trying to print " \
-                      "a warning.\n\nThe warning message to print was the " \
-                      "following:\n  %s\n\nHowever, some additional " \
-                      "arguments were passed, but it is not clear how they\n" \
-                      "should have been handled:\n  %s\n\nPlease report a " \
-                      "bug, providing the above information." % (msg, args)
-                raise WTFException(msg)
-
-        def new_critical(msg):
-            raise NBYumException(msg)
-
-        self.base.verbose_logger.warning = new_warning
-        self.base.logger.critical = new_critical
 
     @contextmanager
     def __lock_yum(self):
