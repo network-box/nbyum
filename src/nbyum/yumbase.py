@@ -197,7 +197,7 @@ class NBYumBase(yum.YumBase):
             raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
 
         if not len(self.tsInfo.getMembers()):
-            print(json.dumps({"info": "Packages are all up to date"}))
+            self.verbose_logger.info("Packages are all up to date")
 
         elif apply:
             self.processTransaction(rpmDisplay=self.nbyum_rpmDisplay)
