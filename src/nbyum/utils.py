@@ -134,10 +134,17 @@ def get_rpminfos(pkg):
     return dict([(attr, getattr(pkg, attr)) for attr in infos_attrs])
 
 def list_ordergetter(pkg):
-    """Get the Name-Epoch:Version-Release.Arch representation of a package."""
+    """Return a simple ordering for package lists.
+
+    In listings, we want the order to be defined as follows:
+        - packages are ordered first by name, alphabetically,
+          case-insensitively,
+        - packages are then ordered by epoch, version, release and finally
+          architecture.
+    """
     envra = get_envra(pkg)
 
-    # Let's order alphabetically and insensitively to the case
+    # The order should be case-insensitive
     envra['name'] = envra['name'].lower()
 
     return "%(name)s-%(epoch)s:%(version)s-%(release)s.%(arch)s" % envra
