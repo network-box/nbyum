@@ -11,7 +11,9 @@ class TestRemoveSms(TestCase):
         args = [self.command, "sms", "no_such_security_module"]
 
         # -- Check the error message -------------------------------
-        expected = [{"error": "No Match for argument: nbsm-no_such_security_module"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "error", "message": "No Match for argument: nbsm-no_such_security_module"}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the no-op ----------
@@ -26,9 +28,10 @@ class TestRemoveSms(TestCase):
         args = [self.command, "sms", "nbsm-foo"]
 
         # -- Check the removal summary -----------------------------
-        expected = [{"remove": {"name": "nbsm-foo", "epoch": "0", "version": "1",
-                                "release": "1.nb5.0", "arch": "noarch"}},
-                    {"info": "All requested packages removed successfully"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "progress", "current": 1, "total": 1, "hint": "Removed: nbsm-foo"},
+                    {"type": "remove", "pkgs": [{"name": "nbsm-foo", "old": "1-1.nb5.0", "reason": ""}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the removal --------
@@ -47,11 +50,12 @@ class TestRemoveSms(TestCase):
         args = [self.command, "sms", "nbsm-bidule"]
 
         # -- Check the removal summary -----------------------------
-        expected = [{"remove": {"name": "nbsm-bidule", "epoch": "0", "version": "1",
-                                "release": "1.nb5.0", "arch": "noarch"}},
-                    {"remove": {"name": "bidule", "epoch": "0", "version": "1",
-                                "release": "1.nb5.0", "arch": "noarch"}},
-                    {"info": "All requested packages removed successfully"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "progress", "current": 1, "total": 2, "hint": "Removed: nbsm-bidule"},
+                    {"type": "progress", "current": 2, "total": 2, "hint": "Removed: bidule"},
+                    {"type": "remove", "pkgs": [{"name": "nbsm-bidule", "old": "1-1.nb5.0", "reason": ""},
+                                                {"name": "bidule", "old": "1-1.nb5.0", "reason": ""}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the removal --------
@@ -71,7 +75,9 @@ class TestRemoveSms(TestCase):
         args = [self.command, "sms", "nbsm-bidule"]
 
         # -- Check the removal summary -----------------------------
-        expected = [{"error": "Proceeding would remove the following security modules:\n  - nbsm-machin\n  - nbsm-trucmuche\nTransaction aborted."}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "error", "message": "Proceeding would remove the following security modules:\n  - nbsm-machin\n  - nbsm-trucmuche\nTransaction aborted."}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the removal --------
