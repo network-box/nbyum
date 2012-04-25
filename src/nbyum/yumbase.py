@@ -206,10 +206,8 @@ class NBYumBase(yum.YumBase):
         else:
             self.__cleanup_transaction_file()
 
-    def recap_transaction(self, confirm=None):
+    def recap_transaction(self):
         """Print a summary of the transaction."""
-        if not len(self.tsInfo.getMembers()):
-            return
 
         for member in sorted(self.tsInfo.getMembers(),
                              key=transaction_ordergetter):
@@ -263,5 +261,3 @@ class NBYumBase(yum.YumBase):
                       " Ask your friendly nbyum developer!" % member.ts_state
                 raise WTFException(msg)
 
-        if confirm:
-            print(json.dumps({"info": confirm}))

@@ -123,8 +123,7 @@ class NBYumCli(object):
 
         with self.__lock_yum():
             self.base.install_packages(self.args.type, self.args.patterns)
-            self.base.recap_transaction(confirm="All requested packages " \
-                                                "installed successfully")
+            self.base.recap_transaction()
 
     def list(self):
         """List packages and security modules."""
@@ -141,8 +140,7 @@ class NBYumCli(object):
 
         with self.__lock_yum():
             self.base.remove_packages(self.args.type, self.args.patterns)
-            self.base.recap_transaction(confirm="All requested packages " \
-                                                "removed successfully")
+            self.base.recap_transaction()
 
     @ensure_privileges
     def update(self):
@@ -153,8 +151,4 @@ class NBYumCli(object):
 
         with self.__lock_yum():
             self.base.update_packages(self.args.patterns, apply=True)
-            self.base.recap_transaction(confirm="All %spackages updated " \
-                                                "successfully" \
-                                                % (self.args.patterns \
-                                                    and "requested " \
-                                                    or ""))
+            self.base.recap_transaction()
