@@ -127,6 +127,13 @@ def get_envra(pkg):
     envra_attrs = ("name", "epoch", "version", "release", "arch")
     return dict([(attr, getattr(pkg, attr)) for attr in envra_attrs])
 
+def get_version(pkg):
+    """Get the Epoch:Version-release of a package."""
+    if int(pkg.epoch) > 0:
+        return "%s:%s-%s" % (pkg.epoch, pkg.version, pkg.release)
+    else:
+        return "%s-%s" % (pkg.version, pkg.release)
+
 def list_ordergetter(pkg):
     """Return a simple ordering for package lists.
 
