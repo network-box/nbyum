@@ -9,9 +9,9 @@ class TestListSMs(TestCase):
         args = [self.command, "installed", "sms"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"status": "installed", "name": "nbsm-foo", "epoch": "0",
-                     "version": "1", "release": "1.nb5.0", "arch": "noarch",
-                     "summary": "Security Module to get some Foo"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "installed", "pkgs": [{"name": "nbsm-foo", "version": "1-1.nb5.0", "summary": "Security Module to get some Foo"}]}]
         self._run_nbyum_test(args, expected)
 
     def test_list_available_sms(self):
@@ -19,9 +19,9 @@ class TestListSMs(TestCase):
         args = [self.command, "available", "sms"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"status": "available", "name": "nbsm-bar", "epoch": "0",
-                     "version": "1", "release": "1.nb5.0", "arch": "noarch",
-                     "summary": "Security Module to meet Toto"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "available", "pkgs": [{"name": "nbsm-bar", "version": "1-1.nb5.0", "summary": "Security Module to meet Toto"}]}]
         self._run_nbyum_test(args, expected)
 
     def test_list_sms(self):
@@ -29,12 +29,10 @@ class TestListSMs(TestCase):
         args = [self.command, "all", "sms"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"status": "installed", "name": "nbsm-foo", "epoch": "0",
-                     "version": "1", "release": "1.nb5.0", "arch": "noarch",
-                     "summary": "Security Module to get some Foo"},
-                    {"status": "available", "name": "nbsm-bar", "epoch": "0",
-                     "version": "1", "release": "1.nb5.0", "arch": "noarch",
-                     "summary": "Security Module to meet Toto"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "installed", "pkgs": [{"name": "nbsm-foo", "version": "1-1.nb5.0", "summary": "Security Module to get some Foo"}]},
+                    {"type": "available", "pkgs": [{"name": "nbsm-bar", "version": "1-1.nb5.0", "summary": "Security Module to meet Toto"}]}]
         self._run_nbyum_test(args, expected)
 
     def test_list_no_sms_match(self):
@@ -42,7 +40,8 @@ class TestListSMs(TestCase):
         args = [self.command, "all", "sms", "no_such_sm"]
 
         # -- Check the listing -------------------------------------
-        expected = []
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."}]
         self._run_nbyum_test(args, expected)
 
     def test_list_sms_match(self):
@@ -50,10 +49,8 @@ class TestListSMs(TestCase):
         args = [self.command, "all", "sms", "nbsm-foo", "*a*"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"status": "installed", "name": "nbsm-foo", "epoch": "0",
-                     "version": "1", "release": "1.nb5.0", "arch": "noarch",
-                     "summary": "Security Module to get some Foo"},
-                    {"status": "available", "name": "nbsm-bar", "epoch": "0",
-                     "version": "1", "release": "1.nb5.0", "arch": "noarch",
-                     "summary": "Security Module to meet Toto"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "installed", "pkgs": [{"name": "nbsm-foo", "version": "1-1.nb5.0", "summary": "Security Module to get some Foo"}]},
+                    {"type": "available", "pkgs": [{"name": "nbsm-bar", "version": "1-1.nb5.0", "summary": "Security Module to meet Toto"}]}]
         self._run_nbyum_test(args, expected)
