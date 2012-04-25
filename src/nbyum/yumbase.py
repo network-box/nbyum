@@ -5,6 +5,7 @@ import os
 import yum
 
 from .errors import NBYumException, WTFException
+from .logging_hijack import NBYumRPMCallback
 from .utils import (get_envra, list_ordergetter, transaction_ordergetter)
 
 
@@ -117,7 +118,7 @@ class NBYumBase(yum.YumBase):
             raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
 
         if len(self.tsInfo.getMembers()):
-            self.processTransaction(rpmDisplay=self.nbyum_rpmDisplay)
+            self.processTransaction(rpmDisplay=NBYumRPMCallback())
 
     def list_packages(self, type_, status, patterns):
         """List packages and security modules."""
@@ -180,7 +181,7 @@ class NBYumBase(yum.YumBase):
             raise NBYumException(msg)
 
         if len(self.tsInfo.getMembers()):
-            self.processTransaction(rpmDisplay=self.nbyum_rpmDisplay)
+            self.processTransaction(rpmDisplay=NBYumRPMCallback())
 
     def update_packages(self, patterns, apply=False):
         """Check for updates and optionally apply."""
@@ -200,7 +201,7 @@ class NBYumBase(yum.YumBase):
             self.verbose_logger.info("Packages are all up to date")
 
         elif apply:
-            self.processTransaction(rpmDisplay=self.nbyum_rpmDisplay)
+            self.processTransaction(rpmDisplay=NBYumRPMCallback())
 
         else:
             self.__cleanup_transaction_file()

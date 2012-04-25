@@ -1,6 +1,10 @@
 import json
 import logging
 
+from yum.constants import (TS_UPDATE, TS_ERASE, TS_INSTALL, TS_TRUEINSTALL,
+                           TS_OBSOLETED, TS_OBSOLETING, TS_UPDATED)
+from yum.rpmtrans import RPMBaseCallback
+
 from .errors import NBYumException, WTFException
 
 
@@ -36,3 +40,51 @@ class NBYumLogger(logging.Logger):
 
         else:
             raise WTFException("Got unexpected logging level: %s" % level)
+
+
+class NBYumRPMCallback(RPMBaseCallback):
+    def __init__(self):
+        RPMBaseCallback.__init__(self)
+
+        self.fileaction = {TS_INSTALL: 'Installed',
+                           TS_TRUEINSTALL: 'Installed',
+                           TS_OBSOLETING: 'Installed',
+                           TS_UPDATE: 'Installed',
+                           TS_OBSOLETED: 'Removed',
+                           TS_UPDATED: 'Removed',
+                           TS_ERASE: 'Removed',
+                           }
+
+    def event(self, package, action, te_current, te_total, ts_current, ts_total):
+        """Log progression of the transaction."""
+        if te_current != te_total:
+            # No progress bar, we only print packages completely processed
+            return
+
+        if action in self.fileaction:
+            self.logger.log(PROGRESS_LEVEL,
+                            {"current": ts_current,
+                             "total": ts_total,
+                             "hint": "%s: %s" % (self.fileaction[action],
+                                                 package)})
+
+        else:
+            raise WTFException("Package %s from transaction had action set " \
+                               "to %s" % (package, action))
+
+    def filelog(self, package, action):
+        """Log that a package has been entirely installed/removed/..."""
+        # We don't get packages removed as part of an update here, so we do
+        # everything in self.event() instead, acting only if the package is
+        # done with
+        pass
+
+    def scriptout(self, package, msgs):
+        """Log errors in the package scriptlets."""
+        if msgs:
+            for msg in msgs:
+                self.logger.error(msg)
+
+    def errorlog(self, msg):
+        """Log Yum errors occuring **during** the transaction."""
+        self.logger.error(msg)

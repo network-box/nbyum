@@ -26,10 +26,8 @@ class NBYumCli(object):
         if not args.debug:
             # Shut yum up
             self.base.preconf.debuglevel = 0
-            self.base.nbyum_rpmDisplay = NoOutputCallBack()
         else:
             self.base.preconf.debuglevel = 6
-            self.base.nbyum_rpmDisplay = None
 
         if args.config:
             self.base.preconf.fn = args.config
