@@ -7,7 +7,7 @@ from yum.Errors import LockError
 from yum.rpmtrans import NoOutputCallBack
 
 from .errors import NBYumException, WTFException
-from .logging_hijack import NBYumLogger
+from .logging_hijack import NBYumLogger, PROGRESS_LEVEL
 from .utils import DummyOpts, ensure_privileges
 from .yumbase import NBYumBase
 
@@ -18,6 +18,7 @@ class NBYumCli(object):
 
         # -- Hijack the Yum logging ------------------------------------------
         logging.setLoggerClass(NBYumLogger)
+        logging.addLevelName(PROGRESS_LEVEL,  "progress")
 
         # -- Deal with the preconfig stuff -----------------------------------
         self.base = NBYumBase()
@@ -35,8 +36,10 @@ class NBYumCli(object):
 
         self.base.setCacheDir()
 
-        # We don't care about it, but calling it initializes the plugins...
-        self.base.conf
+        self.base.logger.log_progress({"current": 0, "total": 1, "hint": "Downloading the packages metadata..."})
+        self.base._getSacks()
+
+        self.base.logger.log_progress({"current": 0, "total": 1, "hint": "Processing the packages metadata..."})
 
     @contextmanager
     def __lock_yum(self):

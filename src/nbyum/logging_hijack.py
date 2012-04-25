@@ -4,7 +4,13 @@ import logging
 from .errors import NBYumException, WTFException
 
 
+# Our custom log levels
+PROGRESS_LEVEL  = 3141592653
+
+
 class NBYumLogger(logging.Logger):
+    log_progress  = lambda self, msg: self.log(PROGRESS_LEVEL, msg)
+
     def handle(self, record):
         level = record.levelname.lower()
 
@@ -20,6 +26,13 @@ class NBYumLogger(logging.Logger):
 
         if level in ("debug", "info", "warning", "error"):
             print(json.dumps({"type": level, "message": record.getMessage()}))
+
+        elif level == "progress":
+            # `record.msg` is a dict
+            print(json.dumps({"type": level,
+                              "current": record.msg["current"],
+                              "total": record.msg["total"],
+                              "hint": record.msg["hint"]}))
 
         else:
             raise WTFException("Got unexpected logging level: %s" % level)
