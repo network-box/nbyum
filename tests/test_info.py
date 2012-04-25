@@ -9,7 +9,8 @@ class TestInfo(TestCase):
         args = [self.command, "no_such_package"]
 
         # -- Check the infos ---------------------------------------
-        expected = []
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."}]
         self._run_nbyum_test(args, expected)
 
     def test_info_simple(self):
@@ -17,11 +18,11 @@ class TestInfo(TestCase):
         args = [self.command, "foo"]
 
         # -- Check the infos ---------------------------------------
-        expected = [{'name': 'foo', 'base_package_name': 'foo', 'license': 'MIT',
-                     'epoch': '0', 'version': '1', 'release': '1.nb5.0',
-                     'arch': 'noarch', 'summary': 'Get some Foo',
-                     'description': 'This package provides you the joy of ' \
-                                    'getting some Foo.'}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "pkginfos", "pkgs": [{"name": "foo", "license": "MIT", "base_package_name": "foo",
+                                                   "version": "1-1.nb5.0", "arch": "noarch", "summary": "Get some Foo",
+                                                   "description": "This package provides you the joy of getting some Foo."}]}]
         self._run_nbyum_test(args, expected)
 
     def test_info_patterns(self):
@@ -29,23 +30,17 @@ class TestInfo(TestCase):
         args = [self.command, "*foo*", "bar*"]
 
         # -- Check the infos ---------------------------------------
-        expected = [{'name': 'bar', 'base_package_name': 'bar', 'license': 'MIT',
-                     'epoch': '0', 'version': '1', 'release': '1.nb5.0',
-                     'arch': 'noarch', 'summary': 'Get some Bar',
-                     'description': 'This package provides you the joy of ' \
-                                    'getting some Bar.'},
-                    {'name': 'foo', 'base_package_name': 'foo', 'license': 'MIT',
-                     'epoch': '0', 'version': '1', 'release': '1.nb5.0',
-                     'arch': 'noarch', 'summary': 'Get some Foo',
-                     'description': 'This package provides you the joy of ' \
-                                    'getting some Foo.'},
-                    {'name': 'nbsm-foo', 'base_package_name': 'nbsm-foo',
-                     'license': 'MIT', 'epoch': '0', 'version': '1',
-                     'release': '1.nb5.0', 'arch': 'noarch',
-                     'summary': 'Security Module to get some Foo',
-                     'description': 'This package provides you the joy of ' \
-                                    'getting some Foo.'},
-                    ]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "pkginfos", "pkgs": [{"name": "bar", "license": "MIT", "base_package_name": "bar",
+                                                   "version": "1-1.nb5.0", "arch": "noarch", "summary": "Get some Bar",
+                                                   "description": "This package provides you the joy of getting some Bar."},
+                                                  {"name": "foo", "license": "MIT", "base_package_name": "foo",
+                                                   "version": "1-1.nb5.0", "arch": "noarch", "summary": "Get some Foo",
+                                                   "description": "This package provides you the joy of getting some Foo."},
+                                                  {"name": "nbsm-foo", "license": "MIT", "base_package_name": "nbsm-foo",
+                                                   "version": "1-1.nb5.0", "arch": "noarch", "summary": "Security Module to get some Foo",
+                                                   "description": "This package provides you the joy of getting some Foo."}]}]
         self._run_nbyum_test(args, expected)
 
     def test_info_apostrophes(self):
@@ -53,11 +48,11 @@ class TestInfo(TestCase):
         args = [self.command, "bdummy"]
 
         # -- Check the infos ---------------------------------------
-        expected = [{'name': 'bdummy', 'base_package_name': 'bdummy', 'license': 'MIT',
-                     'epoch': '0', 'version': '1', 'release': '1.nb5.0',
-                     'arch': 'noarch', 'summary': 'Not just any dummy',
-                     'description': 'This package provides bochecha\'s ' \
-                                    'dummy.\n\nThe main "feature" is to make' \
-                                    ' it\'s alright to have apostrophes in a' \
-                                    ' field, so\nlet\'s add one more :\'}"'}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "pkginfos", "pkgs": [{"name": "bdummy", "license": "MIT", "base_package_name": "bdummy",
+                                                   "version": "1-1.nb5.0", "arch": "noarch", "summary": "Not just any dummy",
+                                                   "description": "This package provides bochecha's dummy.\n\nThe " \
+                                                                  "main \"feature\" is to make it's alright to have " \
+                                                                  "apostrophes in a field, so\nlet's add one more :'}\""}]}]
         self._run_nbyum_test(args, expected)
