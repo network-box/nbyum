@@ -122,11 +122,6 @@ def get_parser():
 
     return parser
 
-def get_envra(pkg):
-    """Get the (Epoch, Name, Version, Release, Arch) representation of a package."""
-    envra_attrs = ("name", "epoch", "version", "release", "arch")
-    return dict([(attr, getattr(pkg, attr)) for attr in envra_attrs])
-
 def get_version(pkg):
     """Get the Epoch:Version-release of a package."""
     if int(pkg.epoch) > 0:
@@ -143,7 +138,8 @@ def list_ordergetter(pkg):
         - packages are then ordered by epoch, version, release and finally
           architecture.
     """
-    envra = get_envra(pkg)
+    envra = dict([(attr, getattr(pkg, attr)) \
+                  for attr in ("name", "epoch", "version", "release", "arch")])
 
     # The order should be case-insensitive
     envra['name'] = envra['name'].lower()
