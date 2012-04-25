@@ -1,5 +1,5 @@
-nbyum is a wrapper around yum. Why wrap? Simply because we need a way to call
-the yum API from a Perl program.
+The ``nbyum`` tool is a wrapper around yum. Why wrap? Simply because we need a
+way to call the yum API from a Perl program.
 
 As such, we could easier write a Perl binding to the yum API (which would be
 quite painful and would require someone with knowledge both in Python and
@@ -26,192 +26,198 @@ command rather than to the global tool::
 
     # nbyum check-update -h
 
-Warnings and error messages
-===========================
+General considerations for the output
+=====================================
 
-Shi^wErrors happen.
+Each line of output is a JSON object with **at least** a ``type`` member,
+representing the type of output.
 
-And when they do, they will be printed as JSON objects, one on each line.
+The rest of the JSON object depends on this value, which is detailed in the
+following sections.
 
-The possible keys to look for are ``warning`` and ``error``, for example::
+Good ol' logging messages (debug, errors,...)
+=============================================
+
+For those, the "level" of the logging message is the value of the ``type``
+member. The possible values are ``debug``, ``info``, ``warning`` and ``error``.
+
+The only other member of the JSON object is ``message``, whose value is the
+actual logging message.
+
+Unless running nbyum in debug mode, only messages with a level of ``info``,
+``warning`` or ``error`` are shown.
+
+.. note::
+    Not all ``info`` messages are even shown, only the actually important ones.
+
+A few examples of logging messages::
+
+    # nbyum update
+    [... snip ...]
+    {"type": "info", "message": "Packages are all up to date"}
 
     # nbyum install sms base
-    {"warning": "Package nbsm-base-5.0.0-0.1.nb5.0.18.noarch already installed and latest version"}
+    [... snip ...]
+    {"type": "warning", "message": "Package nbsm-base-5.0.0-0.1.nb5.0.18.noarch already installed and latest version"}
 
     # nbyum check-update nosuchpackage
-    {"error": "No Match for argument: nosuchpackage"}
+    [... snip ...]
+    {"type": "error", "message": "No Match for argument: nosuchpackage"}
 
-Warnings are not fatal, but errors are.
+Progression messages
+====================
 
-Check for available updates
-===========================
+We print some progress messages while ``nbyum`` is performing, so that the user
+doesn't fall asleep or hammers his keyboard impatiently.
 
-The command prints one action of the transaction (that we'd execute if we were
-actually updating the system) per line, each line being a JSON dictionary.
+These messages are indicated by the ``type`` member of the JSON object being
+set to ``progress``.
 
-The only key of the dictionary is a string. It specifies the type of the
-action. The value contains the details of the action, and it depends on the
-type, as described below:
+The rest of the object is composed of three members:
 
-* key = ``install``
+* ``total`` is the number of steps to perform. For example, if there are 3
+  packages to install, then ``total`` would be ``3``.
+* ``current`` is where the process is currently, out of the ``total``. For
+  example, if we are installing the second out of 3 packages, then ``current``
+  would be ``2``.
+* ``hint`` is a message indicating what is the current step, so that the user
+  is not left in the dark.
 
-** This means that the package would be installed if we'd actually run the
-   transaction. (e.g: the ``kernel`` package is only ever installed, never
-   updated)
-** The value of the hash is the envra of the package to be installed.
-** Example::
+Here is an example of progression message::
 
-    {"install": "0:kernel-3.1.7-4.nb5.0.4.x86_64"}
+    # nbyum install sms nbsm-foo
+    [... snip ...]
+    {"type": "progress", "current": 2, "total": 3, "hint": "Installing foo-1.0-1.noarch"}
 
-* key = ``obsolete``
-
-** This means that the package would be obsoleted if we'd actually run the
-   transaction.
-** The value of the hash is a 2-array containing the envra of the package
-   which would be obsolated and the envra of the package which would obsolete
-   it.
-** Example::
-
-    {"obsolete": ["0:bar-1-1.nb5.0.noarch", "0:baz-2-1.nb5.0.noarch"]}
-
-* key = ``update``
-
-** This means that the package would be updated if we'd actually run the
-   transaction.
-** The value of the hash is a 2-array containing the envra of the package
-   which would be updated and the envra of the package which would update it.
-** Example::
-
-    {"update": ["0:systemd-37-3.nb5.0.9.x86_64", "0:systemd-37-5.nb5.0.9.x86_64"]}
-
-* key = ``updatedep``
-
-** This means that the package is already installed, but another package being
-   changed in the transaction requires a newer version
-** The value od the hash is a 2-array containing the envra of the package
-   which would be updated and the envra of the package which would update it.
-** Example::
-
-    {"update": ["0:systemd-37-3.nb5.0.9.x86_64", "0:systemd-37-5.nb5.0.9.x86_64"]}
-    {"updatedep": "0:systemd-units-37-3.nb5.0.9.x86_64", "0:systemd-units-37-5.nb5.0.9.x86_64"]}
-
-* key = ``installdep``
-
-** This means that the package would be installed if we'd actually run the
-   transaction, because an update now requires it.
-** The value of the hash is the envra of the package to be installed.
-** Example::
-
-    {"installdep": "0:plouf-2-1.nb5.0.noarch"}
-
-Of course, nbyum might return **several lines of output**, since a transaction
-can be formed of several updates, installations, obsoletions, or any
-combination of those.
-
-In such a case, lines of output will be **grouped by type**
-("transaction states" states in Yum parlance), and those types will be
-**ordered** as they have been described above. As an example, one could have
-the following summary::
-
-    {"install": "0:kernel-3.1.7-4.nb5.0.4.x86_64"}
-    {"obsolete": ["0:upstart-1.2.2-1.nb5.0.noarch", "0:systemd-26-2.nb5.0.noarch"]}
-    {"update": ["0:bash-4.2.10-4.nb5.0.9.x86_64", "0:bash-4.2.20-1.nb5.0.9.x86_64"]}
-    {"update": ["0:glibc-2.14.90-14.nb5.0.9.x86_64", "0:glibc-2.14.90-24.nb5.0.9.x86_64"]}
-    {"installdep": "0:systemd-units-26-2.nb5.0.noarch"}
-
-Update the system
-=================
-
-The output is **exactly the same** as for the ``check-update`` command. In
-fact, the only difference between those two is that the transaction is
-processed in this case, whereas the previous command merely display what would
-happen if it had been.
+The above shows that we are installing the package ``foo-1.0-1.noarch``, which
+is the second out of three packages to install during this transaction.
 
 .. note::
-    The summary is printed **after** the transaction has been processed. In
-    other words, once you get the output, the updates have already been
-    applied.
+    Some operations happen before we even know how many steps we will have to
+    perform during the transaction. For all of those, ``current`` would be set
+    to ``0`` and ``total`` to ``1``. The idea is to provide some feedback to
+    the user as to what is happening, without showing a "fake" progress bar
+    which might "go back" once we know how many operations we will actually
+    perform.
 
-List packages and security modules
-==================================
+Action messages
+===============
 
-The command prints a JSON dictionary per line. Its only key is a string
-representing the status of the package. The only two possible keys are
-``installed`` and ``available``.
+There are several possible actions in ``nbyum``. Each one of those will have
+its own value for the ``type`` member of the JSON object representing each
+message:
 
-Below is an example output of a packages listing::
+* when ``list``\ ing packages and security modules, it will be set to either
+  ``installed`` or ``available``, depending on the package being listed.
+* when printing ``info``\ rmations about packages and security modules, it will
+  be set to ``pkginfos``
+* when ``install``\ ing, ``update``\ ing or ``remove``\ ing packages and
+  security modules, it will be set to ``install``, ``update`` or ``remove``, as
+  appropriate.
 
-    {"installed": "0:nbsm-base-5.0.0-0.1.nb5.0.18.noarch"}
-    {"available": "0:nbsm-noc-provisioning-5.0.0-0.1.nb5.0.0.noarch"}
-
-Obtain informations on packages
-===============================
-
-The command prints a JSON object per line, each one representing a package.
-
-The list of names used for the members of the objects are as follow:
-
-* ``name``: The name of the package.
-* ``base_package_name``: The name of the base package. This is also the name
-    of the source rpm and of the spec file.
-* ``license``: The license under which the software is distributed.
-* ``epoch``: The epoch of the package.
-* ``version``: The version of the packaged software.
-* ``release``: The release of the package.
-* ``arch``: The architecture for which the package has been built.
-* ``summary``: The summary of the package.
-* ``description``: The description of the package.
-
-Below is an example output::
-
-    {"name": "bar", "base_package_name": "bar", "license": "MIT", "epoch": "0",
-     "version": "1", "release": "1.nb5.0", "arch": "noarch",
-     "summary": "Get some Bar",
-     "description": "This package provides you the joy of getting some Bar."}
-    {"name": "foo", "base_package_name": "foo", "license": "MIT", "epoch": "0",
-     "version": "1", "release": "1.nb5.0", "arch": "noarch",
-     "summary": "Get some Foo",
-     "description": "This package provides you the joy of getting some Foo."}
+For each ``type``, **there will always be only one line**, i.e one JSON object.
+Since most of the times we will need to display several packages, they will all
+be listed in the last member: ``pkgs``.
 
 .. note::
-    The example above should really be on two lines (2 packages), but it
-    contains line breaks to improve readability of this documentation.
+   The ``pkgs`` member will always be a list, even if it contains only one
+   package.
 
-Install new packages and security modules
-=========================================
+Modifying the system
+--------------------
 
-.. note::
-   Only security modules can be installed at the moment. It might become
-   possible in the future to install packages as well.
+Except for the ``pkginfos`` and ``list`` cases, each package is a JSON object
+with up to 4 members:
 
-The command prints a JSON object per line, each one representing a package in
-the install transaction.
+* the ``name`` of the package.
+* the ``old`` version, being removed during the transaction.
+* the ``new`` version, being installed during the transaction.
+* an eventual ``reason`` for the package to be removed (and **only for packages
+  being removed**), for example if it is being obsoleted by another one.
 
-The output is similar to the ``check-update`` one, except only ``install`` and
-``installdep`` are valid keys for the objects.
-
-Here is an example output::
-
-    {"install": "0:nbsm-noc-provisioning-5.0.0-0.1.nb5.0.0.noarch"}
-    {"installdep": "0:mysql-libs-5.1.52-1_1.nb5.0.0.x86_64"}
-    {"installdep": "0:nbprovision-5.0.0-0.1.svn20086.nb5.0.1.noarch"}
-    {"installdep": "0:nbprovision-pushcode-5.0.0-0.1.svn20086.nb5.0.1.noarch"}
-    {"installdep": "0:perl-DBD-MySQL-4.013-3.nb5.0.0.x86_64"}
-
-Remove packages and security modules
-====================================
+Of course, packages being installed will only have a ``new`` version, whereas
+packages being removed will only have an ``old`` version and packages being
+updated will have both.
 
 .. note::
-   Only security modules can be removed at the moment. It might become
-   possible in the future to remove packages as well.
+    By the time those messages appear, it is only as a summary of the
+    transaction which has just been executed. As such, they act as a
+    confirmation that everything went fine, and no additional confirmation
+    message will be printed.
 
-The command prints a JSON object per line, each one representing a package in
-the removal transaction.
+To make things crystal clear, here are a couple of examples::
 
-The ourput is similar to the ``check-update`` one, except only ``remove`` is a
-valid key for the objects.
+    # nbyum install sms nbsm-foo
+    [... snip ...]
+    {"type": "install", "pkgs": [{"name": "nbsm-foo", "new": "5.0-1"},
+                                 {"name": "foo", "new": "1:5.0-1"}]}
 
-Here is an example output::
+As you can see, we do not make any differences between packages the user
+requested to install and the ones that come in as dependencies.
 
-    {"remove": "0:nbsm-bidule-1-1.nb5.0.noarch"}
-    {"remove": "0:bidule-1-1.nb5.0.noarch"}
+Here is what happens on updates::
+
+    # nbyum update
+    [... snip ...]
+    {"type": "install", "pkgs": [{"name": "kernel", "new": "3.3.3-1"}]}
+    {"type": "update", "pkgs": [{"name": "foo", "old": "5.0-1", "new": "1:5.0-1"}]}
+    {"type": "remove", "pkgs": [{"name": "kernel", "old": "3.2.0-1", "reason": ""},
+                                {"name": "bar", "old": "5.0-1", "reason": "Replaced by baz-5.0-1"}]}
+
+A couple of things are interesting here. First, running an update can of course
+update packages, but it can also install some and remove others.
+
+Secondly, the ``kernel`` is an "**installonly**" package in Yum-speak, and as
+such it is only ever installed, never updated. But since we only keep three
+versions, we also have to remove the older one. Note how the ``reason`` member
+is always present, even when in this case it is empty.
+
+Finally, we are installing the package ``baz-5.0-1`` which is obsoleting the
+installed ``bar`` package. This shows up as a removal.
+
+Listing packages
+----------------
+
+We will often want to list ``installed`` and ``available`` packages.
+
+This works pretty much the same as above, except that each item of the ``pkgs``
+member will also contain the ``summary`` of the package, to make the listing a
+touch more user-friendly::
+
+    # nbyum list all packages
+    [... snip ...]
+    {"type": "installed", "pkgs": [{"name": "foo", "version": "5.0-1", "summary": "Foo foo foo"}]
+    {"type": "available", "pkgs": [{"name": "foo", "version": "5.0-2", "summary": "Foo foo foo"},
+                                   {"name": "bar", "version": "5.0-1", "summary": "Bar bar bar"}]
+
+Notice how ``foo`` is both ``installed`` and ``available``? That's because
+there is an update in the repositories, waiting to be installed.
+
+.. note::
+    We don't show updates of ``installed`` **security modules** as
+    ``available``, because in this case, what the user wants to know is which
+    modules he has activated, which is a very different thing from listing
+    packages.
+
+Obtaining informations
+----------------------
+
+The case for ``pkginfos`` is also very similar to all the above, except that we
+show much more details.
+
+Indeed, each item of the ``pkgs`` member will contain lots of information about
+the package, like its ``arch``, ``license`` or even full ``description``. The
+following examples shows all the printed attributes::
+
+    # nbyum info \*foo\*
+    [... snip ...]
+    {"type": "pkginfos", "pkgs": [{"name": "nbsm-foo", "version": "5.0-1",
+                                   "arch": "noarch", "license": "MIT",
+                                   "summary": "Un module foo",
+                                   "basepackage": "nbsm-foo",
+                                   "description": "Blabla about nbsm-foo"},
+                                  {"name": "foo", "version": "5.0-1",
+                                   "arch": "noarch", "license": "MIT",
+                                   "summary": "Foo foo foo",
+                                   "basepackage": "foo",
+                                   "description": "Blabla about foo"}]}
