@@ -11,7 +11,9 @@ class TestInstallSms(TestCase):
         args = [self.command, "sms", "no_such_security_module"]
 
         # -- Check the error message -------------------------------
-        expected = [{"error": "No package(s) available to install"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "error", "message": "No package(s) available to install"}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the no-op ----------
@@ -26,7 +28,9 @@ class TestInstallSms(TestCase):
         args = [self.command, "sms", "foo"]
 
         # -- Check the warning message -----------------------------
-        expected = [{"warning": "Package nbsm-foo-1-1.nb5.0.noarch already installed and latest version"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "warning", "message": "Package nbsm-foo-1-1.nb5.0.noarch already installed and latest version"}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the no-op ----------
@@ -41,9 +45,10 @@ class TestInstallSms(TestCase):
         args = [self.command, "sms", "nbsm-bar"]
 
         # Check the installation summary ---------------------------
-        expected = [{"install": {"name": "nbsm-bar", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"}},
-                    {"info": "All requested packages installed successfully"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "progress", "current": 1, "total": 1, "hint": "Installed: nbsm-bar-1-1.nb5.0.noarch"},
+                    {"type": "install", "pkgs": [{"name": "nbsm-bar", "new": "1-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the install --------
@@ -59,11 +64,12 @@ class TestInstallSms(TestCase):
         args = [self.command, "sms", "nbsm-plouf"]
 
         # Check the installation summary ---------------------------
-        expected = [{"install": {"name": "nbsm-plouf", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"}},
-                    {"installdep": {"name": "plouf", "epoch": "0", "version": "2",
-                                    "release": "1.nb5.0", "arch": "noarch"}},
-                    {"info": "All requested packages installed successfully"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "progress", "current": 1, "total": 2, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 2, "hint": "Installed: nbsm-plouf-1-1.nb5.0.noarch"},
+                    {"type": "install", "pkgs": [{"name": "nbsm-plouf", "new": "1-1.nb5.0"},
+                                                 {"name": "plouf", "new": "2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the install --------
@@ -80,13 +86,14 @@ class TestInstallSms(TestCase):
         args = [self.command, "sms", "nbsm-plouf", "toto"]
 
         # Check the installation summary ---------------------------
-        expected = [{"install": {"name": "nbsm-plouf", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"}},
-                    {"install": {"name": "nbsm-toto", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"}},
-                    {"installdep": {"name": "plouf", "epoch": "0", "version": "2",
-                                    "release": "1.nb5.0", "arch": "noarch"}},
-                    {"info": "All requested packages installed successfully"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "progress", "current": 1, "total": 3, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 3, "hint": "Installed: nbsm-plouf-1-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 3, "total": 3, "hint": "Installed: nbsm-toto-1-1.nb5.0.noarch"},
+                    {"type": "install", "pkgs": [{"name": "nbsm-plouf", "new": "1-1.nb5.0"},
+                                                 {"name": "nbsm-toto", "new": "1-1.nb5.0"},
+                                                 {"name": "plouf", "new": "2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the install --------
