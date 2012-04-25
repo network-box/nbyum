@@ -10,7 +10,9 @@ class TestCheckUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"info": "Packages are all up to date"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "info", "message": "Packages are all up to date"}]
         self._run_nbyum_test(args, expected)
 
     def test_only_updates(self):
@@ -18,10 +20,9 @@ class TestCheckUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'update': [{"name": "foo", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "foo", "epoch": "0", "version": "1",
-                                 "release": "2.nb5.0", "arch": "noarch"}]}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "update", "pkgs": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
     def test_only_install(self):
@@ -29,8 +30,9 @@ class TestCheckUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'install': {"name": "bar", "epoch": "0", "version": "1",
-                                 "release": "2.nb5.0", "arch": "noarch"}}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "install", "pkgs": [{"name": "bar", "new": "1-2.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
     def test_only_obsoletes(self):
@@ -38,10 +40,9 @@ class TestCheckUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'obsolete': [{"name": "bar", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"},
-                                  {"name": "baz", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}]}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "remove", "pkgs": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
     def test_install_as_dep(self):
@@ -49,50 +50,34 @@ class TestCheckUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'update': [{"name": "toto", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "toto", "epoch": "0", "version": "2",
-                                 "release": "1.nb5.0", "arch": "noarch"}]},
-                    {'installdep': {"name": "plouf", "epoch": "0", "version": "2",
-                                    "release": "1.nb5.0", "arch": "noarch"}}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "install", "pkgs": [{"name": "plouf", "new": "2-1.nb5.0"}]},
+                    {"type": "update", "pkgs": [{"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
-    def test_ordering(self):
+    def test_mixup(self):
         """Check the ordering of the summary for a repo with a bit of everything available."""
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'obsolete': [{"name": "bar", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"},
-                                  {"name": "baz", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}]},
-                    {'update': [{"name": "foo", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "foo", "epoch": "0", "version": "1",
-                                 "release": "2.nb5.0", "arch": "noarch"}]},
-                    {'update': [{"name": "toto", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "toto", "epoch": "0", "version": "2",
-                                 "release": "1.nb5.0", "arch": "noarch"}]},
-                    {'installdep': {"name": "plouf", "epoch": "0", "version": "2",
-                                    "release": "1.nb5.0", "arch": "noarch"}}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "install", "pkgs": [{"name": "plouf", "new": "2-1.nb5.0"}]},
+                    {"type": "update", "pkgs": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"},
+                                                {"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]},
+                    {"type": "remove", "pkgs": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
-    def test_ordering_bis(self):
+    def test_mixup_bis(self):
         """Check the ordering of the summary for a repo with a bit of everything available, bis."""
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'install': {"name": "bar", "epoch": "0", "version": "1",
-                                 "release": "2.nb5.0", "arch": "noarch"}},
-                    {'update': [{"name": "foo", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "foo", "epoch": "0", "version": "1",
-                                 "release": "2.nb5.0", "arch": "noarch"}]},
-                    {'update': [{"name": "toto", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "toto", "epoch": "0", "version": "2",
-                                 "release": "1.nb5.0", "arch": "noarch"}]},
-                    {'installdep': {"name": "plouf", "epoch": "0", "version": "2",
-                                    "release": "1.nb5.0", "arch": "noarch"}}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "install", "pkgs": [{"name": "bar", "new": "1-2.nb5.0"},
+                                                 {"name": "plouf", "new": "2-1.nb5.0"}]},
+                    {"type": "update", "pkgs": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"},
+                                                {"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
