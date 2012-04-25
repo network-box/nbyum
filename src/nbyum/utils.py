@@ -127,12 +127,6 @@ def get_envra(pkg):
     envra_attrs = ("name", "epoch", "version", "release", "arch")
     return dict([(attr, getattr(pkg, attr)) for attr in envra_attrs])
 
-def get_rpminfos(pkg):
-    """Get more infos on a package than simply the ENVRA."""
-    infos_attrs = ("name", "epoch", "version", "release", "arch", "license",
-              "base_package_name", "summary", "description")
-    return dict([(attr, getattr(pkg, attr)) for attr in infos_attrs])
-
 def list_ordergetter(pkg):
     """Return a simple ordering for package lists.
 
