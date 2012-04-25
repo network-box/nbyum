@@ -7,7 +7,7 @@ from yum.Errors import LockError
 from yum.rpmtrans import NoOutputCallBack
 
 from .errors import NBYumException, WTFException
-from .logging_hijack import NBYumLogger, PROGRESS_LEVEL
+from .logging_hijack import NBYumLogger, PROGRESS_LEVEL, INFOS_LEVEL
 from .utils import DummyOpts, ensure_privileges
 from .yumbase import NBYumBase
 
@@ -19,6 +19,7 @@ class NBYumCli(object):
         # -- Hijack the Yum logging ------------------------------------------
         logging.setLoggerClass(NBYumLogger)
         logging.addLevelName(PROGRESS_LEVEL,  "progress")
+        logging.addLevelName(INFOS_LEVEL,     "pkginfos")
 
         # -- Deal with the preconfig stuff -----------------------------------
         self.base = NBYumBase()

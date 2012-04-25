@@ -10,10 +10,12 @@ from .errors import NBYumException, WTFException
 
 # Our custom log levels
 PROGRESS_LEVEL  = 3141592653
+INFOS_LEVEL     = 31415926535897
 
 
 class NBYumLogger(logging.Logger):
     log_progress  = lambda self, msg: self.log(PROGRESS_LEVEL, msg)
+    log_infos     = lambda self, msg: self.log(INFOS_LEVEL, msg)
 
     def handle(self, record):
         level = record.levelname.lower()
@@ -30,6 +32,10 @@ class NBYumLogger(logging.Logger):
 
         if level in ("debug", "info", "warning", "error"):
             print(json.dumps({"type": level, "message": record.getMessage()}))
+
+        elif level == "pkginfos":
+            # `record.msg` is a list of dicts, each representing a package
+            print(json.dumps({"type": level, "pkgs": record.msg}))
 
         elif level == "progress":
             # `record.msg` is a dict

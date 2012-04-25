@@ -6,7 +6,7 @@ import yum
 
 from .errors import NBYumException, WTFException
 from .logging_hijack import NBYumRPMCallback
-from .utils import (get_envra, list_ordergetter, transaction_ordergetter)
+from .utils import (get_envra, get_version, list_ordergetter, transaction_ordergetter)
 
 
 class NBYumBase(yum.YumBase):
@@ -93,14 +93,17 @@ class NBYumBase(yum.YumBase):
         # We don't want to filter here, unlike for listings
         type_filter = lambda x: True
 
+        pkgs = []
         for pkg in sorted(self.__get_packages_list(patterns, type_filter),
                           key=list_ordergetter):
-            print(json.dumps({"name": pkg.name, "version": pkg.version,
-                         "release": pkg.release, "epoch": pkg.epoch,
+            pkgs.append({"name": pkg.name, "version": get_version(pkg),
                          "license": pkg.license, "summary": pkg.summary,
                          "description": pkg.description, "arch": pkg.arch,
                          "base_package_name": pkg.base_package_name,
-                         }))
+                         })
+
+        if pkgs:
+            self.logger.log_infos(pkgs)
 
     def install_packages(self, type_, patterns):
         """Install packages and security modules."""
