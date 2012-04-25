@@ -1,12 +1,11 @@
 import fnmatch
-import json
 import os
 
 import yum
 
 from .errors import NBYumException, WTFException
 from .logging_hijack import NBYumRPMCallback
-from .utils import (get_envra, get_version, list_ordergetter, transaction_ordergetter)
+from .utils import get_version, list_ordergetter, transaction_ordergetter
 
 
 class NBYumBase(yum.YumBase):
@@ -217,16 +216,21 @@ class NBYumBase(yum.YumBase):
 
     def recap_transaction(self):
         """Print a summary of the transaction."""
+        pkgs = {"install": [], "update": [], "remove": []}
 
         for member in sorted(self.tsInfo.getMembers(),
                              key=transaction_ordergetter):
+            pkg = {"name": member.name}
+
             # Packages newly installed (install_only when running an update)
             if member.ts_state == "i":
-                print(json.dumps({"install": get_envra(member)}))
+                pkg.update({"new": get_version(member.po)})
+                pkgs["install"].append(pkg)
 
             # Packages being removed
             elif member.ts_state == "e":
-                print(json.dumps({"remove": get_envra(member)}))
+                pkg.update({"old": get_version(member.po), "reason": ""})
+                pkgs["remove"].append(pkg)
 
             # Packages obsoleted by a new one
             elif member.ts_state == "od":
@@ -241,28 +245,21 @@ class NBYumBase(yum.YumBase):
             # Packages being the actual update/obsoleter...
             # or a new dependency, or even a new install >_<
             elif member.ts_state == "u":
-                envra_new = get_envra(member)
-                if member.isDep:
-                    if member.updates:
-                        for old in member.updates:
-                            print(json.dumps({"updatedep": (get_envra(old),
-                                                            envra_new)}))
-                    else:
-                        print(json.dumps({"installdep": envra_new}))
+                pkg.update({"new": get_version(member.po)})
 
-                elif not member.updates and not member.obsoletes:
-                    # Packages newly installed (when running 'install')
-                    print(json.dumps({"install": envra_new}))
-
+                if not member.updates and not member.obsoletes:
+                    pkgs["install"].append(pkg)
                 else:
-                    # Packages obsoleting and/or updating others
-                    for old in member.obsoletes:
-                        print(json.dumps({"obsolete": (get_envra(old),
-                                                     envra_new)}))
-
                     for old in member.updates:
-                        print(json.dumps({"update": (get_envra(old),
-                                                     envra_new)}))
+                        pkg.update({"old": get_version(old)})
+                        pkgs["update"].append(pkg)
+
+                    # Obsoletions are considered as removals, start fresh
+                    for old in member.obsoletes:
+                        pkg = {"name": old.name, "old": get_version(old),
+                               "reason": "Replaced by %s-%s" % \
+                                   (member.name, get_version(member))}
+                        pkgs["remove"].append(pkg)
 
             else:
                 msg = "The transaction includes a package of state '%s'," \
@@ -270,3 +267,9 @@ class NBYumBase(yum.YumBase):
                       " Ask your friendly nbyum developer!" % member.ts_state
                 raise WTFException(msg)
 
+        if pkgs["install"]:
+            self.logger.log_install(pkgs["install"])
+        if pkgs["update"]:
+            self.logger.log_update(pkgs["update"])
+        if pkgs["remove"]:
+            self.logger.log_remove(pkgs["remove"])
