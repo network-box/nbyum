@@ -12,7 +12,9 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"info": "Packages are all up to date"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "info", "message": "Packages are all up to date"}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -27,11 +29,11 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'update': [{"name": "foo", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "foo", "epoch": "0", "version": "1",
-                                 "release": "2.nb5.0", "arch": "noarch"}]},
-                    {"info": "All packages updated successfully"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "progress", "current": 1, "total": 2, "hint": "Installed: foo-1-2.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 2, "hint": "Removed: foo"},
+                    {"type": "update", "pkgs": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -46,9 +48,10 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'install': {"name": "bar", "epoch": "0", "version": "1",
-                                 "release": "2.nb5.0", "arch": "noarch"}},
-                    {"info": "All packages updated successfully"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "progress", "current": 1, "total": 1, "hint": "Installed: bar-1-2.nb5.0.noarch"},
+                    {"type": "install", "pkgs": [{"name": "bar", "new": "1-2.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -64,11 +67,11 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'obsolete': [{"name": "bar", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"},
-                                  {"name": "baz", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}]},
-                    {"info": "All packages updated successfully"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "progress", "current": 1, "total": 2, "hint": "Installed: baz-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 2, "hint": "Removed: bar"},
+                    {"type": "remove", "pkgs": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -83,13 +86,13 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'update': [{"name": "toto", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "toto", "epoch": "0", "version": "2",
-                                 "release": "1.nb5.0", "arch": "noarch"}]},
-                    {'installdep': {"name": "plouf", "epoch": "0", "version": "2",
-                                    "release": "1.nb5.0", "arch": "noarch"}},
-                    {"info": "All packages updated successfully"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "progress", "current": 1, "total": 3, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 3, "hint": "Installed: toto-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 3, "total": 3, "hint": "Removed: toto"},
+                    {"type": "install", "pkgs": [{"name": "plouf", "new": "2-1.nb5.0"}]},
+                    {"type": "update", "pkgs": [{"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -100,26 +103,24 @@ class TestUpdate(TestCase):
                     "0:toto-2-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    def test_ordering(self):
+    def test_mixup(self):
         """Update from a repo with a bit of everything available."""
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'obsolete': [{"name": "bar", "epoch": "0", "version": "1",
-                                   "release": "1.nb5.0", "arch": "noarch"},
-                                  {"name": "baz", "epoch": "0", "version": "2",
-                                   "release": "1.nb5.0", "arch": "noarch"}]},
-                    {'update': [{"name": "foo", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "foo", "epoch": "0", "version": "1",
-                                 "release": "2.nb5.0", "arch": "noarch"}]},
-                    {'update': [{"name": "toto", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "toto", "epoch": "0", "version": "2",
-                                 "release": "1.nb5.0", "arch": "noarch"}]},
-                    {'installdep': {"name": "plouf", "epoch": "0", "version": "2",
-                                    "release": "1.nb5.0", "arch": "noarch"}},
-                    {"info": "All packages updated successfully"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "progress", "current": 1, "total": 7, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 7, "hint": "Installed: toto-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 3, "total": 7, "hint": "Installed: foo-1-2.nb5.0.noarch"},
+                    {"type": "progress", "current": 4, "total": 7, "hint": "Installed: baz-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 5, "total": 7, "hint": "Removed: foo"},
+                    {"type": "progress", "current": 6, "total": 7, "hint": "Removed: bar"},
+                    {"type": "progress", "current": 7, "total": 7, "hint": "Removed: toto"},
+                    {"type": "install", "pkgs": [{"name": "plouf", "new": "2-1.nb5.0"}]},
+                    {"type": "update", "pkgs": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"},
+                                                {"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]},
+                    {"type": "remove", "pkgs": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -130,24 +131,23 @@ class TestUpdate(TestCase):
                     "0:toto-2-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
 
-    def test_ordering_bis(self):
+    def test_mixup_bis(self):
         """Update from a repo with a bit of everything available, bis."""
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'install': {"name": "bar", "epoch": "0", "version": "1",
-                                 "release": "2.nb5.0", "arch": "noarch"}},
-                    {'update': [{"name": "foo", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "foo", "epoch": "0", "version": "1",
-                                 "release": "2.nb5.0", "arch": "noarch"}]},
-                    {'update': [{"name": "toto", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "toto", "epoch": "0", "version": "2",
-                                 "release": "1.nb5.0", "arch": "noarch"}]},
-                    {'installdep': {"name": "plouf", "epoch": "0", "version": "2",
-                                    "release": "1.nb5.0", "arch": "noarch"}},
-                    {"info": "All packages updated successfully"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "progress", "current": 1, "total": 6, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 6, "hint": "Installed: toto-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 3, "total": 6, "hint": "Installed: bar-1-2.nb5.0.noarch"},
+                    {"type": "progress", "current": 4, "total": 6, "hint": "Installed: foo-1-2.nb5.0.noarch"},
+                    {"type": "progress", "current": 5, "total": 6, "hint": "Removed: foo"},
+                    {"type": "progress", "current": 6, "total": 6, "hint": "Removed: toto"},
+                    {"type": "install", "pkgs": [{"name": "bar", "new": "1-2.nb5.0"},
+                                                 {"name": "plouf", "new": "2-1.nb5.0"}]},
+                    {"type": "update", "pkgs": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"},
+                                                {"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -170,11 +170,11 @@ class TestUpdate(TestCase):
             f.write("foo=0\n")
 
         # -- Check the update summary ------------------------------
-        expected = [{'update': [{"name": "nbsm-foo", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "nbsm-foo", "epoch": "0", "version": "2",
-                                 "release": "1.nb5.0", "arch": "noarch"}]},
-                    {"info": "All packages updated successfully"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "progress", "current": 1, "total": 2, "hint": "Installed: nbsm-foo-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 2, "hint": "Removed: nbsm-foo"},
+                    {"type": "update", "pkgs": [{"name": "nbsm-foo", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -193,11 +193,11 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{'update': [{"name": "nbsm-foo", "epoch": "0", "version": "1",
-                                 "release": "1.nb5.0", "arch": "noarch"},
-                                {"name": "nbsm-foo", "epoch": "0", "version": "3",
-                                 "release": "1.nb5.0", "arch": "noarch"}]},
-                    {"info": "All packages updated successfully"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+                    {"type": "progress", "current": 1, "total": 2, "hint": "Installed: nbsm-foo-3-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 2, "hint": "Removed: nbsm-foo"},
+                    {"type": "update", "pkgs": [{"name": "nbsm-foo", "old": "1-1.nb5.0", "new": "3-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
