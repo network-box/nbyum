@@ -207,8 +207,6 @@ class NBYumBase(yum.YumBase):
 
     def recap_transaction(self, confirm=None):
         """Print a summary of the transaction."""
-        # Interesting stuff for the future:
-        #   - member.repoid (string: 'experimental', 'installed', ...
         if not len(self.tsInfo.getMembers()):
             return
 
