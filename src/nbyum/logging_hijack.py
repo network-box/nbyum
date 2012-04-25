@@ -60,7 +60,7 @@ class NBYumLogger(logging.Logger):
 
 
 class NBYumRPMCallback(RPMBaseCallback):
-    def __init__(self):
+    def __init__(self, installroot="/"):
         RPMBaseCallback.__init__(self)
 
         self.fileaction = {TS_INSTALL: 'Installed',
@@ -71,6 +71,11 @@ class NBYumRPMCallback(RPMBaseCallback):
                            TS_UPDATED: 'Removed',
                            TS_ERASE: 'Removed',
                            }
+
+        # FIXME: We only need this whole thing to work around a Yum bug:
+        #     https://bugzilla.redhat.com/show_bug.cgi?id=684686#c6
+        # When it's fixed, just nuke it out of here
+        self.__installroot = installroot
 
     def event(self, package, action, te_current, te_total, ts_current, ts_total):
         """Log progression of the transaction."""
@@ -104,4 +109,10 @@ class NBYumRPMCallback(RPMBaseCallback):
 
     def errorlog(self, msg):
         """Log Yum errors occuring **during** the transaction."""
+        # FIXME: We only need this whole thing to work around a Yum bug:
+        #     https://bugzilla.redhat.com/show_bug.cgi?id=684686#c6
+        # When it's fixed, just nuke it out of here
+        if self.__installroot != "/" and msg.startswith("could not open ts_done file: [Errno 2] No such file or directory: '"):
+            return
+
         self.logger.error(msg)

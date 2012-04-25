@@ -189,7 +189,10 @@ class NBYumBase(yum.YumBase):
             raise NBYumException(msg)
 
         if len(self.tsInfo.getMembers()):
-            self.processTransaction(rpmDisplay=NBYumRPMCallback())
+            # FIXME: We only need the installroot parameter to work around a Yum bug:
+            #     https://bugzilla.redhat.com/show_bug.cgi?id=684686#c6
+            # When it's fixed, just nuke it out of here
+            self.processTransaction(rpmDisplay=NBYumRPMCallback(installroot=self.conf.installroot))
 
     def update_packages(self, patterns, apply=False):
         """Check for updates and optionally apply."""
