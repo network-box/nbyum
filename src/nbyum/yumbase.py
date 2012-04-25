@@ -129,15 +129,19 @@ class NBYumBase(yum.YumBase):
                                                                       patterns)
 
         if status in ("all", "installed"):
+            pkgs = []
             for pkg in sorted(self.__get_packages_list(patterns, type_filter,
                                                        status="installed"),
                               key=list_ordergetter):
-                result = get_envra(pkg)
-                result.update({"status": "installed"})
-                result.update({"summary": pkg.summary})
-                print(json.dumps(result))
+                pkgs.append({"name": pkg.name,
+                             "version": get_version(pkg),
+                             "summary": pkg.summary})
+
+            if pkgs:
+                self.logger.log_installed(pkgs)
 
         if status in ("all", "available"):
+            pkgs = []
             for pkg in sorted(self.__get_packages_list(patterns, type_filter,
                                                        status="available"),
                               key=list_ordergetter):
@@ -146,10 +150,12 @@ class NBYumBase(yum.YumBase):
                     # are **not installed**, even if in a different version
                     continue
 
-                result = get_envra(pkg)
-                result.update({"status": "available"})
-                result.update({"summary": pkg.summary})
-                print(json.dumps(result))
+                pkgs.append({"name": pkg.name,
+                             "version": get_version(pkg),
+                             "summary": pkg.summary})
+
+            if pkgs:
+                self.logger.log_available(pkgs)
 
     def remove_packages(self, type_, patterns):
         """Remove packages and security modules."""
