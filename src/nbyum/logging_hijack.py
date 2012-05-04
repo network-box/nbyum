@@ -16,6 +16,7 @@ REMOVE_LEVEL    = 3141592653589
 INFOS_LEVEL     = 31415926535897
 INSTALLED_LEVEL = 314159265358979
 AVAILABLE_LEVEL = 3141592653589793
+RECAP_LEVEL     = 31415926535897932
 
 
 class NBYumLogger(logging.Logger):
@@ -26,6 +27,7 @@ class NBYumLogger(logging.Logger):
     log_infos     = lambda self, msg: self.log(INFOS_LEVEL, msg)
     log_installed = lambda self, msg: self.log(INSTALLED_LEVEL, msg)
     log_available = lambda self, msg: self.log(AVAILABLE_LEVEL, msg)
+    log_recap     = lambda self, msg: self.log(RECAP_LEVEL, msg)
 
     def handle(self, record):
         level = record.levelname.lower()
@@ -47,6 +49,17 @@ class NBYumLogger(logging.Logger):
                        "pkginfos", "installed", "available"):
             # `record.msg` is a list of dicts, each representing a package
             print(json.dumps({"type": level, "pkgs": record.msg}))
+
+	elif level == "recap":
+            d = {"type": level}
+
+            # `record.msg` is a dict where for each (k, v) :
+            #   - `k` is one of ("install", "update", "remove", "pkginfos",
+            #                  "installed", "available")
+            #   - `v` is a list of dicts, each representing a package
+            d.update(record.msg)
+
+            print(json.dumps(d))
 
         elif level == "progress":
             # `record.msg` is a dict

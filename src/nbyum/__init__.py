@@ -9,7 +9,7 @@ from yum.rpmtrans import NoOutputCallBack
 from .errors import NBYumException, WTFException
 from .logging_hijack import (NBYumLogger, PROGRESS_LEVEL, INSTALL_LEVEL,
                              UPDATE_LEVEL, REMOVE_LEVEL, INFOS_LEVEL,
-                             INSTALLED_LEVEL, AVAILABLE_LEVEL)
+                             INSTALLED_LEVEL, AVAILABLE_LEVEL, RECAP_LEVEL)
 from .utils import DummyOpts, ensure_privileges
 from .yumbase import NBYumBase
 
@@ -27,6 +27,7 @@ class NBYumCli(object):
         logging.addLevelName(INFOS_LEVEL,     "pkginfos")
         logging.addLevelName(INSTALLED_LEVEL, "installed")
         logging.addLevelName(AVAILABLE_LEVEL, "available")
+        logging.addLevelName(RECAP_LEVEL,     "recap")
 
         # -- Deal with the preconfig stuff -----------------------------------
         self.base = NBYumBase()
