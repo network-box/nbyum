@@ -38,11 +38,11 @@ following sections.
 Good ol' logging messages (debug, errors,...)
 =============================================
 
-For those, the "level" of the logging message is the value of the ``type``
-member. The possible values are ``debug``, ``info``, ``warning`` and ``error``.
+For those, the ``type`` member will always be set to ``log``. The "level" of
+the log message is then the **name** of the second member, which will be one of
+``debug``, ``info``, ``warning`` or ``error``.
 
-The only other member of the JSON object is ``message``, whose value is the
-actual logging message.
+The value of that second member is the actual logging message.
 
 Unless running nbyum in debug mode, only messages with a level of ``info``,
 ``warning`` or ``error`` are shown.
@@ -54,15 +54,15 @@ A few examples of logging messages::
 
     # nbyum update
     [... snip ...]
-    {"type": "info", "message": "Packages are all up to date"}
+    {"type": "log", "info": "Packages are all up to date"}
 
     # nbyum install sms base
     [... snip ...]
-    {"type": "warning", "message": "Package nbsm-base-5.0.0-0.1.nb5.0.18.noarch already installed and latest version"}
+    {"type": "log", "warning": "Package nbsm-base-5.0.0-0.1.nb5.0.18.noarch already installed and latest version"}
 
     # nbyum check-update nosuchpackage
     [... snip ...]
-    {"type": "error", "message": "No Match for argument: nosuchpackage"}
+    {"type": "log", "error": "No Match for argument: nosuchpackage"}
 
 Progression messages
 ====================

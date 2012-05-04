@@ -14,7 +14,7 @@ class TestUpdate(TestCase):
         # -- Check the update summary ------------------------------
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "info", "message": "Packages are all up to date"}]
+                    {"type": "log", "info": "Packages are all up to date"}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------

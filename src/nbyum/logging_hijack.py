@@ -41,7 +41,7 @@ class NBYumLogger(logging.Logger):
             level = "info"
 
         if level in ("debug", "info", "warning", "error"):
-            print(json.dumps({"type": level, "message": record.getMessage()}))
+            print(json.dumps({"type": "log", level: record.getMessage()}))
 
         elif level in ("install", "update", "remove",
                        "pkginfos", "installed", "available"):

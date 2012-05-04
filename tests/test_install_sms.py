@@ -13,7 +13,7 @@ class TestInstallSms(TestCase):
         # -- Check the error message -------------------------------
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "error", "message": "No package(s) available to install"}]
+                    {"type": "log", "error": "No package(s) available to install"}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the no-op ----------
@@ -30,7 +30,7 @@ class TestInstallSms(TestCase):
         # -- Check the warning message -----------------------------
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "warning", "message": "Package nbsm-foo-1-1.nb5.0.noarch already installed and latest version"}]
+                    {"type": "log", "warning": "Package nbsm-foo-1-1.nb5.0.noarch already installed and latest version"}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the no-op ----------

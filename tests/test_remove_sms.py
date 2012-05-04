@@ -13,7 +13,7 @@ class TestRemoveSms(TestCase):
         # -- Check the error message -------------------------------
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "error", "message": "No Match for argument: nbsm-no_such_security_module"}]
+                    {"type": "log", "error": "No Match for argument: nbsm-no_such_security_module"}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the no-op ----------
@@ -77,7 +77,7 @@ class TestRemoveSms(TestCase):
         # -- Check the removal summary -----------------------------
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "error", "message": "Proceeding would remove the following security modules:\n  - nbsm-machin\n  - nbsm-trucmuche\nTransaction aborted."}]
+                    {"type": "log", "error": "Proceeding would remove the following security modules:\n  - nbsm-machin\n  - nbsm-trucmuche\nTransaction aborted."}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the removal --------
