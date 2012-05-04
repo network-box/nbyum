@@ -223,7 +223,7 @@ class NBYumBase(yum.YumBase):
 
     def recap_transaction(self):
         """Print a summary of the transaction."""
-        pkgs = {"install": [], "update": [], "remove": []}
+        pkgs = {}
 
         for member in sorted(self.tsInfo.getMembers(),
                              key=transaction_ordergetter):
@@ -232,11 +232,19 @@ class NBYumBase(yum.YumBase):
             # Packages newly installed (install_only when running an update)
             if member.ts_state == "i":
                 pkg.update({"new": get_version(member.po)})
+
+                if not pkgs.has_key("install"):
+                    pkgs["install"] = []
+
                 pkgs["install"].append(pkg)
 
             # Packages being removed
             elif member.ts_state == "e":
                 pkg.update({"old": get_version(member.po), "reason": ""})
+
+                if not pkgs.has_key("remove"):
+                    pkgs["remove"] = []
+
                 pkgs["remove"].append(pkg)
 
             # Packages obsoleted by a new one
@@ -255,10 +263,17 @@ class NBYumBase(yum.YumBase):
                 pkg.update({"new": get_version(member.po)})
 
                 if not member.updates and not member.obsoletes:
+                    if not pkgs.has_key("install"):
+                        pkgs["install"] = []
+
                     pkgs["install"].append(pkg)
                 else:
                     for old in member.updates:
                         pkg.update({"old": get_version(old)})
+
+                        if not pkgs.has_key("update"):
+                            pkgs["update"] = []
+
                         pkgs["update"].append(pkg)
 
                     # Obsoletions are considered as removals, start fresh
@@ -266,6 +281,10 @@ class NBYumBase(yum.YumBase):
                         pkg = {"name": old.name, "old": get_version(old),
                                "reason": "Replaced by %s-%s" % \
                                    (member.name, get_version(member))}
+
+                        if not pkgs.has_key("remove"):
+                            pkgs["remove"] = []
+
                         pkgs["remove"].append(pkg)
 
             else:
@@ -274,9 +293,5 @@ class NBYumBase(yum.YumBase):
                       " Ask your friendly nbyum developer!" % member.ts_state
                 raise WTFException(msg)
 
-        if pkgs["install"]:
-            self.logger.log_install(pkgs["install"])
-        if pkgs["update"]:
-            self.logger.log_update(pkgs["update"])
-        if pkgs["remove"]:
-            self.logger.log_remove(pkgs["remove"])
+        if pkgs:
+            self.logger.log_recap(pkgs)

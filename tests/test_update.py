@@ -33,7 +33,8 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: foo-1-2.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: foo"},
-                    {"type": "update", "pkgs": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"}]}]
+                    {"type": "recap",
+                     "update": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -51,7 +52,8 @@ class TestUpdate(TestCase):
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
                     {"type": "progress", "current": 1, "total": 1, "hint": "Installed: bar-1-2.nb5.0.noarch"},
-                    {"type": "install", "pkgs": [{"name": "bar", "new": "1-2.nb5.0"}]}]
+                    {"type": "recap",
+                     "install": [{"name": "bar", "new": "1-2.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -71,7 +73,8 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: baz-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: bar"},
-                    {"type": "remove", "pkgs": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]
+                    {"type": "recap",
+                     "remove": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -91,8 +94,9 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 1, "total": 3, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 3, "hint": "Installed: toto-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 3, "total": 3, "hint": "Removed: toto"},
-                    {"type": "install", "pkgs": [{"name": "plouf", "new": "2-1.nb5.0"}]},
-                    {"type": "update", "pkgs": [{"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
+                    {"type": "recap",
+                     "install": [{"name": "plouf", "new": "2-1.nb5.0"}],
+                     "update": [{"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -117,10 +121,11 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 5, "total": 7, "hint": "Removed: foo"},
                     {"type": "progress", "current": 6, "total": 7, "hint": "Removed: bar"},
                     {"type": "progress", "current": 7, "total": 7, "hint": "Removed: toto"},
-                    {"type": "install", "pkgs": [{"name": "plouf", "new": "2-1.nb5.0"}]},
-                    {"type": "update", "pkgs": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"},
-                                                {"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]},
-                    {"type": "remove", "pkgs": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]
+                    {"type": "recap",
+                     "install": [{"name": "plouf", "new": "2-1.nb5.0"}],
+                     "update": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"},
+                                {"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}],
+                     "remove": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -144,10 +149,11 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 4, "total": 6, "hint": "Installed: foo-1-2.nb5.0.noarch"},
                     {"type": "progress", "current": 5, "total": 6, "hint": "Removed: foo"},
                     {"type": "progress", "current": 6, "total": 6, "hint": "Removed: toto"},
-                    {"type": "install", "pkgs": [{"name": "bar", "new": "1-2.nb5.0"},
-                                                 {"name": "plouf", "new": "2-1.nb5.0"}]},
-                    {"type": "update", "pkgs": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"},
-                                                {"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
+                    {"type": "recap",
+                     "install": [{"name": "bar", "new": "1-2.nb5.0"},
+                                 {"name": "plouf", "new": "2-1.nb5.0"}],
+                     "update": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"},
+                                {"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -174,7 +180,8 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: nbsm-foo-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: nbsm-foo"},
-                    {"type": "update", "pkgs": [{"name": "nbsm-foo", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
+                    {"type": "recap",
+                     "update": [{"name": "nbsm-foo", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -197,7 +204,8 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: nbsm-foo-3-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: nbsm-foo"},
-                    {"type": "update", "pkgs": [{"name": "nbsm-foo", "old": "1-1.nb5.0", "new": "3-1.nb5.0"}]}]
+                    {"type": "recap",
+                     "update": [{"name": "nbsm-foo", "old": "1-1.nb5.0", "new": "3-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
