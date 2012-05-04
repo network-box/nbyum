@@ -21,11 +21,10 @@ class NBYumCli(object):
         logging.addLevelName(PROGRESS_LEVEL, "progress")
         logging.addLevelName(RECAP_LEVEL, "recap")
 
-        # -- Deal with the preconfig stuff -----------------------------------
         self.base = NBYumBase()
 
+        # -- Deal with the preconfig stuff -----------------------------------
         if not args.debug:
-            # Shut yum up
             self.base.preconf.debuglevel = 0
         else:
             self.base.preconf.debuglevel = 6
