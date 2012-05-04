@@ -92,17 +92,19 @@ class NBYumBase(yum.YumBase):
         # We don't want to filter here, unlike for listings
         type_filter = lambda x: True
 
-        pkgs = []
+        pkgs = {"pkginfos": []}
         for pkg in sorted(self.__get_packages_list(patterns, type_filter),
                           key=list_ordergetter):
-            pkgs.append({"name": pkg.name, "version": get_version(pkg),
-                         "license": pkg.license, "summary": pkg.summary,
-                         "description": pkg.description, "arch": pkg.arch,
-                         "base_package_name": pkg.base_package_name,
-                         })
+            pkgs["pkginfos"].append({"name": pkg.name, "arch": pkg.arch,
+                                     "version": get_version(pkg),
+                                     "license": pkg.license,
+                                     "summary": pkg.summary,
+                                     "description": pkg.description,
+                                     "base_package_name": pkg.base_package_name,
+                                     })
 
-        if pkgs:
-            self.logger.log_infos(pkgs)
+        if pkgs["pkginfos"]:
+            self.logger.log_recap(pkgs)
 
     def install_packages(self, type_, patterns):
         """Install packages and security modules."""
