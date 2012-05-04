@@ -1,5 +1,6 @@
 import json
 import logging
+import sys
 
 from yum.constants import (TS_UPDATE, TS_ERASE, TS_INSTALL, TS_TRUEINSTALL,
                            TS_OBSOLETED, TS_OBSOLETING, TS_UPDATED)
@@ -31,7 +32,8 @@ class NBYumLogger(logging.Logger):
             level = "info"
 
         if level in ("debug", "info", "warning", "error"):
-            print(json.dumps({"type": "log", level: record.getMessage()}))
+            sys.stdout.write("%s\n" % json.dumps({"type": "log",
+                                                  level: record.getMessage()}))
 
 	elif level == "recap":
             d = {"type": level}
@@ -42,17 +44,19 @@ class NBYumLogger(logging.Logger):
             #   - `v` is a list of dicts, each representing a package
             d.update(record.msg)
 
-            print(json.dumps(d))
+            sys.stdout.write("%s\n" % json.dumps(d))
 
         elif level == "progress":
             # `record.msg` is a dict
-            print(json.dumps({"type": level,
-                              "current": record.msg["current"],
-                              "total": record.msg["total"],
-                              "hint": record.msg["hint"]}))
+            sys.stdout.write("%s\n" % json.dumps({"type": level,
+                                                  "current": record.msg["current"],
+                                                  "total": record.msg["total"],
+                                                  "hint": record.msg["hint"]}))
 
         else:
             raise WTFException("Got unexpected logging level: %s" % level)
+
+        sys.stdout.flush()
 
 
 class NBYumRPMCallback(RPMBaseCallback):
