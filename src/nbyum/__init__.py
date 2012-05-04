@@ -18,8 +18,8 @@ class NBYumCli(object):
 
         # -- Hijack the Yum logging ------------------------------------------
         logging.setLoggerClass(NBYumLogger)
-        logging.addLevelName(PROGRESS_LEVEL,  "progress")
-        logging.addLevelName(RECAP_LEVEL,     "recap")
+        logging.addLevelName(PROGRESS_LEVEL, "progress")
+        logging.addLevelName(RECAP_LEVEL, "recap")
 
         # -- Deal with the preconfig stuff -----------------------------------
         self.base = NBYumBase()
