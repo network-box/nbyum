@@ -127,20 +127,19 @@ class NBYumBase(yum.YumBase):
         type_filter, patterns = self.__type_and_patterns_preprocessor(type_,
                                                                       patterns)
 
+        pkgs = {}
         if status in ("all", "installed"):
-            pkgs = []
             for pkg in sorted(self.__get_packages_list(patterns, type_filter,
                                                        status="installed"),
                               key=list_ordergetter):
-                pkgs.append({"name": pkg.name,
-                             "version": get_version(pkg),
-                             "summary": pkg.summary})
+                if not pkgs.has_key("installed"):
+                    pkgs["installed"] = []
 
-            if pkgs:
-                self.logger.log_installed(pkgs)
+                pkgs["installed"].append({"name": pkg.name,
+                                          "version": get_version(pkg),
+                                          "summary": pkg.summary})
 
         if status in ("all", "available"):
-            pkgs = []
             for pkg in sorted(self.__get_packages_list(patterns, type_filter,
                                                        status="available"),
                               key=list_ordergetter):
@@ -149,12 +148,15 @@ class NBYumBase(yum.YumBase):
                     # are **not installed**, even if in a different version
                     continue
 
-                pkgs.append({"name": pkg.name,
-                             "version": get_version(pkg),
-                             "summary": pkg.summary})
+                if not pkgs.has_key("available"):
+                    pkgs["available"] = []
 
-            if pkgs:
-                self.logger.log_available(pkgs)
+                pkgs["available"].append({"name": pkg.name,
+                                          "version": get_version(pkg),
+                                          "summary": pkg.summary})
+
+        if pkgs:
+            self.logger.log_recap(pkgs)
 
     def remove_packages(self, type_, patterns):
         """Remove packages and security modules."""

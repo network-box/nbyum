@@ -11,9 +11,10 @@ class TestListPackages(TestCase):
         # -- Check the listing -------------------------------------
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "installed", "pkgs": [{"name": "bar", "version": "1-1.nb5.0", "summary": "Get some Bar"},
-                                                   {"name": "foo", "version": "1-1.nb5.0", "summary": "Get some Foo"},
-                                                   {"name": "toto", "version": "1-1.nb5.0", "summary": "Get some Toto"}]}]
+                    {"type": "recap",
+                     "installed": [{"name": "bar", "version": "1-1.nb5.0", "summary": "Get some Bar"},
+                                   {"name": "foo", "version": "1-1.nb5.0", "summary": "Get some Foo"},
+                                   {"name": "toto", "version": "1-1.nb5.0", "summary": "Get some Toto"}]}]
         self._run_nbyum_test(args, expected)
 
     def test_list_available_packages(self):
@@ -23,10 +24,11 @@ class TestListPackages(TestCase):
         # -- Check the listing -------------------------------------
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "available", "pkgs": [{"name": "baz", "version": "2-1.nb5.0", "summary": "Get some Baz"},
-                                                   {"name": "foo", "version": "1-2.nb5.0", "summary": "Get some Foo"},
-                                                   {"name": "plouf", "version": "2-1.nb5.0", "summary": "Get some Plouf"},
-                                                   {"name": "toto", "version": "2-1.nb5.0", "summary": "Get some Toto"}]}]
+                    {"type": "recap",
+                     "available": [{"name": "baz", "version": "2-1.nb5.0", "summary": "Get some Baz"},
+                                   {"name": "foo", "version": "1-2.nb5.0", "summary": "Get some Foo"},
+                                   {"name": "plouf", "version": "2-1.nb5.0", "summary": "Get some Plouf"},
+                                   {"name": "toto", "version": "2-1.nb5.0", "summary": "Get some Toto"}]}]
         self._run_nbyum_test(args, expected)
 
     def test_list_packages(self):
@@ -36,13 +38,14 @@ class TestListPackages(TestCase):
         # -- Check the listing -------------------------------------
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "installed", "pkgs": [{"name": "bar", "version": "1-1.nb5.0", "summary": "Get some Bar"},
-                                                   {"name": "foo", "version": "1-1.nb5.0", "summary": "Get some Foo"},
-                                                   {"name": "toto", "version": "1-1.nb5.0", "summary": "Get some Toto"}]},
-                    {"type": "available", "pkgs": [{"name": "baz", "version": "2-1.nb5.0", "summary": "Get some Baz"},
-                                                   {"name": "foo", "version": "1-2.nb5.0", "summary": "Get some Foo"},
-                                                   {"name": "plouf", "version": "2-1.nb5.0", "summary": "Get some Plouf"},
-                                                   {"name": "toto", "version": "2-1.nb5.0", "summary": "Get some Toto"}]}]
+                    {"type": "recap",
+                     "installed": [{"name": "bar", "version": "1-1.nb5.0", "summary": "Get some Bar"},
+                                   {"name": "foo", "version": "1-1.nb5.0", "summary": "Get some Foo"},
+                                   {"name": "toto", "version": "1-1.nb5.0", "summary": "Get some Toto"}],
+                     "available": [{"name": "baz", "version": "2-1.nb5.0", "summary": "Get some Baz"},
+                                   {"name": "foo", "version": "1-2.nb5.0", "summary": "Get some Foo"},
+                                   {"name": "plouf", "version": "2-1.nb5.0", "summary": "Get some Plouf"},
+                                   {"name": "toto", "version": "2-1.nb5.0", "summary": "Get some Toto"}]}]
         self._run_nbyum_test(args, expected)
 
     def test_list_no_packages_match(self):
@@ -61,6 +64,7 @@ class TestListPackages(TestCase):
         # -- Check the listing -------------------------------------
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "installed", "pkgs": [{"name": "foo", "version": "1-1.nb5.0", "summary": "Get some Foo"}]},
-                    {"type": "available", "pkgs": [{"name": "plouf", "version": "2-1.nb5.0", "summary": "Get some Plouf"}]}]
+                    {"type": "recap",
+                     "installed": [{"name": "foo", "version": "1-1.nb5.0", "summary": "Get some Foo"}],
+                     "available": [{"name": "plouf", "version": "2-1.nb5.0", "summary": "Get some Plouf"}]}]
         self._run_nbyum_test(args, expected)

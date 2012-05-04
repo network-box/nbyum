@@ -11,7 +11,8 @@ class TestListSMs(TestCase):
         # -- Check the listing -------------------------------------
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "installed", "pkgs": [{"name": "nbsm-foo", "version": "1-1.nb5.0", "summary": "Security Module to get some Foo"}]}]
+                    {"type": "recap",
+                     "installed": [{"name": "nbsm-foo", "version": "1-1.nb5.0", "summary": "Security Module to get some Foo"}]}]
         self._run_nbyum_test(args, expected)
 
     def test_list_available_sms(self):
@@ -21,7 +22,8 @@ class TestListSMs(TestCase):
         # -- Check the listing -------------------------------------
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "available", "pkgs": [{"name": "nbsm-bar", "version": "1-1.nb5.0", "summary": "Security Module to meet Toto"}]}]
+                    {"type": "recap",
+                     "available": [{"name": "nbsm-bar", "version": "1-1.nb5.0", "summary": "Security Module to meet Toto"}]}]
         self._run_nbyum_test(args, expected)
 
     def test_list_sms(self):
@@ -31,8 +33,9 @@ class TestListSMs(TestCase):
         # -- Check the listing -------------------------------------
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "installed", "pkgs": [{"name": "nbsm-foo", "version": "1-1.nb5.0", "summary": "Security Module to get some Foo"}]},
-                    {"type": "available", "pkgs": [{"name": "nbsm-bar", "version": "1-1.nb5.0", "summary": "Security Module to meet Toto"}]}]
+                    {"type": "recap",
+                     "installed": [{"name": "nbsm-foo", "version": "1-1.nb5.0", "summary": "Security Module to get some Foo"}],
+                     "available": [{"name": "nbsm-bar", "version": "1-1.nb5.0", "summary": "Security Module to meet Toto"}]}]
         self._run_nbyum_test(args, expected)
 
     def test_list_no_sms_match(self):
@@ -51,6 +54,7 @@ class TestListSMs(TestCase):
         # -- Check the listing -------------------------------------
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "installed", "pkgs": [{"name": "nbsm-foo", "version": "1-1.nb5.0", "summary": "Security Module to get some Foo"}]},
-                    {"type": "available", "pkgs": [{"name": "nbsm-bar", "version": "1-1.nb5.0", "summary": "Security Module to meet Toto"}]}]
+                    {"type": "recap",
+                     "installed": [{"name": "nbsm-foo", "version": "1-1.nb5.0", "summary": "Security Module to get some Foo"}],
+                     "available": [{"name": "nbsm-bar", "version": "1-1.nb5.0", "summary": "Security Module to meet Toto"}]}]
         self._run_nbyum_test(args, expected)
