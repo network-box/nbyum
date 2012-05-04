@@ -103,25 +103,27 @@ is the second out of three packages to install during this transaction.
 Action messages
 ===============
 
-There are several possible actions in ``nbyum``. Each one of those will have
-its own value for the ``type`` member of the JSON object representing each
-message:
+There are several possible actions in ``nbyum``. They all share the same value
+for the ``type`` member of the JSON object: ``recap``.
 
-* when ``list``\ ing packages and security modules, it will be set to either
-  ``installed`` or ``available``, depending on the package being listed.
+Also, since they represent a summary of what has been done, then there is only
+one message (and so only one JSON object) with all the data inside.
+
+The other member depends on each action requested by the user:
+
+* when ``list``\ ing packages and security modules, it will be either
+  ``installed`` or ``available``, depending on the package(s) being listed.
 * when printing ``info``\ rmations about packages and security modules, it will
-  be set to ``pkginfos``
+  be ``pkginfos``
 * when ``install``\ ing, ``update``\ ing or ``remove``\ ing packages and
-  security modules, it will be set to ``install``, ``update`` or ``remove``, as
+  security modules, it will be ``install``, ``update`` or ``remove``, as
   appropriate.
 
-For each ``type``, **there will always be only one line**, i.e one JSON object.
-Since most of the times we will need to display several packages, they will all
-be listed in the last member: ``pkgs``.
+Of course, there could be more than one of those. For example the user could
+have requested to list both installed and available packages.
 
-.. note::
-   The ``pkgs`` member will always be a list, even if it contains only one
-   package.
+Each one of those members will have the list of corresponding packages as its
+value. It will always be a list, even if it contains only one package.
 
 Modifying the system
 --------------------
@@ -149,8 +151,8 @@ To make things crystal clear, here are a couple of examples::
 
     # nbyum install sms nbsm-foo
     [... snip ...]
-    {"type": "install", "pkgs": [{"name": "nbsm-foo", "new": "5.0-1"},
-                                 {"name": "foo", "new": "1:5.0-1"}]}
+    {"type": "recap", "install": [{"name": "nbsm-foo", "new": "5.0-1"},
+                                  {"name": "foo", "new": "1:5.0-1"}]}
 
 As you can see, we do not make any differences between packages the user
 requested to install and the ones that come in as dependencies.
@@ -159,10 +161,10 @@ Here is what happens on updates::
 
     # nbyum update
     [... snip ...]
-    {"type": "install", "pkgs": [{"name": "kernel", "new": "3.3.3-1"}]}
-    {"type": "update", "pkgs": [{"name": "foo", "old": "5.0-1", "new": "1:5.0-1"}]}
-    {"type": "remove", "pkgs": [{"name": "kernel", "old": "3.2.0-1", "reason": ""},
-                                {"name": "bar", "old": "5.0-1", "reason": "Replaced by baz-5.0-1"}]}
+    {"type": "recap", "install": [{"name": "kernel", "new": "3.3.3-1"}]}
+                      "update": [{"name": "foo", "old": "5.0-1", "new": "1:5.0-1"}]}
+                      "remove": [{"name": "kernel", "old": "3.2.0-1", "reason": ""},
+                                 {"name": "bar", "old": "5.0-1", "reason": "Replaced by baz-5.0-1"}]}
 
 A couple of things are interesting here. First, running an update can of course
 update packages, but it can also install some and remove others.
@@ -186,9 +188,9 @@ touch more user-friendly::
 
     # nbyum list all packages
     [... snip ...]
-    {"type": "installed", "pkgs": [{"name": "foo", "version": "5.0-1", "summary": "Foo foo foo"}]
-    {"type": "available", "pkgs": [{"name": "foo", "version": "5.0-2", "summary": "Foo foo foo"},
-                                   {"name": "bar", "version": "5.0-1", "summary": "Bar bar bar"}]
+    {"type": "recap", "installed": [{"name": "foo", "version": "5.0-1", "summary": "Foo foo foo"}]
+    {"type": "recap", "available": [{"name": "foo", "version": "5.0-2", "summary": "Foo foo foo"},
+                                    {"name": "bar", "version": "5.0-1", "summary": "Bar bar bar"}]
 
 Notice how ``foo`` is both ``installed`` and ``available``? That's because
 there is an update in the repositories, waiting to be installed.
@@ -205,19 +207,19 @@ Obtaining informations
 The case for ``pkginfos`` is also very similar to all the above, except that we
 show much more details.
 
-Indeed, each item of the ``pkgs`` member will contain lots of information about
-the package, like its ``arch``, ``license`` or even full ``description``. The
-following examples shows all the printed attributes::
+Indeed, each item of the ``pkginfos`` member will contain lots of information
+about the package, like its ``arch``, ``license`` or even full ``description``.
+The following examples shows all the printed attributes::
 
     # nbyum info \*foo\*
     [... snip ...]
-    {"type": "pkginfos", "pkgs": [{"name": "nbsm-foo", "version": "5.0-1",
-                                   "arch": "noarch", "license": "MIT",
-                                   "summary": "Un module foo",
-                                   "basepackage": "nbsm-foo",
-                                   "description": "Blabla about nbsm-foo"},
-                                  {"name": "foo", "version": "5.0-1",
-                                   "arch": "noarch", "license": "MIT",
-                                   "summary": "Foo foo foo",
-                                   "basepackage": "foo",
-                                   "description": "Blabla about foo"}]}
+    {"type": "recap", "pkginfos": [{"name": "nbsm-foo", "version": "5.0-1",
+                                    "arch": "noarch", "license": "MIT",
+                                    "summary": "Un module foo",
+                                    "basepackage": "nbsm-foo",
+                                    "description": "Blabla about nbsm-foo"},
+                                   {"name": "foo", "version": "5.0-1",
+                                    "arch": "noarch", "license": "MIT",
+                                    "summary": "Foo foo foo",
+                                    "basepackage": "foo",
+                                    "description": "Blabla about foo"}]}
