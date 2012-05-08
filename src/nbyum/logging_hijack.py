@@ -35,7 +35,7 @@ class NBYumLogger(logging.Logger):
             sys.stdout.write("%s\n" % json.dumps({"type": "log",
                                                   level: record.getMessage()}))
 
-	elif level == "recap":
+        elif level == "recap":
             d = {"type": level}
 
             # `record.msg` is a dict where for each (k, v) :
