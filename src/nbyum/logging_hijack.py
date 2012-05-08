@@ -32,8 +32,14 @@ class NBYumLogger(logging.Logger):
             level = "info"
 
         if level in ("debug", "info", "warning", "error"):
-            sys.stdout.write("%s\n" % json.dumps({"type": "log",
-                                                  level: record.getMessage()}))
+            hdlr = self._get_syslog_handler()
+            if hdlr:
+                if record.levelno >= hdlr.level:
+                    hdlr.handle(record)
+
+            else:
+                sys.stdout.write("%s\n" % json.dumps({"type": "log",
+                                                      level: record.getMessage()}))
 
         elif level == "recap":
             d = {"type": level}
@@ -57,6 +63,15 @@ class NBYumLogger(logging.Logger):
             raise WTFException("Got unexpected logging level: %s" % level)
 
         sys.stdout.flush()
+
+    def _get_syslog_handler(self):
+        """Get Yum's syslog handler, if there is one for this logger."""
+        for hdlr in self.handlers:
+            if isinstance(hdlr, logging.handlers.SysLogHandler):
+                return hdlr
+
+        if self.propagate:
+            return self.parent._get_syslog_handler()
 
 
 class NBYumRPMCallback(RPMBaseCallback):
@@ -93,13 +108,6 @@ class NBYumRPMCallback(RPMBaseCallback):
         else:
             raise WTFException("Package %s from transaction had action set " \
                                "to %s" % (package, action))
-
-    def filelog(self, package, action):
-        """Log that a package has been entirely installed/removed/..."""
-        # We don't get packages removed as part of an update here, so we do
-        # everything in self.event() instead, acting only if the package is
-        # done with
-        pass
 
     def scriptout(self, package, msgs):
         """Log errors in the package scriptlets."""
