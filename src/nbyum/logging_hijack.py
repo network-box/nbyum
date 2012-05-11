@@ -78,14 +78,14 @@ class NBYumRPMCallback(RPMBaseCallback):
     def __init__(self, installroot="/"):
         RPMBaseCallback.__init__(self)
 
-        self.fileaction = {TS_INSTALL: 'Installed',
-                           TS_TRUEINSTALL: 'Installed',
-                           TS_OBSOLETING: 'Installed',
-                           TS_UPDATE: 'Installed',
-                           TS_OBSOLETED: 'Removed',
-                           TS_UPDATED: 'Removed',
-                           TS_ERASE: 'Removed',
-                           }
+        self.action = {TS_INSTALL: 'Installed',
+                       TS_TRUEINSTALL : 'Installed',
+                       TS_OBSOLETING: 'Installed',
+                       TS_UPDATE : 'Installed',
+                       TS_OBSOLETED: 'Removed',
+                       TS_UPDATED: 'Removed'
+                       TS_ERASE: 'Removed',
+                       }
 
         # FIXME: We only need this whole thing to work around a Yum bug:
         #     https://bugzilla.redhat.com/show_bug.cgi?id=684686#c6
@@ -98,11 +98,11 @@ class NBYumRPMCallback(RPMBaseCallback):
             # No progress bar, we only print packages completely processed
             return
 
-        if action in self.fileaction:
+        if action in self.action:
             self.logger.log(PROGRESS_LEVEL,
                             {"current": ts_current,
                              "total": ts_total,
-                             "hint": "%s: %s" % (self.fileaction[action],
+                             "hint": "%s: %s" % (self.action[action],
                                                  package)})
 
         else:
