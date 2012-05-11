@@ -120,7 +120,9 @@ class NBYumRPMCallback(RPMBaseCallback):
         # FIXME: We only need this whole thing to work around a Yum bug:
         #     https://bugzilla.redhat.com/show_bug.cgi?id=684686#c6
         # When it's fixed, just nuke it out of here
-        if self.__installroot != "/" and msg.startswith("could not open ts_done file: [Errno 2] No such file or directory: '"):
+        yumbug_error = "could not open ts_done file: [Errno 2] No such file" \
+                       " or directory: '"
+        if self.__installroot != "/" and msg.startswith(yumbug_error):
             return
 
         self.logger.error(msg)
