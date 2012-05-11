@@ -99,11 +99,9 @@ class NBYumRPMCallback(RPMBaseCallback):
             return
 
         if action in self.action:
-            self.logger.log(PROGRESS_LEVEL,
-                            {"current": ts_current,
-                             "total": ts_total,
-                             "hint": "%s: %s" % (self.action[action],
-                                                 package)})
+            self.logger.log_progress({"current": ts_current, "total": ts_total,
+                                      "hint": "%s: %s" % (self.action[action],
+                                                          package)})
 
         else:
             self.logger.error("The package %s from the transaction had its " \
