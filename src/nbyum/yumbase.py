@@ -288,9 +288,9 @@ class NBYumBase(yum.YumBase):
                         pkgs["remove"].append(pkg)
 
             else:
-                msg = "The transaction includes a package of state '%s'," \
-                      " but those are not handled yet." \
-                      " Ask your friendly nbyum developer!" % member.ts_state
+                msg = "The package %s has the state '%s' in the current " \
+                      "transaction. We don't handle those states yet. Please" \
+                      " report it as a bug." % (member.po, member.ts_state)
                 raise WTFException(msg)
 
         if pkgs:
