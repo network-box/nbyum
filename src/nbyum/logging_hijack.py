@@ -10,8 +10,8 @@ from .errors import NBYumException, WTFException
 
 
 # Our custom log levels
-PROGRESS_LEVEL  = 3141592653
-RECAP_LEVEL = 31415926535
+PROGRESS_LEVEL  = 314159
+RECAP_LEVEL = 3141592
 
 
 class NBYumLogger(logging.Logger):
