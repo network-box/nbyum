@@ -11,8 +11,8 @@ class TestRemoveSms(TestCase):
         args = [self.command, "sms", "no_such_security_module"]
 
         # -- Check the error message -------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "log", "error": "No Match for argument: nbsm-no_such_security_module"}]
         self._run_nbyum_test(args, expected)
 
@@ -28,8 +28,8 @@ class TestRemoveSms(TestCase):
         args = [self.command, "sms", "nbsm-foo"]
 
         # -- Check the removal summary -----------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 1, "hint": "Removed: nbsm-foo"},
                     {"type": "recap",
                      "remove": [{"name": "nbsm-foo", "old": "1-1.nb5.0", "reason": ""}]}]
@@ -51,8 +51,8 @@ class TestRemoveSms(TestCase):
         args = [self.command, "sms", "nbsm-bidule"]
 
         # -- Check the removal summary -----------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Removed: nbsm-bidule"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: bidule"},
                     {"type": "recap",
@@ -77,8 +77,8 @@ class TestRemoveSms(TestCase):
         args = [self.command, "sms", "nbsm-bidule"]
 
         # -- Check the removal summary -----------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "log", "error": "Proceeding would remove the following security modules:\n  - nbsm-machin\n  - nbsm-trucmuche\nTransaction aborted."}]
         self._run_nbyum_test(args, expected)
 

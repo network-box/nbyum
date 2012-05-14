@@ -9,8 +9,8 @@ class TestInfo(TestCase):
         args = [self.command, "no_such_package"]
 
         # -- Check the infos ---------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."}]
         self._run_nbyum_test(args, expected)
 
     def test_info_simple(self):
@@ -18,8 +18,8 @@ class TestInfo(TestCase):
         args = [self.command, "foo"]
 
         # -- Check the infos ---------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap", "pkginfos": [{"name": "foo", "license": "MIT", "base_package_name": "foo",
                                                     "version": "1-1.nb5.0", "arch": "noarch", "summary": "Get some Foo",
                                                     "description": "This package provides you the joy of getting some Foo."}]}]
@@ -30,8 +30,8 @@ class TestInfo(TestCase):
         args = [self.command, "*foo*", "bar*"]
 
         # -- Check the infos ---------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap", "pkginfos": [{"name": "bar", "license": "MIT", "base_package_name": "bar",
                                                     "version": "1-1.nb5.0", "arch": "noarch", "summary": "Get some Bar",
                                                     "description": "This package provides you the joy of getting some Bar."},
@@ -48,8 +48,8 @@ class TestInfo(TestCase):
         args = [self.command, "bdummy"]
 
         # -- Check the infos ---------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap", "pkginfos": [{"name": "bdummy", "license": "MIT", "base_package_name": "bdummy",
                                                     "version": "1-1.nb5.0", "arch": "noarch", "summary": "Not just any dummy",
                                                     "description": "This package provides bochecha's dummy.\n\nThe " \

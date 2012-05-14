@@ -11,8 +11,8 @@ class TestInstallSms(TestCase):
         args = [self.command, "sms", "no_such_security_module"]
 
         # -- Check the error message -------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "log", "error": "No package(s) available to install"}]
         self._run_nbyum_test(args, expected)
 
@@ -28,8 +28,8 @@ class TestInstallSms(TestCase):
         args = [self.command, "sms", "foo"]
 
         # -- Check the warning message -----------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "log", "warning": "Package nbsm-foo-1-1.nb5.0.noarch already installed and latest version"}]
         self._run_nbyum_test(args, expected)
 
@@ -45,8 +45,8 @@ class TestInstallSms(TestCase):
         args = [self.command, "sms", "nbsm-bar"]
 
         # Check the installation summary ---------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 1, "hint": "Installed: nbsm-bar-1-1.nb5.0.noarch"},
                     {"type": "recap",
                      "install": [{"name": "nbsm-bar", "new": "1-1.nb5.0"}]}]
@@ -65,8 +65,8 @@ class TestInstallSms(TestCase):
         args = [self.command, "sms", "nbsm-plouf"]
 
         # Check the installation summary ---------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Installed: nbsm-plouf-1-1.nb5.0.noarch"},
                     {"type": "recap",
@@ -88,8 +88,8 @@ class TestInstallSms(TestCase):
         args = [self.command, "sms", "nbsm-plouf", "toto"]
 
         # Check the installation summary ---------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 3, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 3, "hint": "Installed: nbsm-plouf-1-1.nb5.0.noarch"},
                     {"type": "progress", "current": 3, "total": 3, "hint": "Installed: nbsm-toto-1-1.nb5.0.noarch"},

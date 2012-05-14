@@ -12,9 +12,9 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "log", "info": "Packages are all up to date"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
+                    {"type": "log", "info": "All packages are up to date."}]
         self._run_nbyum_test(args, expected)
 
         # -- Check the installed packages after the update ---------
@@ -29,8 +29,8 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: foo-1-2.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: foo"},
                     {"type": "recap",
@@ -49,8 +49,8 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 1, "hint": "Installed: bar-1-2.nb5.0.noarch"},
                     {"type": "recap",
                      "install": [{"name": "bar", "new": "1-2.nb5.0"}]}]
@@ -69,8 +69,8 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: baz-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: bar"},
                     {"type": "recap",
@@ -89,8 +89,8 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 3, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 3, "hint": "Installed: toto-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 3, "total": 3, "hint": "Removed: toto"},
@@ -112,8 +112,8 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 7, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 7, "hint": "Installed: toto-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 3, "total": 7, "hint": "Installed: foo-1-2.nb5.0.noarch"},
@@ -141,8 +141,8 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 6, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 6, "hint": "Installed: toto-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 3, "total": 6, "hint": "Installed: bar-1-2.nb5.0.noarch"},
@@ -176,8 +176,8 @@ class TestUpdate(TestCase):
             f.write("foo=0\n")
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: nbsm-foo-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: nbsm-foo"},
                     {"type": "recap",
@@ -200,8 +200,8 @@ class TestUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: nbsm-foo-3-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: nbsm-foo"},
                     {"type": "recap",

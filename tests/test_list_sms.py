@@ -9,8 +9,8 @@ class TestListSMs(TestCase):
         args = [self.command, "installed", "sms"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "installed": [{"name": "nbsm-foo", "version": "1-1.nb5.0", "summary": "Security Module to get some Foo"}]}]
         self._run_nbyum_test(args, expected)
@@ -20,8 +20,8 @@ class TestListSMs(TestCase):
         args = [self.command, "available", "sms"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "available": [{"name": "nbsm-bar", "version": "1-1.nb5.0", "summary": "Security Module to meet Toto"}]}]
         self._run_nbyum_test(args, expected)
@@ -31,8 +31,8 @@ class TestListSMs(TestCase):
         args = [self.command, "all", "sms"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "installed": [{"name": "nbsm-foo", "version": "1-1.nb5.0", "summary": "Security Module to get some Foo"}],
                      "available": [{"name": "nbsm-bar", "version": "1-1.nb5.0", "summary": "Security Module to meet Toto"}]}]
@@ -43,8 +43,8 @@ class TestListSMs(TestCase):
         args = [self.command, "all", "sms", "no_such_sm"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."}]
         self._run_nbyum_test(args, expected)
 
     def test_list_sms_match(self):
@@ -52,8 +52,8 @@ class TestListSMs(TestCase):
         args = [self.command, "all", "sms", "nbsm-foo", "*a*"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "installed": [{"name": "nbsm-foo", "version": "1-1.nb5.0", "summary": "Security Module to get some Foo"}],
                      "available": [{"name": "nbsm-bar", "version": "1-1.nb5.0", "summary": "Security Module to meet Toto"}]}]

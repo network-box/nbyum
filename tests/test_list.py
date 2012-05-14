@@ -9,8 +9,8 @@ class TestListPackages(TestCase):
         args = [self.command, "installed", "packages"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "installed": [{"name": "bar", "version": "1-1.nb5.0", "summary": "Get some Bar"},
                                    {"name": "foo", "version": "1-1.nb5.0", "summary": "Get some Foo"},
@@ -22,8 +22,8 @@ class TestListPackages(TestCase):
         args = [self.command, "available", "packages"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "available": [{"name": "baz", "version": "2-1.nb5.0", "summary": "Get some Baz"},
                                    {"name": "foo", "version": "1-2.nb5.0", "summary": "Get some Foo"},
@@ -36,8 +36,8 @@ class TestListPackages(TestCase):
         args = [self.command, "all", "packages"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "installed": [{"name": "bar", "version": "1-1.nb5.0", "summary": "Get some Bar"},
                                    {"name": "foo", "version": "1-1.nb5.0", "summary": "Get some Foo"},
@@ -53,8 +53,8 @@ class TestListPackages(TestCase):
         args = [self.command, "all", "packages", "no_such_package"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."}]
         self._run_nbyum_test(args, expected)
 
     def test_list_packages_match(self):
@@ -62,8 +62,8 @@ class TestListPackages(TestCase):
         args = [self.command, "all", "packages", "foo", "*lou*"]
 
         # -- Check the listing -------------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "installed": [{"name": "foo", "version": "1-1.nb5.0", "summary": "Get some Foo"}],
                      "available": [{"name": "plouf", "version": "2-1.nb5.0", "summary": "Get some Plouf"}]}]

@@ -10,9 +10,9 @@ class TestCheckUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
-                    {"type": "log", "info": "Packages are all up to date"}]
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
+                    {"type": "log", "info": "All packages are up to date."}]
         self._run_nbyum_test(args, expected)
 
     def test_only_updates(self):
@@ -20,8 +20,8 @@ class TestCheckUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "update": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
@@ -31,8 +31,8 @@ class TestCheckUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "install": [{"name": "bar", "new": "1-2.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
@@ -42,8 +42,8 @@ class TestCheckUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "remove": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
@@ -53,8 +53,8 @@ class TestCheckUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "install": [{"name": "plouf", "new": "2-1.nb5.0"}],
                      "update": [{"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
@@ -65,8 +65,8 @@ class TestCheckUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "install": [{"name": "plouf", "new": "2-1.nb5.0"}],
                      "update": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"},
@@ -79,8 +79,8 @@ class TestCheckUpdate(TestCase):
         args = [self.command]
 
         # -- Check the update summary ------------------------------
-        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the packages metadata..."},
-                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the packages metadata..."},
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
                      "install": [{"name": "bar", "new": "1-2.nb5.0"},
                                  {"name": "plouf", "new": "2-1.nb5.0"}],
