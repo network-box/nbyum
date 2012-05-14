@@ -83,7 +83,7 @@ class NBYumRPMCallback(RPMBaseCallback):
                        TS_OBSOLETING: 'Installed',
                        TS_UPDATE : 'Installed',
                        TS_OBSOLETED: 'Removed',
-                       TS_UPDATED: 'Removed'
+                       TS_UPDATED: 'Removed',
                        TS_ERASE: 'Removed',
                        }
 
