@@ -95,13 +95,13 @@ class NBYumBase(yum.YumBase):
         pkgs = []
         for pkg in sorted(self.__get_packages_list(patterns, type_filter),
                           key=list_ordergetter):
-            pkgs.append({"name": pkg.name, "arch": pkg.arch,
-                                     "version": get_version(pkg),
-                                     "license": pkg.license,
-                                     "summary": pkg.summary,
-                                     "description": pkg.description,
-                                     "base_package_name": pkg.base_package_name,
-                                     })
+            pkgdict = {"name": pkg.name, "arch": pkg.arch,
+                       "version": get_version(pkg), "license": pkg.license,
+                       "summary": pkg.summary, "description": pkg.description,
+                       "base_package_name": pkg.base_package_name,
+                       }
+
+            pkgs.append(pkgdict)
 
         if pkgs:
             self.logger.log_recap({"pkginfos": pkgs})
