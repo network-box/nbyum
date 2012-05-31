@@ -130,7 +130,6 @@ class NBYumBase(yum.YumBase):
                                                                       patterns)
 
         installed = []
-        available = []
         if status in ("all", "installed"):
             for pkg in sorted(self.__get_packages_list(patterns, type_filter,
                                                        status="installed"),
@@ -140,6 +139,7 @@ class NBYumBase(yum.YumBase):
 
                 installed.append(pkgdict)
 
+        available = []
         if status in ("all", "available"):
             for pkg in sorted(self.__get_packages_list(patterns, type_filter,
                                                        status="available"),
