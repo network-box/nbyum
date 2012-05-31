@@ -153,7 +153,26 @@ class NBYumBase(yum.YumBase):
                 pkgdict = {"name": pkg.name, "version": get_version(pkg),
                            "summary": pkg.summary}
 
+                # Filter multiarch dupes for arches others than the system one.
+                # We can just compare with the previous one because packages
+                # are ordered by nevra.
+                if len(installed) and \
+                   installed[-1].get("name", None) == pkgdict["name"] and \
+                   installed[-1].get("version", None) == pkgdict["version"]:
+                    # This is a multiarch dupe
+
+                    if previous_arch == self.arch.basearch and \
+                       pkg.arch != self.arch.basearch:
+                        continue
+
+                    elif previous_arch != self.arch.basearch and \
+                         pkg.arch == self.arch.basearch:
+                        installed.pop()
+
                 installed.append(pkgdict)
+
+                # Keep for next iteration
+                previous_arch = pkg.arch
 
         available = []
         if status in ("all", "available"):
@@ -168,7 +187,26 @@ class NBYumBase(yum.YumBase):
                 pkgdict = {"name": pkg.name, "version": get_version(pkg),
                            "summary": pkg.summary}
 
+                # Filter multiarch dupes for arches others than the system one.
+                # We can just compare with the previous one because packages
+                # are ordered by nevra.
+                if len(available) and \
+                   available[-1].get("name", None) == pkgdict["name"] and \
+                   available[-1].get("version", None) == pkgdict["version"]:
+                    # This is a multiarch dupe!
+
+                    if previous_arch == self.arch.basearch and \
+                       pkg.arch != self.arch.basearch:
+                        continue
+
+                    elif previous_arch != self.arch.basearch and \
+                         pkg.arch == self.arch.basearch:
+                        available.pop()
+
                 available.append(pkgdict)
+
+                # Keep for next iteration
+                previous_arch = pkg.arch
 
         pkgs = {}
         if installed:
