@@ -135,9 +135,10 @@ class NBYumBase(yum.YumBase):
             for pkg in sorted(self.__get_packages_list(patterns, type_filter,
                                                        status="installed"),
                               key=list_ordergetter):
-                installed.append({"name": pkg.name,
-                                          "version": get_version(pkg),
-                                          "summary": pkg.summary})
+                pkgdict = {"name": pkg.name, "version": get_version(pkg),
+                           "summary": pkg.summary}
+
+                installed.append(pkgdict)
 
         if status in ("all", "available"):
             for pkg in sorted(self.__get_packages_list(patterns, type_filter,
@@ -148,9 +149,10 @@ class NBYumBase(yum.YumBase):
                     # are **not installed**, even if in a different version
                     continue
 
-                available.append({"name": pkg.name,
-                                          "version": get_version(pkg),
-                                          "summary": pkg.summary})
+                pkgdict = {"name": pkg.name, "version": get_version(pkg),
+                           "summary": pkg.summary}
+
+                available.append(pkgdict)
 
         pkgs = {}
         if installed:
