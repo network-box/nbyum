@@ -101,6 +101,22 @@ class NBYumBase(yum.YumBase):
                        "base_package_name": pkg.base_package_name,
                        }
 
+            # Filter multiarch dupes for arches others than the system one.
+            # We can just compare with the previous one because packages
+            # are ordered by nevra.
+            if len(pkgs) and \
+               pkgs[-1].get("name", None) == pkgdict["name"] and \
+               pkgs[-1].get("version", None) == pkgdict["version"]:
+                # This is a multiarch dupe
+
+                if pkgs[-1]["arch"] == self.arch.basearch and \
+                   pkg.arch != self.arch.basearch:
+                    continue
+
+                elif pkgs[-1]["arch"] != self.arch.basearch and \
+                     pkg.arch == self.arch.basearch:
+                    pkgs.pop()
+
             pkgs.append(pkgdict)
 
         if pkgs:
