@@ -129,15 +129,13 @@ class NBYumBase(yum.YumBase):
         type_filter, patterns = self.__type_and_patterns_preprocessor(type_,
                                                                       patterns)
 
-        pkgs = {}
+        installed = []
+        available = []
         if status in ("all", "installed"):
             for pkg in sorted(self.__get_packages_list(patterns, type_filter,
                                                        status="installed"),
                               key=list_ordergetter):
-                if not pkgs.has_key("installed"):
-                    pkgs["installed"] = []
-
-                pkgs["installed"].append({"name": pkg.name,
+                installed.append({"name": pkg.name,
                                           "version": get_version(pkg),
                                           "summary": pkg.summary})
 
@@ -150,12 +148,15 @@ class NBYumBase(yum.YumBase):
                     # are **not installed**, even if in a different version
                     continue
 
-                if not pkgs.has_key("available"):
-                    pkgs["available"] = []
-
-                pkgs["available"].append({"name": pkg.name,
+                available.append({"name": pkg.name,
                                           "version": get_version(pkg),
                                           "summary": pkg.summary})
+
+        pkgs = {}
+        if installed:
+            pkgs["installed"] = installed
+        if available:
+            pkgs["available"] = available
 
         if pkgs:
             self.logger.log_recap(pkgs)
