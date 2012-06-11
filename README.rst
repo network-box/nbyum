@@ -161,7 +161,8 @@ Here is what happens on updates::
 
     # nbyum update
     [... snip ...]
-    {"type": "recap", "install": [{"name": "kernel", "new": "3.3.3-1"}],
+    {"type": "recap", "install": [{"name": "baz", "new": "5.0-1"},
+                                  {"name": "kernel", "new": "3.3.3-1"}],
                       "update": [{"name": "foo", "old": "5.0-1", "new": "1:5.0-1"}],
                       "remove": [{"name": "kernel", "old": "3.2.0-1", "reason": ""},
                                  {"name": "bar", "old": "5.0-1", "reason": "Replaced by baz-5.0-1"}]}
