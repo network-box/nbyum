@@ -335,14 +335,14 @@ class NBYumBase(yum.YumBase):
 
                         pkgs["update"].append(pkg)
 
-                    # Obsoletions are both an install...
+                    # Obsoletions are sometimes an install...
                     if member.obsoletes and not member.updates:
                         if not pkgs.has_key("install"):
                             pkgs["install"] = []
 
                         pkgs["install"].append(pkg)
 
-                    # ... and a few removals
+                    # ... but they always are removals
                     for old in member.obsoletes:
                         pkg = {"name": old.name, "old": get_version(old),
                                "reason": "Replaced by %s-%s" % \
