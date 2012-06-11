@@ -320,6 +320,7 @@ class NBYumBase(yum.YumBase):
                 pkg.update({"new": get_version(member.po)})
 
                 if not member.updates and not member.obsoletes:
+                    # This is a new install
                     if not pkgs.has_key("install"):
                         pkgs["install"] = []
 
