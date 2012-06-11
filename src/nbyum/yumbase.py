@@ -325,6 +325,7 @@ class NBYumBase(yum.YumBase):
                         pkgs["install"] = []
 
                     pkgs["install"].append(pkg)
+
                 else:
                     for old in member.updates:
                         pkg.update({"old": get_version(old)})
