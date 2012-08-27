@@ -1,3 +1,4 @@
+from itertools import izip_longest
 import json
 from operator import attrgetter
 import os
@@ -77,7 +78,9 @@ class TestCase(unittest.TestCase):
         stdout, unused = proc.communicate()
 
         result = [json.loads(line) for line in stdout.split("\n") if line]
-        self.assertEqual(result, expected)
+
+        self.assertEqual(result, expected,
+                         msg="\n".join(self._gen_diff(result, expected)))
 
     def _check_installed_rpms(self, expected):
         """Not a test, just a handy helper.
@@ -108,6 +111,20 @@ class TestCase(unittest.TestCase):
 
         subprocess.check_call(cmd, stdout=subprocess.PIPE,
                                    stderr=subprocess.STDOUT)
+
+    def _gen_diff(self, result, expected):
+        yield "We didn't get the expected result:"
+        yield "-expected result"
+        yield "+actual result"
+        yield "================"
+        for res, exp in izip_longest(result, expected):
+            if res == exp:
+                yield " %s" % res
+            else:
+                if exp is not None:
+                    yield "-%s" % exp
+                if res is not None:
+                    yield "+%s" % res
 
 
 # Make sure the unit tests are discovered
