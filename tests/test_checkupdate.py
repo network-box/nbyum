@@ -45,6 +45,7 @@ class TestCheckUpdate(TestCase):
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
+                     "install": [{"new": "2-1.nb5.0", "name": "baz"}],
                      "remove": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
@@ -68,7 +69,8 @@ class TestCheckUpdate(TestCase):
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "recap",
-                     "install": [{"name": "plouf", "new": "2-1.nb5.0"}],
+                     "install": [{"name": "baz", "new": "2-1.nb5.0"},
+                                 {"name": "plouf", "new": "2-1.nb5.0"}],
                      "update": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"},
                                 {"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}],
                      "remove": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]

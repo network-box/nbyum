@@ -74,6 +74,7 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: baz-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: bar"},
                     {"type": "recap",
+                     "install": [{"name": "baz", "new": "2-1.nb5.0"}],
                      "remove": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
 
@@ -122,7 +123,8 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 6, "total": 7, "hint": "Removed: bar"},
                     {"type": "progress", "current": 7, "total": 7, "hint": "Removed: toto"},
                     {"type": "recap",
-                     "install": [{"name": "plouf", "new": "2-1.nb5.0"}],
+                     "install": [{"name": "baz", "new": "2-1.nb5.0"},
+                                 {"name": "plouf", "new": "2-1.nb5.0"}],
                      "update": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"},
                                 {"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}],
                      "remove": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]
