@@ -33,6 +33,8 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: foo-1-2.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: foo"},
+                    {"type": "progress", "current": 1, "total": 2, "hint": "Verified: foo-1-2.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 2, "hint": "Verified: foo-1-1.nb5.0.noarch"},
                     {"type": "recap",
                      "update": [{"name": "foo", "old": "1-1.nb5.0", "new": "1-2.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
@@ -52,6 +54,7 @@ class TestUpdate(TestCase):
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 1, "hint": "Installed: bar-1-2.nb5.0.noarch"},
+                    {"type": "progress", "current": 1, "total": 1, "hint": "Verified: bar-1-2.nb5.0.noarch"},
                     {"type": "recap",
                      "install": [{"name": "bar", "new": "1-2.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
@@ -73,6 +76,8 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: baz-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: bar"},
+                    {"type": "progress", "current": 1, "total": 2, "hint": "Verified: baz-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 2, "hint": "Verified: bar-1-1.nb5.0.noarch"},
                     {"type": "recap",
                      "install": [{"name": "baz", "new": "2-1.nb5.0"}],
                      "remove": [{"name": "bar", "old": "1-1.nb5.0", "reason": "Replaced by baz-2-1.nb5.0"}]}]
@@ -95,6 +100,9 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 1, "total": 3, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 3, "hint": "Installed: toto-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 3, "total": 3, "hint": "Removed: toto"},
+                    {"type": "progress", "current": 1, "total": 3, "hint": "Verified: plouf-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 3, "hint": "Verified: toto-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 3, "total": 3, "hint": "Verified: toto-1-1.nb5.0.noarch"},
                     {"type": "recap",
                      "install": [{"name": "plouf", "new": "2-1.nb5.0"}],
                      "update": [{"name": "toto", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
@@ -122,6 +130,13 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 5, "total": 7, "hint": "Removed: foo"},
                     {"type": "progress", "current": 6, "total": 7, "hint": "Removed: bar"},
                     {"type": "progress", "current": 7, "total": 7, "hint": "Removed: toto"},
+                    {"type": "progress", "current": 1, "total": 7, "hint": "Verified: toto-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 7, "hint": "Verified: baz-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 3, "total": 7, "hint": "Verified: plouf-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 4, "total": 7, "hint": "Verified: foo-1-2.nb5.0.noarch"},
+                    {"type": "progress", "current": 5, "total": 7, "hint": "Verified: toto-1-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 6, "total": 7, "hint": "Verified: bar-1-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 7, "total": 7, "hint": "Verified: foo-1-1.nb5.0.noarch"},
                     {"type": "recap",
                      "install": [{"name": "baz", "new": "2-1.nb5.0"},
                                  {"name": "plouf", "new": "2-1.nb5.0"}],
@@ -151,6 +166,12 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 4, "total": 6, "hint": "Installed: foo-1-2.nb5.0.noarch"},
                     {"type": "progress", "current": 5, "total": 6, "hint": "Removed: foo"},
                     {"type": "progress", "current": 6, "total": 6, "hint": "Removed: toto"},
+                    {"type": "progress", "current": 1, "total": 6, "hint": "Verified: toto-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 6, "hint": "Verified: plouf-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 3, "total": 6, "hint": "Verified: foo-1-2.nb5.0.noarch"},
+                    {"type": "progress", "current": 4, "total": 6, "hint": "Verified: bar-1-2.nb5.0.noarch"},
+                    {"type": "progress", "current": 5, "total": 6, "hint": "Verified: toto-1-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 6, "total": 6, "hint": "Verified: foo-1-1.nb5.0.noarch"},
                     {"type": "recap",
                      "install": [{"name": "bar", "new": "1-2.nb5.0"},
                                  {"name": "plouf", "new": "2-1.nb5.0"}],
@@ -182,6 +203,8 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: nbsm-foo-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: nbsm-foo"},
+                    {"type": "progress", "current": 1, "total": 2, "hint": "Verified: nbsm-foo-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 2, "hint": "Verified: nbsm-foo-1-1.nb5.0.noarch"},
                     {"type": "recap",
                      "update": [{"name": "nbsm-foo", "old": "1-1.nb5.0", "new": "2-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
@@ -206,6 +229,8 @@ class TestUpdate(TestCase):
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: nbsm-foo-3-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: nbsm-foo"},
+                    {"type": "progress", "current": 1, "total": 2, "hint": "Verified: nbsm-foo-3-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 2, "hint": "Verified: nbsm-foo-1-1.nb5.0.noarch"},
                     {"type": "recap",
                      "update": [{"name": "nbsm-foo", "old": "1-1.nb5.0", "new": "3-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)

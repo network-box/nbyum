@@ -126,3 +126,8 @@ class NBYumRPMCallback(RPMBaseCallback):
             return
 
         self.logger.error(msg)
+
+    def verify_txmbr(self, base, txmbr, count):
+        """Log progression of the post-transaction verifications."""
+        self.logger.log_progress({"current": count, "total": len(base.tsInfo),
+                                  "hint": "Verified: %s" % str(txmbr.po)})

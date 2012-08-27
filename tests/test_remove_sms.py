@@ -31,6 +31,7 @@ class TestRemoveSms(TestCase):
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 1, "hint": "Removed: nbsm-foo"},
+                    {"type": "progress", "current": 1, "total": 1, "hint": "Verified: nbsm-foo-1-1.nb5.0.noarch"},
                     {"type": "recap",
                      "remove": [{"name": "nbsm-foo", "old": "1-1.nb5.0", "reason": ""}]}]
         self._run_nbyum_test(args, expected)
@@ -55,6 +56,8 @@ class TestRemoveSms(TestCase):
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Removed: nbsm-bidule"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Removed: bidule"},
+                    {"type": "progress", "current": 1, "total": 2, "hint": "Verified: nbsm-bidule-1-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 2, "hint": "Verified: bidule-1-1.nb5.0.noarch"},
                     {"type": "recap",
                      "remove": [{"name": "nbsm-bidule", "old": "1-1.nb5.0", "reason": ""},
                                 {"name": "bidule", "old": "1-1.nb5.0", "reason": ""}]}]

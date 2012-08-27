@@ -48,6 +48,7 @@ class TestInstallSms(TestCase):
         expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 1, "hint": "Installed: nbsm-bar-1-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 1, "total": 1, "hint": "Verified: nbsm-bar-1-1.nb5.0.noarch"},
                     {"type": "recap",
                      "install": [{"name": "nbsm-bar", "new": "1-1.nb5.0"}]}]
         self._run_nbyum_test(args, expected)
@@ -69,6 +70,8 @@ class TestInstallSms(TestCase):
                     {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
                     {"type": "progress", "current": 1, "total": 2, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 2, "hint": "Installed: nbsm-plouf-1-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 1, "total": 2, "hint": "Verified: plouf-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 2, "hint": "Verified: nbsm-plouf-1-1.nb5.0.noarch"},
                     {"type": "recap",
                      "install": [{"name": "nbsm-plouf", "new": "1-1.nb5.0"},
                                  {"name": "plouf", "new": "2-1.nb5.0"}]}]
@@ -93,6 +96,9 @@ class TestInstallSms(TestCase):
                     {"type": "progress", "current": 1, "total": 3, "hint": "Installed: plouf-2-1.nb5.0.noarch"},
                     {"type": "progress", "current": 2, "total": 3, "hint": "Installed: nbsm-plouf-1-1.nb5.0.noarch"},
                     {"type": "progress", "current": 3, "total": 3, "hint": "Installed: nbsm-toto-1-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 1, "total": 3, "hint": "Verified: plouf-2-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 2, "total": 3, "hint": "Verified: nbsm-toto-1-1.nb5.0.noarch"},
+                    {"type": "progress", "current": 3, "total": 3, "hint": "Verified: nbsm-plouf-1-1.nb5.0.noarch"},
                     {"type": "recap",
                      "install": [{"name": "nbsm-plouf", "new": "1-1.nb5.0"},
                                  {"name": "nbsm-toto", "new": "1-1.nb5.0"},
