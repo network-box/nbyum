@@ -48,7 +48,7 @@ class TestCommand(Command):
 
 
 setup(name="nbyum",
-      version="5.0.2",
+      version="5.0.3",
       description="Just like yum, but with a usable output",
       long_description=README,
       author="Mathieu Bridon",
