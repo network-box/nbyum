@@ -91,11 +91,15 @@ class NBYumCli(object):
             self.base.setCacheDir()
 
             if not self.base.conf.cache:
-                self.base.logger.log_progress({"current": 0, "total": 1, "hint": "Downloading the package metadata..."})
+                self.base.logger.log_progress({"current": 0, "total": 1,
+                                               "hint": "Downloading the "
+                                                       "package metadata..."})
 
             self.base._getSacks()
 
-            self.base.logger.log_progress({"current": 0, "total": 1, "hint": "Processing the package metadata..."})
+            self.base.logger.log_progress({"current": 0, "total": 1,
+                                           "hint": "Processing the package "
+                                                   "metadata..."})
 
             # -- Then do what we were asked ----------------------------------
             func = getattr(self, self.args.func)

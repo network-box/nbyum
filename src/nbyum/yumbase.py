@@ -81,8 +81,8 @@ class NBYumBase(yum.YumBase):
             type_filter = lambda x: not x.name.startswith("nbsm-")
 
         else:
-            raise WTFException("Somehow you managed to pass an unhandled " \
-                               "value for the listing type (%s). Please " \
+            raise WTFException("Somehow you managed to pass an unhandled "
+                               "value for the listing type (%s). Please "
                                "report it as a bug." % type_)
 
         return type_filter, patterns

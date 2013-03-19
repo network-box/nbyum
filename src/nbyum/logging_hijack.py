@@ -104,9 +104,9 @@ class NBYumRPMCallback(RPMBaseCallback):
                                                           package)})
 
         else:
-            self.logger.error("The package %s from the transaction had its " \
-                              "action set to %s, which should never have " \
-                              "happened. Please report it as a bug." \
+            self.logger.error("The package %s from the transaction had its "
+                              "action set to %s, which should never have "
+                              "happened. Please report it as a bug."
                                   % (package, action))
 
     def scriptout(self, package, msgs):
