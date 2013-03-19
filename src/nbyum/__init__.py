@@ -32,6 +32,9 @@ class NBYumCli(object):
         if args.config:
             self.base.preconf.fn = args.config
 
+        if args.force_cache:
+            self.base.conf.cache = 1
+
     @contextmanager
     def __lock_yum(self):
         """Acquire the Yum global lock.

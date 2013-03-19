@@ -37,6 +37,9 @@ def get_parser():
     parser.add_argument("-c", "--config",
                         help="Yum configuration file to use " \
                              "(default: /etc/yum.comf)")
+    parser.add_argument("--force-cache", action="store_true",
+                        help="Force Yum to use its local cache, as old as it "
+                             "may be.")
 
     subparsers = parser.add_subparsers(title="subcommands")
 
