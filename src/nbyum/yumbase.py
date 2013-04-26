@@ -208,11 +208,8 @@ class NBYumBase(yum.YumBase):
                 if len(available) and \
                    available[-1].get("name", None) == pkgdict["name"] and \
                    available[-1].get("version", None) == pkgdict["version"]:
-                    if previous_arch == pkg.arch:
-                        # The same package is in two configured repos
-                        continue
+                    # This is a multiarch dupe!
 
-                    # This is a multiarch dupe
                     if previous_arch == self.arch.basearch and \
                        pkg.arch != self.arch.basearch:
                         continue
