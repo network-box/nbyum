@@ -24,7 +24,6 @@ class TestCase(unittest.TestCase):
         self.reposdir = os.path.join(self.dataroot,
                                      "%s.repos.d" % self._testMethodName)
 
-        testrepo_conf = os.path.join(self.reposdir, "test.repo")
         testrepo_baseurl = os.path.join(self.dataroot,
                                         "%s.repo" % self._testMethodName)
 
@@ -53,11 +52,17 @@ class TestCase(unittest.TestCase):
         self._install_packages_setup(["*"])
 
         # -- Set up the test repo ----------------------------------
+        self._add_repo("test", testrepo_baseurl)
+
+    def _add_repo(self, name, baseurl):
+        """Not a test, just a handy helper."""
+        testrepo_conf = os.path.join(self.reposdir, "%s.repo" % name)
+
         with open(testrepo_conf, "w") as f:
-            f.write("[test]\n")
+            f.write("[%s]\n" % name)
             f.write("name=Dummy test repo\n")
             f.write("enabled=1\n")
-            f.write("baseurl=file://%s\n" % testrepo_baseurl)
+            f.write("baseurl=file://%s\n" % baseurl)
             f.write("gpgcheck=0\n")
 
     def tearDown(self):
