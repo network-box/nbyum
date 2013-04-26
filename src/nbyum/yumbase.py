@@ -1,5 +1,6 @@
 import fnmatch
-from itertools import ifilter
+from itertools import groupby, ifilter
+from operator import attrgetter
 import os
 
 import yum
@@ -60,7 +61,10 @@ class NBYumBase(yum.YumBase):
 
         pkgs = ifilter(actually_match_on_name, pkgs)
 
-        return pkgs
+        for name, group in groupby(pkgs, attrgetter("name")):
+            best = self.bestPackagesFromList(group)
+            for pkg in best:
+                yield pkg
 
     def __smsize_patterns(self, patterns):
         """Pre-process patterns when matching security modules.
