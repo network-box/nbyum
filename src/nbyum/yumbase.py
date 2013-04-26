@@ -44,10 +44,11 @@ class NBYumBase(yum.YumBase):
         # Filter on sms or packages
         pkgs = ifilter(filter_, matches)
 
-        for pkg in pkgs:
-            if status == "available" and self.rpmdb.installed(po=pkg):
-                continue
+        if status == "available":
+            # Don't show installed packages if we asked for available ones
+            pkgs = ifilter(lambda x: not self.rpmdb.installed(po=x), pkgs)
 
+        for pkg in pkgs:
             for pattern in patterns:
                 # Yum developers, if you name an API matchPackageNames,
                 # make it match packages on their name, not envra!
