@@ -1,3 +1,5 @@
+import os
+
 from tests import TestCase
 
 
@@ -67,4 +69,20 @@ class TestListPackages(TestCase):
                     {"type": "recap",
                      "installed": [{"name": "foo", "version": "1-1.nb5.0", "summary": "Get some Foo"}],
                      "available": [{"name": "plouf", "version": "2-1.nb5.0", "summary": "Get some Plouf"}]}]
+        self._run_nbyum_test(args, expected)
+
+    def test_list_available_packages_deduped(self):
+        """List only once a package present in multiple repositories."""
+        args = [self.command, "available", "packages", "foo"]
+
+        # -- Do some preparation first -----------------------------
+        secondrepo_baseurl = os.path.join(self.dataroot,
+                                          "%s2.repo" % self._testMethodName)
+        self._add_repo("test2", secondrepo_baseurl)
+
+        # -- Check the listing -------------------------------------
+        expected = [{"type": "progress", "current": 0, "total": 1, "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1, "hint": "Processing the package metadata..."},
+                    {"type": "recap",
+                     "available": [{"name": "foo", "version": "1-3.nb5.0", "summary": "Get some Foo"}]}]
         self._run_nbyum_test(args, expected)
