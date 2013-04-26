@@ -1,4 +1,5 @@
 import fnmatch
+from itertools import ifilter
 import os
 
 import yum
@@ -40,7 +41,10 @@ class NBYumBase(yum.YumBase):
         match_tuple = source.matchPackageNames(patterns)
         matches = set(match_tuple[0] + match_tuple[1])
 
-        for pkg in filter(filter_, matches):
+        # Filter on sms or packages
+        pkgs = ifilter(filter_, matches)
+
+        for pkg in pkgs:
             if status == "available" and self.rpmdb.installed(po=pkg):
                 continue
 
