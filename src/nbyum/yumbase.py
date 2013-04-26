@@ -48,13 +48,19 @@ class NBYumBase(yum.YumBase):
             # Don't show installed packages if we asked for available ones
             pkgs = ifilter(lambda x: not self.rpmdb.installed(po=x), pkgs)
 
-        for pkg in pkgs:
+        def actually_match_on_name(pkg):
+            """Do what matchPackageNames should already be doing
+
+            Yum developers, if you name an API matchPackage**Names**, make it
+            match packages on their name, not envra!
+            """
             for pattern in patterns:
-                # Yum developers, if you name an API matchPackageNames,
-                # make it match packages on their name, not envra!
                 if fnmatch.fnmatch(pkg.name, pattern):
-                    yield pkg
-                    break
+                    return True
+
+        pkgs = ifilter(actually_match_on_name, pkgs)
+
+        return pkgs
 
     def __smsize_patterns(self, patterns):
         """Pre-process patterns when matching security modules.
