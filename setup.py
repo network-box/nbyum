@@ -21,7 +21,28 @@ with open(os.path.join(here, "README.rst")) as f:
 
 
 class TestCommand(Command):
-    """A custom distutils command to run unit tests."""
+    """A custom distutils command to warn the user
+
+    Unit tests must be run against the installed module.
+    """
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        print("Did you mean 'python setup.py installedtests' ?")
+        sys.exit(1)
+
+
+class InstalledTestCommand(Command):
+    """A custom distutils command to run unit tests
+
+    The module must actually be installed first.
+    """
     user_options = []
 
     def initialize_options(self):
@@ -59,5 +80,5 @@ setup(name="nbyum",
       packages=["nbyum"],
       scripts=["nbyum"],
       requires=install_requires,
-      cmdclass={'test': TestCommand},
+      cmdclass={'test': TestCommand, 'installedtests': InstalledTestCommand},
       )
