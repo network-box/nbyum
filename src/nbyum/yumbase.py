@@ -59,7 +59,8 @@ class NBYumBase(yum.YumBase):
                 if fnmatch.fnmatch(pkg.name, pattern):
                     return True
 
-        pkgs = ifilter(actually_match_on_name, pkgs)
+        if patterns != ['*']:
+            pkgs = ifilter(actually_match_on_name, pkgs)
 
         for name, group in groupby(pkgs, attrgetter("name")):
             best = self.bestPackagesFromList(group)
