@@ -88,14 +88,7 @@ class NBYumCli(object):
     def run(self):
         try:
             # -- Prepare our Yum base for the user's request -----------------
-            self.base.setCacheDir()
-
-            if not self.base.conf.cache:
-                self.base.logger.log_progress({"current": 0, "total": 1,
-                                               "hint": "Downloading the "
-                                                       "package metadata..."})
-
-            self.base._getSacks()
+            self.base.prepare()
 
             self.base.logger.log_progress({"current": 0, "total": 1,
                                            "hint": "Processing the package "

@@ -12,6 +12,22 @@ from .utils import get_version, list_ordergetter, transaction_ordergetter
 
 
 class NBYumBase(yum.YumBase):
+    def prepare(self):
+        """Prepare for the user's request
+
+        This implies getting the various repository metadata.
+        """
+        self.setCacheDir()
+
+        if not self.conf.cache:
+            # If we force the cache usage, the next operation will not imply a
+            # download, so don't log in that case
+            self.logger.log_progress({"current": 0, "total": 1,
+                                      "hint": "Downloading the package "
+                                              "metadata..."})
+
+        self._getSacks()
+
     def __cleanup_transaction_file(self):
         """Remove the saved transaction file.
 
