@@ -28,6 +28,8 @@ class NBYumBase(yum.YumBase):
 
         self._getSacks()
 
+        self.updatemd = UpdateMetadata(self.repos.listEnabled())
+
     def __cleanup_transaction_file(self):
         """Remove the saved transaction file.
 
@@ -316,8 +318,6 @@ class NBYumBase(yum.YumBase):
 
     def recap_transaction(self):
         """Print a summary of the transaction."""
-        # TODO: Print some download progression?
-        mdta = UpdateMetadata(self.repos.listEnabled())
         suggest_reboot = False
 
         pkgs = {}
@@ -329,7 +329,9 @@ class NBYumBase(yum.YumBase):
             if not suggest_reboot:
                 for po in self.rpmdb.searchNevra(name=member.po.name,
                                                  arch=member.po.arch):
-                    for (tup, notice) in mdta.get_applicable_notices(po.pkgtup):
+                    notices = self.updatemd.get_applicable_notices(po.pkgtup)
+
+                    for (pkgtup, notice) in notices:
                         if notice["reboot_suggested"]:
                             suggest_reboot = True
 
