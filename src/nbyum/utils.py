@@ -27,6 +27,7 @@ class DummyOpts(object):
         # constructor. Return None for all those cases.
         return None
 
+
 def get_parser():
     """Get the argument parser for the main nbyum command line tool."""
     # -- Root level arguments (-h/--help is added by default) ----------------
