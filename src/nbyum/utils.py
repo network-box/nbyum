@@ -4,6 +4,11 @@ import os
 from errors import NBYumException
 
 
+# We will always suggest a reboot after an update to one of these packages
+PKGS_NEEDING_REBOOT = ('kernel',
+                       )
+
+
 class DummyOpts(object):
     """Just a dummy class to get the plugins to run.
 

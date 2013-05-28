@@ -7,7 +7,8 @@ import yum
 
 from .errors import NBYumException, WTFException
 from .logging_hijack import NBYumRPMCallback
-from .utils import get_version, list_ordergetter, transaction_ordergetter
+from .utils import (PKGS_NEEDING_REBOOT, get_version, list_ordergetter,
+                    transaction_ordergetter)
 
 
 class NBYumBase(yum.YumBase):
@@ -299,11 +300,16 @@ class NBYumBase(yum.YumBase):
 
     def recap_transaction(self):
         """Print a summary of the transaction."""
+        suggest_reboot = False
+
         pkgs = {}
 
         for member in sorted(self.tsInfo.getMembers(),
                              key=transaction_ordergetter):
             pkg = {"name": member.name}
+
+            if member.name in PKGS_NEEDING_REBOOT:
+                suggest_reboot = True
 
             # Packages newly installed (install_only when running an update)
             if member.ts_state == "i":
@@ -380,3 +386,6 @@ class NBYumBase(yum.YumBase):
 
         if pkgs:
             self.logger.log_recap(pkgs)
+
+        if suggest_reboot:
+            self.verbose_logger.info("This update requires a reboot")
