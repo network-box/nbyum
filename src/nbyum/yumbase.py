@@ -308,8 +308,9 @@ class NBYumBase(yum.YumBase):
                              key=transaction_ordergetter):
             pkg = {"name": member.name}
 
-            if member.name in PKGS_NEEDING_REBOOT:
-                suggest_reboot = True
+            if not suggest_reboot:
+                if member.name in PKGS_NEEDING_REBOOT:
+                    suggest_reboot = True
 
             # Packages newly installed (install_only when running an update)
             if member.ts_state == "i":
