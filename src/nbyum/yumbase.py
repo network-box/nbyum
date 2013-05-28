@@ -4,6 +4,7 @@ from operator import attrgetter
 import os
 
 import yum
+from yum.update_md import UpdateMetadata
 
 from .errors import NBYumException, WTFException
 from .logging_hijack import NBYumRPMCallback
@@ -300,6 +301,8 @@ class NBYumBase(yum.YumBase):
 
     def recap_transaction(self):
         """Print a summary of the transaction."""
+        # TODO: Print some download progression?
+        mdta = UpdateMetadata(self.repos.listEnabled())
         suggest_reboot = False
 
         pkgs = {}
@@ -309,8 +312,17 @@ class NBYumBase(yum.YumBase):
             pkg = {"name": member.name}
 
             if not suggest_reboot:
+                # First check against the hardcoded list, this is faster
                 if member.name in PKGS_NEEDING_REBOOT:
                     suggest_reboot = True
+
+                else:
+                    # Otherwise check the updateinfo.xml metadata
+                    for po in self.rpmdb.searchNevra(name=member.po.name,
+                                                     arch=member.po.arch):
+                        for (tup, notice) in mdta.get_applicable_notices(po.pkgtup):
+                            if notice["reboot_suggested"]:
+                                suggest_reboot = True
 
             # Packages newly installed (install_only when running an update)
             if member.ts_state == "i":
