@@ -69,7 +69,7 @@ class InstalledTestCommand(Command):
 
 
 setup(name="nbyum",
-      version="5.0.7",
+      version="5.0.8",
       description="Just like yum, but with a usable output",
       long_description=README,
       author="Mathieu Bridon",
