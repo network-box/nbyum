@@ -189,6 +189,17 @@ class NBYumBase(yum.YumBase):
             raise NBYumException("Failed to build transaction: %s"
                                  % str.join("\n", resmsg))
 
+        # Check that this won't install security modules unexpectedly
+        unexpectedly_installed_sms = self.__get_unexpected_sms(patterns)
+
+        if unexpectedly_installed_sms:
+            msg = ("Installation depends on the following security "
+                   "module%s:\n  %s\nTransaction aborted.\nPlease explicitly "
+                   "install all required security modules."
+                   % (len(unexpectedly_installed_sms)>1 and "s" or "",
+                      " ".join(unexpectedly_installed_sms)))
+            raise NBYumException(msg)
+
         if len(self.tsInfo.getMembers()):
             self.processTransaction(rpmDisplay=NBYumRPMCallback())
 
