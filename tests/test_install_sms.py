@@ -114,3 +114,25 @@ class TestInstallSms(TestCase):
                     "0:plouf-2-1.nb5.0.noarch",
                     "0:toto-1-1.nb5.0.noarch"]
         self._check_installed_rpms(expected)
+
+    def test_fail_to_install_sm_with_sms_deps(self):
+        """Make sure we can't install a security module if it requires others."""
+        args = [self.command, "sms", "nbsm-machin"]
+        # -- Check the installation summary -----------------------------
+        expected = [{"type": "progress", "current": 0, "total": 1,
+                     "hint": "Downloading the package metadata..."},
+                    {"type": "progress", "current": 0, "total": 1,
+                     "hint": "Processing the package metadata..."},
+                    {"type": "log",
+                     "error": "Installation depends on the following security"
+                              " module:\n  nbsm-bidule\nTransaction aborted."
+                              "\nPlease explicitly install all required "
+                              "security modules."}]
+        self._run_nbyum_test(args, expected)
+
+        # -- Check the installed packages after the removal --------
+        expected = ["0:bar-1-1.nb5.0.noarch",
+                    "0:foo-1-1.nb5.0.noarch",
+                    "0:nbsm-foo-1-1.nb5.0.noarch",
+                    "0:toto-1-1.nb5.0.noarch"]
+        self._check_installed_rpms(expected)
