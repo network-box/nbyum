@@ -89,6 +89,19 @@ class NBYumBase(yum.YumBase):
             for pkg in best:
                 yield pkg
 
+    def __get_unexpected_sms(self, patterns):
+        """List the security modules we didn't expect in the transation"""
+        unexpected = []
+        for pkg in self.tsInfo.getMembers():
+            if pkg.name.startswith("nbsm-"):
+                unexpected.append(pkg.name)
+                for pattern in patterns:
+                    if fnmatch.fnmatch(pkg.name, pattern):
+                        unexpected.remove(pkg.name)
+                        break
+
+        return unexpected
+
     def __smsize_patterns(self, patterns):
         """Pre-process patterns when matching security modules.
 
@@ -272,14 +285,7 @@ class NBYumBase(yum.YumBase):
             raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
 
         # Check that this won't remove security modules unexpectedly
-        unexpectedly_removed_sms = []
-        for pkg in self.tsInfo.getMembers():
-            if pkg.name.startswith("nbsm-"):
-                unexpectedly_removed_sms.append(pkg.name)
-                for pattern in patterns:
-                    if fnmatch.fnmatch(pkg.name, pattern):
-                        unexpectedly_removed_sms.remove(pkg.name)
-                        break
+        unexpectedly_removed_sms = self.__get_unexpected_sms(patterns)
 
         if unexpectedly_removed_sms:
             msg = "Proceeding would remove the following " \
