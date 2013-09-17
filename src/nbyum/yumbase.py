@@ -173,7 +173,8 @@ class NBYumBase(yum.YumBase):
         res, resmsg = self.buildTransaction()
 
         if res != 2 and len(self.tsInfo.getMembers()):
-            raise NBYumException("Failed to build transaction: %s" % str.join("\n", resmsg))
+            raise NBYumException("Failed to build transaction: %s"
+                                 % str.join("\n", resmsg))
 
         if len(self.tsInfo.getMembers()):
             self.processTransaction(rpmDisplay=NBYumRPMCallback())
