@@ -8,7 +8,8 @@ from yum.update_md import UpdateMetadata
 
 from .errors import NBYumException, WTFException
 from .logging_hijack import NBYumRPMCallback
-from .utils import get_version, list_ordergetter, transaction_ordergetter
+from .utils import (get_version, list_ordergetter, transaction_ordergetter,
+                    get_local_datetime)
 
 
 class NBYumBase(yum.YumBase):
@@ -172,6 +173,24 @@ class NBYumBase(yum.YumBase):
 
         if pkgs:
             self.logger.log_recap({"pkginfos": pkgs})
+
+    def get_last_updated(self):
+        # Transactions seem to already be ordered reverse-chronologically, but
+        # who knows if we can depend on that :x
+        old_tx = sorted(self.history.old([], complete_transactions_only=True),
+                        key=attrgetter("end_timestamp"), reverse=True)
+
+        for tx in old_tx:
+            for pkg in tx.trans_data:
+                # Search for at least one package having been updated
+                if pkg.state not in ("Update", "Obsoleted"):
+                    continue
+
+                last_update = get_local_datetime(tx.end_timestamp)
+                self.verbose_logger.info("Last updated on %s" % last_update)
+
+                # Stop here
+                return
 
     def install_packages(self, type_, patterns):
         """Install packages and security modules."""

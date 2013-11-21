@@ -1,5 +1,7 @@
 import argparse
+import datetime
 import os
+import time
 
 from errors import NBYumException
 
@@ -198,3 +200,32 @@ def ensure_privileges(command):
         command(self)
 
     return wrapper
+
+def get_local_datetime(timestamp):
+    """Present a UTC timestamp as a datetime string in the local timezone."""
+    local_datetime = datetime.datetime.fromtimestamp(timestamp).strftime("%c")
+
+    local_tz = time.timezone / 3600.0
+
+    if local_tz <= 0:
+        # Yes, the positive offsets are negative values of time.timezones
+        local_tz_sign = "+"
+    else:
+        local_tz_sign = "-"
+
+    local_tz = abs(local_tz)
+
+    local_tz_h = int(local_tz)
+
+    def round_to_quarter(f):
+        return round(f * 4.0) / 4.0
+
+    local_tz_min = int(round_to_quarter(local_tz - local_tz_h) * 100)
+    local_tz_min = (local_tz_min / 25) * 15
+
+    if local_tz_min == 60:
+        local_tz_h += 1
+        local_tz_min = 0
+
+    return "%s %s%02d%02d" % (local_datetime,
+                              local_tz_sign, local_tz_h, local_tz_min)

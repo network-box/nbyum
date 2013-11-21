@@ -114,6 +114,7 @@ class NBYumCli(object):
     def check_update(self):
         """Check for updates to installed packages."""
         with self.__lock_yum():
+            self.base.get_last_updated()
             self.base.update_packages(self.args.patterns, apply=False)
             self.base.recap_transaction()
 
