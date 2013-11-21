@@ -7,7 +7,8 @@ from yum.Errors import LockError
 from yum.rpmtrans import NoOutputCallBack
 
 from .errors import NBYumException, WTFException
-from .logging_hijack import NBYumLogger, PROGRESS_LEVEL, RECAP_LEVEL
+from .logging_hijack import (NBYumLogger, NBYumTextMeter,
+                             PROGRESS_LEVEL, RECAP_LEVEL)
 from .utils import DummyOpts, ensure_privileges
 from .yumbase import NBYumBase
 
@@ -31,6 +32,8 @@ class NBYumCli(object):
 
         if args.config:
             self.base.preconf.fn = args.config
+
+        self.base.prerepoconf.progressbar = NBYumTextMeter()
 
         if args.force_cache:
             self.base.conf.cache = 1

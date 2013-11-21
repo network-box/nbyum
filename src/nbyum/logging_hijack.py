@@ -2,6 +2,8 @@ import json
 import logging
 import sys
 
+from urlgrabber.progress import BaseMeter
+
 from yum.constants import (TS_UPDATE, TS_ERASE, TS_INSTALL, TS_TRUEINSTALL,
                            TS_OBSOLETED, TS_OBSOLETING, TS_UPDATED)
 from yum.rpmtrans import RPMBaseCallback
@@ -131,3 +133,18 @@ class NBYumRPMCallback(RPMBaseCallback):
         """Log progression of the post-transaction verifications."""
         self.logger.log_progress({"current": count, "total": len(base.tsInfo),
                                   "hint": "Verified: %s" % str(txmbr.po)})
+
+
+class NBYumTextMeter(BaseMeter):
+    def __init__(self):
+        self.logger = logging.getLogger("yum")
+        BaseMeter.__init__(self)
+
+    def _do_start(self, now=None):
+        if not self.basename.endswith(".rpm"):
+            return
+
+        self.logger.log_progress({"current": 0, "total": 1,
+                                  "type": "progress",
+                                  "hint": "Downloading %s..."
+                                          % self.basename})
