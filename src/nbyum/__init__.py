@@ -91,7 +91,8 @@ class NBYumCli(object):
     def run(self):
         try:
             # -- Prepare our Yum base for the user's request -----------------
-            self.base.prepare()
+            with self.__lock_yum():
+                self.base.prepare()
 
             self.base.logger.log_progress({"current": 0, "total": 1,
                                            "hint": "Processing the package "
