@@ -143,19 +143,25 @@ class NBYumBase(yum.YumBase):
 
         return result
 
+    def __pkgs_filter(self, pkg):
+        return not pkg.name.startswith("nbsm-")
+
+    def __sms_filter(self, pkg):
+        return pkg.name.startswith("nbsm-")
+
     def __type_and_patterns_preprocessor(self, type_, patterns):
         """Get the type filter and make sure the patterns are sound."""
         if not patterns:
             patterns = ["*"]
 
         if type_ == "sms":
-            type_filter = lambda x: x.name.startswith("nbsm-")
+            type_filter = self.__sms_filter
 
             # Special case for the security modules
             patterns = self.__smsize_patterns(patterns)
 
         elif type_ == "packages":
-            type_filter = lambda x: not x.name.startswith("nbsm-")
+            type_filter = self.__pkgs_filter
 
         else:
             raise WTFException("Somehow you managed to pass an unhandled "
