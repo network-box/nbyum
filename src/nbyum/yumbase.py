@@ -149,26 +149,16 @@ class NBYumBase(yum.YumBase):
     def __sms_filter(self, pkg):
         return pkg.name.startswith("nbsm-")
 
-    def __type_and_patterns_preprocessor(self, type_, patterns):
-        """Get the type filter and make sure the patterns are sound."""
+    def __sanitize_patterns(self, patterns, type_):
+        """Make sure the patterns are sound."""
         if not patterns:
             patterns = ["*"]
 
         if type_ == "sms":
-            type_filter = self.__sms_filter
-
             # Special case for the security modules
             patterns = self.__smsize_patterns(patterns)
 
-        elif type_ == "packages":
-            type_filter = self.__pkgs_filter
-
-        else:
-            raise WTFException("Somehow you managed to pass an unhandled "
-                               "value for the listing type (%s). Please "
-                               "report it as a bug." % type_)
-
-        return type_filter, patterns
+        return patterns
 
     def get_infos(self, patterns):
         """Get some infos on packages."""
@@ -222,8 +212,7 @@ class NBYumBase(yum.YumBase):
 
     def install_packages(self, type_, patterns):
         """Install packages and security modules."""
-        type_filter, patterns = self.__type_and_patterns_preprocessor(type_,
-                                                                      patterns)
+        patterns = self.__sanitize_patterns(patterns, type_)
 
         for pattern in patterns:
             # FIXME: What if a pattern matches `nbsm-*' and type is `packages'?
@@ -252,8 +241,13 @@ class NBYumBase(yum.YumBase):
 
     def list_packages(self, type_, status, patterns):
         """List packages and security modules."""
-        type_filter, patterns = self.__type_and_patterns_preprocessor(type_,
-                                                                      patterns)
+        if type_ == "sms":
+            type_filter = self.__sms_filter
+
+        else:
+            type_filter = self.__pkgs_filter
+
+        patterns = self.__sanitize_patterns(patterns, type_)
 
         installed = []
         if status in ("all", "installed"):
@@ -329,8 +323,7 @@ class NBYumBase(yum.YumBase):
 
     def remove_packages(self, type_, patterns):
         """Remove packages and security modules."""
-        type_filter, patterns = self.__type_and_patterns_preprocessor(type_,
-                                                                      patterns)
+        patterns = self.__sanitize_patterns(patterns, type_)
 
         for pattern in patterns:
             # FIXME: What if a pattern matches `nbsm-*' and type is `packages'?
