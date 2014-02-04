@@ -80,6 +80,12 @@ def get_parser():
                                      "match names against, for example 'nb*'.")
     parser_install.set_defaults(func="install")
 
+    # -- Subcommand: last-updated --------------------------------------------
+    parser_lastup = subparsers.add_parser("last-updated",
+                                          help="Get the date of the last "
+                                               "system update")
+    parser_lastup.set_defaults(func="last_updated")
+
     # -- Subcommand: list ----------------------------------------------------
     parser_list = subparsers.add_parser("list",
                                         help="List packages and security "

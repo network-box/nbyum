@@ -9,7 +9,8 @@ from yum.rpmtrans import NoOutputCallBack
 from .errors import NBYumException, WTFException
 from .logging_hijack import (NBYumLogger, NBYumTextMeter,
                              PROGRESS_LEVEL, RECAP_LEVEL)
-from .utils import DummyOpts, timestamp_to_pretty_local_datetime
+from .utils import (DummyOpts, timestamp_to_pretty_local_datetime,
+                    timestamp_to_iso_local_datetime)
 from .yumbase import NBYumBase
 
 
@@ -147,6 +148,14 @@ class NBYumCli(object):
         with self.__lock_yum():
             self.base.install_packages(self.args.type, self.args.patterns)
             self.base.recap_transaction()
+
+    def last_updated(self):
+        """Get the date of the last system update"""
+        last_update = self.base.get_last_updated()
+
+        if last_update != None:
+            last_update = timestamp_to_iso_local_datetime(last_update)
+            self.base.logger.log_recap({"last_update": last_update})
 
     def list(self):
         """List packages and security modules."""
