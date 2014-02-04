@@ -100,7 +100,7 @@ class NBYumCli(object):
     def run(self):
         try:
             # -- Prepare our Yum base for the user's request -----------------
-            if self.args.func != "rebuild_cache":
+            if self.args.func not in ("last_updated", "rebuild_cache"):
                 with self.__lock_yum():
                     self.base.prepare()
 
