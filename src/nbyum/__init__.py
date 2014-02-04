@@ -35,6 +35,9 @@ class NBYumCli(object):
 
         self.base.prerepoconf.progressbar = NBYumTextMeter()
 
+        # This sets up a bunch of stuff
+        self.base.conf
+
         if args.force_cache:
             self.base.conf.cache = 1
 
