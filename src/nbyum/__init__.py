@@ -9,7 +9,7 @@ from yum.rpmtrans import NoOutputCallBack
 from .errors import NBYumException, WTFException
 from .logging_hijack import (NBYumLogger, NBYumTextMeter,
                              PROGRESS_LEVEL, RECAP_LEVEL)
-from .utils import DummyOpts, ensure_privileges
+from .utils import DummyOpts
 from .yumbase import NBYumBase
 
 
@@ -96,7 +96,6 @@ class NBYumCli(object):
         self.base.closeRpmDB()
         self.base.doUnlock()
 
-    @ensure_privileges
     def run(self):
         try:
             # -- Prepare our Yum base for the user's request -----------------

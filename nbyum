@@ -1,11 +1,16 @@
 #!/usr/bin/python
 
+import os
 import sys
 
 import nbyum
 
 
 if __name__ == "__main__":
+    if os.getuid() != 0:
+        sys.stderr.write("This command must be run as root\n")
+        sys.exit(1)
+
     parser = nbyum.utils.get_parser()
     args = parser.parse_args()
 
