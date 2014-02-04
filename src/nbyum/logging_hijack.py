@@ -21,6 +21,10 @@ class NBYumLogger(logging.Logger):
     log_recap = lambda self, msg: self.log(RECAP_LEVEL, msg)
 
     def handle(self, record):
+        # Ignore the Presto logs
+        if record.module == "presto":
+            return
+
         level = record.levelname.lower()
 
         # We don't differentiate between those 3
