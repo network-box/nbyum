@@ -147,7 +147,7 @@ class NBYumCli(object):
         """List packages and security modules."""
         with self.__lock_yum():
             self.base.list_packages(self.args.type, self.args.filter,
-                                    self.args.patterns)
+                                    self.args.patterns, self.args.show_hidden)
 
     @ensure_privileges
     def rebuild_cache(self):

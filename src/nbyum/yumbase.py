@@ -239,10 +239,15 @@ class NBYumBase(yum.YumBase):
         if len(self.tsInfo.getMembers()):
             self.processTransaction(rpmDisplay=NBYumRPMCallback())
 
-    def list_packages(self, type_, status, patterns):
+    def list_packages(self, type_, status, patterns, show_hidden=False):
         """List packages and security modules."""
         if type_ == "sms":
-            type_filter = self.__sms_filter
+            if not show_hidden:
+                type_filter = lambda x: (self.__sms_filter(x) and
+                                         (not x.group == "nbhidden"))
+
+            else:
+                type_filter = self.__sms_filter
 
         else:
             type_filter = self.__pkgs_filter

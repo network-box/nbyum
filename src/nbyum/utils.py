@@ -98,6 +98,9 @@ def get_parser():
     parser_list.add_argument("patterns", nargs="*", metavar="PATTERN",
                              help="A (list of) glob-like pattern(s) to match"
                                   "names against, for example 'nb*'.")
+    parser_list.add_argument("--show-hidden", action="store_true",
+                             default=False,
+                             help="Also show the hidden security modules")
     parser_list.set_defaults(func="list")
 
     # -- Subcommand: rebuild-cache -------------------------------------------
