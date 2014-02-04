@@ -8,8 +8,7 @@ from yum.update_md import UpdateMetadata
 
 from .errors import NBYumException, WTFException
 from .logging_hijack import NBYumRPMCallback
-from .utils import (get_version, list_ordergetter, transaction_ordergetter,
-                    get_local_datetime)
+from .utils import get_version, list_ordergetter, transaction_ordergetter
 
 
 class NBYumBase(yum.YumBase):
@@ -204,11 +203,7 @@ class NBYumBase(yum.YumBase):
                 if pkg.state not in ("Update", "Obsoleted"):
                     continue
 
-                last_update = get_local_datetime(tx.end_timestamp)
-                self.verbose_logger.info("Last updated on %s" % last_update)
-
-                # Stop here
-                return
+                return tx.end_timestamp
 
     def install_packages(self, type_, patterns):
         """Install packages and security modules."""
