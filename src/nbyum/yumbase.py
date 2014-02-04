@@ -13,6 +13,14 @@ from .utils import (get_version, list_ordergetter, transaction_ordergetter,
 
 
 class NBYumBase(yum.YumBase):
+    def clean_cache(self):
+        """Clean the local cache"""
+        self.logger.log_progress({"current": 0, "total": 1,
+                                  "hint": "Cleaning up the Yum cache..."})
+
+        # TODO: Actually clean the cache
+        return
+
     def prepare(self):
         """Prepare for the user's request
 

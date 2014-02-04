@@ -100,6 +100,11 @@ def get_parser():
                                   "names against, for example 'nb*'.")
     parser_list.set_defaults(func="list")
 
+    # -- Subcommand: rebuild-cache -------------------------------------------
+    parser_cache = subparsers.add_parser("rebuild-cache",
+                                         help="Clean and rebuild the cache")
+    parser_cache.set_defaults(func="rebuild_cache")
+
     # -- Subcommand: remove --------------------------------------------------
     parser_remove = subparsers.add_parser("remove",
                                           help="Remove installed packages and"

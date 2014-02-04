@@ -141,6 +141,12 @@ class NBYumCli(object):
                                     self.args.patterns)
 
     @ensure_privileges
+    def rebuild_cache(self):
+        """Clean and rebuild the cache."""
+        self.base.clean_cache()
+        self.base.prepare()
+
+    @ensure_privileges
     def remove(self):
         """Remove packages and security modules."""
         self.base.plugins.setCmdLine(DummyOpts(remove_leaves=True,
