@@ -96,6 +96,7 @@ class NBYumCli(object):
         self.base.closeRpmDB()
         self.base.doUnlock()
 
+    @ensure_privileges
     def run(self):
         try:
             # -- Prepare our Yum base for the user's request -----------------
@@ -132,7 +133,6 @@ class NBYumCli(object):
         """Get some infos about packages."""
         self.base.get_infos(self.args.patterns)
 
-    @ensure_privileges
     def install(self):
         """Install packages and security modules."""
         self.base.plugins.setCmdLine(DummyOpts(nuke_newsave=True,
@@ -149,13 +149,11 @@ class NBYumCli(object):
             self.base.list_packages(self.args.type, self.args.filter,
                                     self.args.patterns, self.args.show_hidden)
 
-    @ensure_privileges
     def rebuild_cache(self):
         """Clean and rebuild the cache."""
         self.base.clean_cache()
         self.base.prepare()
 
-    @ensure_privileges
     def remove(self):
         """Remove packages and security modules."""
         self.base.plugins.setCmdLine(DummyOpts(remove_leaves=True,
@@ -166,7 +164,6 @@ class NBYumCli(object):
             self.base.remove_packages(self.args.type, self.args.patterns)
             self.base.recap_transaction()
 
-    @ensure_privileges
     def update(self):
         """Actually update the whole system."""
         self.base.plugins.setCmdLine(DummyOpts(nuke_newsave=True,
