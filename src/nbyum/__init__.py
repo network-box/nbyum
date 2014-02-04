@@ -9,7 +9,7 @@ from yum.rpmtrans import NoOutputCallBack
 from .errors import NBYumException, WTFException
 from .logging_hijack import (NBYumLogger, NBYumTextMeter,
                              PROGRESS_LEVEL, RECAP_LEVEL)
-from .utils import DummyOpts, get_local_datetime
+from .utils import DummyOpts, timestamp_to_pretty_local_datetime
 from .yumbase import NBYumBase
 
 
@@ -127,7 +127,7 @@ class NBYumCli(object):
             last_update = self.base.get_last_updated()
 
             if last_update != None:
-                last_update = get_local_datetime(last_update)
+                last_update = timestamp_to_pretty_local_datetime(last_update)
                 self.base.verbose_logger.info("Last updated on %s"
                                               % last_update)
 

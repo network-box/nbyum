@@ -198,7 +198,7 @@ def transaction_ordergetter(pkg):
 
     return "%02d %s" % (index, list_ordergetter(pkg))
 
-def get_local_datetime(timestamp):
+def timestamp_to_pretty_local_datetime(timestamp):
     """Present a UTC timestamp as a datetime string in the local timezone."""
     local_datetime = datetime.datetime.fromtimestamp(timestamp).strftime("%c")
 
