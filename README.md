@@ -234,3 +234,15 @@ The following examples shows all the printed attributes:
                                 "basepackage": "foo",
                                 "description": "Blabla about foo"}]}
 ```
+
+### Last update
+
+Administrators might want to know when the system was last updated.
+
+We show that on `check-update`, but there is also a dedicated command:
+`last-updated`.
+
+```
+# nbyum last-update
+{"type": "recap", "last_update": "2014-02-04 16:31:29"}
+```
