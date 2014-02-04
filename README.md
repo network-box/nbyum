@@ -208,6 +208,9 @@ an update in the repositories, waiting to be installed.
 modules he has activated, which is a very different thing from listing
 packages.
 
+**Note:** Some packages and/or security modules are hidden by default. Use the
+`--show-hidden` option to display them.
+
 ### Obtaining informations
 
 The case for `pkginfos` is also very similar to all the above, except that we
