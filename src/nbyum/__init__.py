@@ -39,7 +39,12 @@ class NBYumCli(object):
         self.base.conf
 
         if args.force_cache:
-            self.base.conf.cache = 1
+            if self.args.func == "rebuild_cache":
+                self.base.logger.warning("Ignoring --force-cache argument, as"
+                                         " we are rebuilding the cache")
+
+            else:
+                self.base.conf.cache = 1
 
     @contextmanager
     def __lock_yum(self):
