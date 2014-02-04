@@ -18,8 +18,22 @@ class NBYumBase(yum.YumBase):
         self.logger.log_progress({"current": 0, "total": 1,
                                   "hint": "Cleaning up the Yum cache..."})
 
-        # TODO: Actually clean the cache
-        return
+        def run_clean(func_name, obj):
+            clean_func = getattr(self, func_name)
+            code, results = clean_func()
+
+            if code != 0:
+                raise NBYumException("Could not clean cached %s:\n    - %s"
+                                     % (obj, "\n    - ".join(pkgresults)))
+
+        # TODO: How to clean all repositories, even disabled ones?
+        run_clean("cleanPackages", "packages")
+        run_clean("cleanHeaders", "headers")
+        run_clean("cleanMetadata", "XML metadata")
+        run_clean("cleanSqlite", "SQLite metadata")
+        run_clean("cleanRpmDB", "RPM DB")
+
+        self.plugins.run('clean')
 
     def prepare(self):
         """Prepare for the user's request
