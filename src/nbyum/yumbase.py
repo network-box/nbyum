@@ -73,8 +73,11 @@ class NBYumBase(yum.YumBase):
                         self._ts_save_file, e)
             self._ts_save_file = None
 
-    def __get_packages_list(self, patterns, filter_, status="all"):
+    def __get_packages_list(self, patterns, filter_=None, status="all"):
         """Get a packages list."""
+        if filter_ is None:
+            filter_ = lambda x: True
+
         if status == "installed":
             source = self.rpmdb
         else:
@@ -163,11 +166,8 @@ class NBYumBase(yum.YumBase):
 
     def get_infos(self, patterns):
         """Get some infos on packages."""
-        # We don't want to filter here, unlike for listings
-        type_filter = lambda x: True
-
         pkgs = []
-        for pkg in sorted(self.__get_packages_list(patterns, type_filter),
+        for pkg in sorted(self.__get_packages_list(patterns),
                           key=list_ordergetter):
             pkgdict = {"name": pkg.name, "arch": pkg.arch,
                        "version": get_version(pkg), "license": pkg.license,
