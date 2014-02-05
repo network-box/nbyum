@@ -83,6 +83,7 @@ class NBYumBase(yum.YumBase):
 
         if status == "installed":
             source = self.rpmdb
+
         else:
             source = self.pkgSack
 
