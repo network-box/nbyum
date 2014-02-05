@@ -251,9 +251,10 @@ class NBYumBase(yum.YumBase):
 
         installed = []
         if status in ("all", "installed"):
-            for pkg in sorted(self.__get_packages_list(patterns, type_filter,
-                                                       status="installed"),
-                              key=list_ordergetter):
+            pkgs = self.__get_packages_list(patterns, type_filter,
+                                            status="installed")
+
+            for pkg in sorted(pkgs, key=list_ordergetter):
                 pkgdict = {"name": pkg.name, "version": get_version(pkg),
                            "summary": pkg.summary}
 
@@ -280,9 +281,10 @@ class NBYumBase(yum.YumBase):
 
         available = []
         if status in ("all", "available"):
-            for pkg in sorted(self.__get_packages_list(patterns, type_filter,
-                                                       status="available"),
-                              key=list_ordergetter):
+            pkgs = self.__get_packages_list(patterns, type_filter,
+                                            status="available")
+
+            for pkg in sorted(pkgs, key=list_ordergetter):
                 if type_ == "sms" and self.rpmdb.installed(name=pkg.name):
                     # For security modules, we only want to show the ones that
                     # are **not installed**, even if in a different version
