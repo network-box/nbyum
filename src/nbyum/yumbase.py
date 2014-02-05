@@ -72,10 +72,10 @@ class NBYumBase(yum.YumBase):
                         self._ts_save_file, e)
             self._ts_save_file = None
 
-    def __get_packages_list(self, patterns, filter_=None, status="all"):
+    def __get_packages_list(self, patterns, type_filter=None, status="all"):
         """Get a packages list."""
-        if filter_ is None:
-            filter_ = lambda x: True
+        if type_filter is None:
+            type_filter = lambda x: True
 
         if status == "installed":
             source = self.rpmdb
@@ -87,7 +87,7 @@ class NBYumBase(yum.YumBase):
         matches = set(match_tuple[0] + match_tuple[1])
 
         # Filter on sms or packages
-        pkgs = ifilter(filter_, matches)
+        pkgs = ifilter(type_filter, matches)
 
         if status == "available":
             # Don't show installed packages if we asked for available ones
