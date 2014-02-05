@@ -72,10 +72,14 @@ class NBYumBase(yum.YumBase):
                         self._ts_save_file, e)
             self._ts_save_file = None
 
-    def __get_packages_list(self, patterns, type_filter=None, status="all"):
+    def __get_packages_list(self, patterns, type_filter=None,
+                            hidden_filter=None, status="all"):
         """Get a packages list."""
         if type_filter is None:
             type_filter = lambda x: True
+
+        if hidden_filter is None:
+            hidden_filter = lambda x: True
 
         if status == "installed":
             source = self.rpmdb
@@ -112,7 +116,8 @@ class NBYumBase(yum.YumBase):
         for name, group in groupby(pkgs, attrgetter("name")):
             best = self.bestPackagesFromList(group)
             for pkg in best:
-                yield pkg
+                if hidden_filter(pkg):
+                    yield pkg
 
     def __get_unexpected_sms(self, patterns):
         """List the security modules we didn't expect in the transation"""
@@ -141,6 +146,9 @@ class NBYumBase(yum.YumBase):
             result.append(pattern)
 
         return result
+
+    def __hidden_filter(self, pkg):
+        return pkg.group != "nbhidden"
 
     def __pkgs_filter(self, pkg):
         return not pkg.name.startswith("nbsm-")
@@ -237,15 +245,16 @@ class NBYumBase(yum.YumBase):
     def list_packages(self, type_, status, patterns, show_hidden=False):
         """List packages and security modules."""
         if type_ == "sms":
-            if not show_hidden:
-                type_filter = lambda x: (self.__sms_filter(x) and
-                                         (not x.group == "nbhidden"))
-
-            else:
-                type_filter = self.__sms_filter
+            type_filter = self.__sms_filter
 
         else:
             type_filter = self.__pkgs_filter
+
+        if not show_hidden:
+            hidden_filter = self.__hidden_filter
+
+        else:
+            hidden_filter = lambda x: True
 
         patterns = self.__sanitize_patterns(patterns, type_)
 
@@ -282,6 +291,7 @@ class NBYumBase(yum.YumBase):
         available = []
         if status in ("all", "available"):
             pkgs = self.__get_packages_list(patterns, type_filter,
+                                            hidden_filter=hidden_filter,
                                             status="available")
 
             for pkg in sorted(pkgs, key=list_ordergetter):
