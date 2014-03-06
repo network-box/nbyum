@@ -1,8 +1,13 @@
 import argparse
 import datetime
+import errno
+import os
+import pwd
 import time
 
-from errors import NBYumException
+from yum.Errors import LockError
+
+from errors import NBYumException, WTFException
 
 
 class DummyOpts(object):
@@ -27,6 +32,75 @@ class DummyOpts(object):
         # sometimes try to access an option which we didn't pass to the
         # constructor. Return None for all those cases.
         return None
+
+
+class locked(object):
+    """Decorator to run a function under the Yum lock"""
+    def __init__(self, func):
+        self.__func = func
+
+    def __get__(self, instance, *args, **kwargs):
+        self.instance = instance
+        return self
+
+    def __call__(self, *args):
+        """Run the decorated function, protected by the Yum lock"""
+        self.__acquire_lock()
+        self.__func(self.instance, *args)
+        self.__unlock()
+
+    def __acquire_lock(self):
+        """Acquire the Yum lock"""
+        try:
+            self.instance.base.doLock()
+
+        except LockError as e:
+            if e.errno in (errno.EPERM, errno.EACCES):
+                raise WTFException("Can't create the lock file: %s" % e)
+
+            else:
+                locking_pid = int(e.pid)
+
+                if locking_pid != os.getpid():
+                    lock_owner = self.__get_lock_owner(locking_pid)
+
+                    msg = ("The package system is being used by another " \
+                           "administrator - please try again later (user: " \
+                           "%(user)s, cmd: '%(cmd)s', pid: %(pid)s)"
+                           % lock_owner)
+
+                    raise NBYumException(msg)
+
+    def __get_lock_owner(self, locking_pid):
+        """Figure out the some info on the locking process"""
+        lock_owner = {"pid": locking_pid}
+
+        with open("/proc/%(pid)s/status" % lock_owner) as status:
+            for line in status:
+                if line.startswith("Name:"):
+                    exe = line.strip().split()[-1]
+
+                    with open("/proc/%(pid)s/cmdline" % lock_owner) as cmdline_file:
+                        cmdline = cmdline_file.read().split("\x00")
+
+                    for index, token in enumerate(cmdline):
+                        if token.startswith("/") and token.endswith(exe):
+                            # Everything after now are options
+                            lock_owner["cmd"] = " ".join([exe, cmdline.pop(index+1)])
+                            break
+                    else:
+                        lock_owner["cmd"] = exe
+
+                if line.startswith("Uid:"):
+                    uid = int(line.strip().split()[-1])
+                    lock_owner["user"] = pwd.getpwuid(uid)[0]
+
+        return lock_owner
+
+    def __unlock(self):
+        """Release the Yum lock"""
+        self.instance.base.closeRpmDB()
+        self.instance.base.doUnlock()
 
 
 def get_parser():
