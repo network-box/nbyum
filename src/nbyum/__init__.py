@@ -122,18 +122,18 @@ class NBYumCli(object):
             return 1
 
     # -- Functions corresponding to commands ---------------------------------
+    @locked
     def check_update(self):
         """Check for updates to installed packages."""
-        with self.__lock_yum():
-            last_update = self.base.get_last_updated()
+        last_update = self.base.get_last_updated()
 
-            if last_update != None:
-                last_update = timestamp_to_pretty_local_datetime(last_update)
-                self.base.verbose_logger.info("Last updated on %s"
-                                              % last_update)
+        if last_update != None:
+            last_update = timestamp_to_pretty_local_datetime(last_update)
+            self.base.verbose_logger.info("Last updated on %s"
+                                          % last_update)
 
-            self.base.update_packages(self.args.patterns, apply=False)
-            self.base.recap_transaction()
+        self.base.update_packages(self.args.patterns, apply=False)
+        self.base.recap_transaction()
 
     def info(self):
         """Get some infos about packages."""
