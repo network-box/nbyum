@@ -168,15 +168,15 @@ class NBYumCli(object):
         self.base.clean_cache()
         self.base.prepare()
 
+    @locked
     def remove(self):
         """Remove packages and security modules."""
         self.base.plugins.setCmdLine(DummyOpts(remove_leaves=True,
                                                posttrans_triggers=True),
                                      None)
 
-        with self.__lock_yum():
-            self.base.remove_packages(self.args.type, self.args.patterns)
-            self.base.recap_transaction()
+        self.base.remove_packages(self.args.type, self.args.patterns)
+        self.base.recap_transaction()
 
     def update(self):
         """Actually update the whole system."""
