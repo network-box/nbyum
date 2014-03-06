@@ -10,7 +10,7 @@ from .errors import NBYumException, WTFException
 from .logging_hijack import (NBYumLogger, NBYumTextMeter,
                              PROGRESS_LEVEL, RECAP_LEVEL)
 from .utils import (DummyOpts, timestamp_to_pretty_local_datetime,
-                    timestamp_to_iso_local_datetime)
+                    timestamp_to_iso_local_datetime, locked)
 from .yumbase import NBYumBase
 
 
@@ -139,15 +139,15 @@ class NBYumCli(object):
         """Get some infos about packages."""
         self.base.get_infos(self.args.patterns)
 
+    @locked
     def install(self):
         """Install packages and security modules."""
         self.base.plugins.setCmdLine(DummyOpts(nuke_newsave=True,
                                                posttrans_triggers=True),
                                      None)
 
-        with self.__lock_yum():
-            self.base.install_packages(self.args.type, self.args.patterns)
-            self.base.recap_transaction()
+        self.base.install_packages(self.args.type, self.args.patterns)
+        self.base.recap_transaction()
 
     def last_updated(self):
         """Get the date of the last system update"""
