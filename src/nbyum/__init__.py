@@ -1,12 +1,5 @@
-from contextlib import contextmanager
-import errno
 import logging
-import pwd
 
-from yum.Errors import LockError
-from yum.rpmtrans import NoOutputCallBack
-
-from .errors import NBYumException, WTFException
 from .logging_hijack import (NBYumLogger, NBYumTextMeter,
                              PROGRESS_LEVEL, RECAP_LEVEL)
 from .utils import (DummyOpts, timestamp_to_pretty_local_datetime,
@@ -46,56 +39,6 @@ class NBYumCli(object):
 
             else:
                 self.base.conf.cache = 1
-
-    @contextmanager
-    def __lock_yum(self):
-        """Acquire the Yum global lock.
-
-        This method works as a context manager, to be used in a `with' block.
-        """
-        # -- Acquire the lock ------------------------------------------------
-        try:
-            self.base.doLock()
-
-        except LockError as e:
-            if e.errno in (errno.EPERM, errno.EACCES):
-                raise WTFException("Can't create the lock file: %s" % e)
-
-            else:
-                lock_owner = {"pid": int(e.pid)}
-
-                with open("/proc/%(pid)s/status" % lock_owner) as status:
-                    for line in status:
-                        if line.startswith("Name:"):
-                            exe = line.strip().split()[-1]
-
-                            with open("/proc/%(pid)s/cmdline" % lock_owner) as cmdline_file:
-                                cmdline = cmdline_file.read().split("\x00")
-
-                            for index, token in enumerate(cmdline):
-                                if token.startswith("/") and token.endswith(exe):
-                                    # Everything after now are options
-                                    lock_owner["cmd"] = " ".join([exe, cmdline.pop(index+1)])
-                                    break
-                            else:
-                                lock_owner["cmd"] = exe
-
-                        if line.startswith("Uid:"):
-                            uid = int(line.strip().split()[-1])
-                            lock_owner["user"] = pwd.getpwuid(uid)[0]
-
-                msg = "The package system is being used by another " \
-                      "administrator - please try again later (user: " \
-                      "%(user)s, cmd: '%(cmd)s', pid: %(pid)s)" % lock_owner
-
-                raise NBYumException(msg)
-
-        # -- Do the work, protected by the acquired lock ---------------------
-        yield
-
-        # -- Work is finished, release the lock ------------------------------
-        self.base.closeRpmDB()
-        self.base.doUnlock()
 
     @locked
     def prepare(self):
