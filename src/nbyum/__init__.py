@@ -163,6 +163,7 @@ class NBYumCli(object):
             self.base.list_packages(self.args.type, self.args.filter,
                                     self.args.patterns, self.args.show_hidden)
 
+    @locked
     def rebuild_cache(self):
         """Clean and rebuild the cache."""
         self.base.clean_cache()
