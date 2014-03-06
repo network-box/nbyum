@@ -32,6 +32,9 @@ class NBYumCli(object):
         # This sets up a bunch of stuff
         self.base.conf
 
+        if self.args.func == "last_updated":
+            args.force_cache = True
+
         if args.force_cache:
             if self.args.func == "rebuild_cache":
                 self.base.logger.warning("Ignoring --force-cache argument, as"
