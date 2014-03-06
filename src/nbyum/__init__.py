@@ -178,12 +178,12 @@ class NBYumCli(object):
         self.base.remove_packages(self.args.type, self.args.patterns)
         self.base.recap_transaction()
 
+    @locked
     def update(self):
         """Actually update the whole system."""
         self.base.plugins.setCmdLine(DummyOpts(nuke_newsave=True,
                                                posttrans_triggers=True),
                                      None)
 
-        with self.__lock_yum():
-            self.base.update_packages(self.args.patterns, apply=True)
-            self.base.recap_transaction()
+        self.base.update_packages(self.args.patterns, apply=True)
+        self.base.recap_transaction()
