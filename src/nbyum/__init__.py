@@ -97,16 +97,18 @@ class NBYumCli(object):
         self.base.closeRpmDB()
         self.base.doUnlock()
 
+    @locked
+    def prepare(self):
+        self.base.prepare()
+        self.base.logger.log_progress({"current": 0, "total": 1,
+                                       "hint": "Processing the package "
+                                               "metadata..."})
+
     def run(self):
         try:
             # -- Prepare our Yum base for the user's request -----------------
             if self.args.func not in ("last_updated", "rebuild_cache"):
-                with self.__lock_yum():
-                    self.base.prepare()
-
-                self.base.logger.log_progress({"current": 0, "total": 1,
-                                               "hint": "Processing the "
-                                                       "package metadata..."})
+                self.prepare()
 
             # -- Then do what we were asked ----------------------------------
             func = getattr(self, self.args.func)
