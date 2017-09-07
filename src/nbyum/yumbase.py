@@ -266,7 +266,8 @@ class NBYumBase(yum.YumBase):
 
             for pkg in sorted(pkgs, key=list_ordergetter):
                 pkgdict = {"name": pkg.name, "version": get_version(pkg),
-                           "summary": pkg.summary}
+                           "summary": pkg.summary,
+                           "description": pkg.description}
 
                 # Filter multiarch dupes for arches others than the system one.
                 # We can just compare with the previous one because packages
@@ -302,7 +303,8 @@ class NBYumBase(yum.YumBase):
                     continue
 
                 pkgdict = {"name": pkg.name, "version": get_version(pkg),
-                           "summary": pkg.summary}
+                           "summary": pkg.summary,
+                           "description": pkg.description}
 
                 # Filter multiarch dupes for arches others than the system one.
                 # We can just compare with the previous one because packages
