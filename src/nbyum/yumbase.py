@@ -209,7 +209,7 @@ class NBYumBase(yum.YumBase):
         for tx in old_tx:
             for pkg in tx.trans_data:
                 # Search for at least one package having been updated
-                if pkg.state not in ("Update", "Obsoleted"):
+                if pkg.state not in ("Update", "Obsoleted", "Install"):
                     continue
 
                 return tx.end_timestamp
